@@ -1,0 +1,98 @@
+
+analysis: "llstau_maximally-mixed"
+
+channel: "BRT2"
+era: "2018"
+lumi: 137.62
+
+obs:
+  scaleby: "137.62/59.83"
+  samples:
+    - "DATA_MET"
+  histfile: "/nfs/dust/cms/user/sobhatta/work/LongLivedStaus/shedprog/LLStaus_Run2/Analysis/output/2018/output_signal_v15/hists/Cut_015_two_loose_jets_final_binning_schema_pass.root"
+  nominal: "nominal/bin2/hist"
+
+
+sig:
+  loadconfig: "configs/limits/sig_procs_test.yaml"
+  xsecfile: "/nfs/dust/cms/user/sobhatta/work/LongLivedStaus/LLStaus_Run2/Analysis/configs/crosssections_stau_maximally-mixed.csv"
+  histfile: "/nfs/dust/cms/user/sobhatta/work/LongLivedStaus/shedprog/LLStaus_Run2/Analysis/output/2018/output_signal_v15/hists/Cut_015_two_loose_jets_final_binning_schema_pass.root"
+  cutflowsfile: "/nfs/dust/cms/user/sobhatta/work/LongLivedStaus/shedprog/LLStaus_Run2/Analysis/output/2018/output_signal_v15/cutflows.json"
+  # Count to use (from cutflowsfile) in the denominator when normalizing
+  # Nested keys separated by "."
+  # For e.g. if "a.b.c", will read the dictionary entry dict[a][b][c]
+  neventkey: "all.BeforeCuts"
+  
+  # Nominal histogram path
+  # Will look for the histogram <dirname>/<nominal> 
+  nominal: "nominal/bin2/hist"
+
+
+bkg:
+  procs:
+    "misid":
+      ismc: false
+      scaleby: "137.62/59.83"
+      samples:
+        - "DATA_MET"
+      histfile: "/nfs/dust/cms/user/sobhatta/work/LongLivedStaus/shedprog/LLStaus_Run2/Analysis/output/2018/output_signal_v15/hists/Cut_015_two_loose_jets_final_binning_schema_yield_bin1to2.root"
+      nominal: "nominal/hist"
+  
+  xsecfile: "/nfs/dust/cms/user/sobhatta/work/LongLivedStaus/LLStaus_Run2/Analysis/configs/crosssections.json"
+  cutflowsfile: "/nfs/dust/cms/user/sobhatta/work/LongLivedStaus/shedprog/LLStaus_Run2/Analysis/output/2018/output_signal_v15/cutflows.json"
+  neventkey: "all.BeforeCuts"
+
+systematics:
+  
+  "distauid":
+    procs:
+      sig: ["sig"]
+      bkg: []
+    iseracorr: false
+    u: 1.3225
+    d: 0.7225
+  
+  "fr_stat":
+    iseracorr: false
+    procs:
+      sig: []
+      bkg: ["misid"]
+    u:
+      "*": "stat_up/hist"
+    d:
+      "*": "stat_down/hist"
+  
+  #"fr_region":
+  #  iseracorr: true
+  #  procs:
+  #    sig: []
+  #    bkg: ["misid"]
+  #  u: 1.15
+  #  d: 0.85
+  
+  "fr_region":
+    iseracorr: true
+    procs:
+      sig: []
+      bkg: ["misid"]
+    u:
+      "*": "sys_up/hist"
+    d:
+      "*": "sys_down/hist"
+
+rebin: null
+binstart: 3
+nbins: 8
+
+#rebin:
+#  - -1
+#  - 1
+#  - 2
+#  - 3
+#  - 4
+#  - 5
+#  - 6
+#  - 8
+#  - 10
+#binstart: 2
+#nbins: 6

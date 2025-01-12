@@ -1,0 +1,64 @@
+{
+
+    "year": "ul2016post",
+    "file_mode": "local",
+    "xrootddomain": "xrootd-cms.infn.it",
+    "datadir": "/pnfs/desy.de/cms/tier2/store/user/sobhatta/LongLivedStaus/NanoAOD",
+    //"bad_file_paths": "$CONFDIR/nano_v11_bad-pnfs-files.json",
+    "rng_seed_file": "$CONFDIR/seed.txt",
+    "compute_systematics": false,
+    "luminosity": 1.0,
+    "apply_met_filters": true,
+    "crosssections": "$CONFDIR/crosssections.json",
+    "exp_datasets": {
+        "SingleMuon_2016_postVFP" :  [
+            "$DATADIR/SingleMuon/crab_SingleMuon_Run2016F_UL_postVFP/240518_032437/*/*.root",
+            "$DATADIR/SingleMuon/crab_SingleMuon_Run2016G_UL_postVFP/240518_032447/*/*.root",
+            "$DATADIR/SingleMuon/crab_SingleMuon_Run2016H_UL_postVFP/240518_032456/*/*.root"
+        ]
+    },
+    "mc_datasets": {
+        "WNJetsToLNu" :  [
+            "$DATADIR/2016_postVFP/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/crab_WJetsToLNu/240528_162702/*/*.root",
+            "$DATADIR/2016_postVFP/W1JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/crab_W1JetsToLNu/240528_162711/*/*.root",
+            "$DATADIR/2016_postVFP/W2JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/crab_W2JetsToLNu/240528_162719/*/*.root",
+            "$DATADIR/2016_postVFP/W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/crab_W3JetsToLNu/240528_162728/*/*.root",
+            "$DATADIR/2016_postVFP/W4JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/crab_W4JetsToLNu/240528_162736/*/*.root"
+        ]
+    },
+    "dataset_for_systematics": {
+    },
+    
+    "dataset_trigger_order": [
+        "SingleMuon_2016_postVFP"
+    ],
+    
+    "tag_trigger_map": {
+        "SingleMuon_2016_postVFP": [
+            "HLT_IsoMu24",
+            "HLT_IsoMu27",
+            
+            "HLT_IsoTkMu24",
+            "HLT_IsoTkMu27"
+        ]
+    },
+    
+    "probe_trigger_map": {
+        "SingleMuon_2016_postVFP": [
+            "HLT_PFMET100_PFMHT100_IDTight",
+            "HLT_PFMET110_PFMHT110_IDTight",
+            "HLT_PFMET120_PFMHT120_IDTight"
+        ]
+    },
+    
+    // Njets: [0, 1, 2, 3, 4]
+    "W_jet_reweight": [
+        0.745120894871221,
+        0.205516819876549,
+        0.129371312250394,
+        0.0601130154214759,
+        0.105668682366326
+    ],
+    
+    "hists": "$CONFDIR/histograms_trigger_eff_MET.json"
+}

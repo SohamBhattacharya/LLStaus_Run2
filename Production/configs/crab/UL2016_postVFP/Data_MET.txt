@@ -1,0 +1,9 @@
+sampleType=Data era=2016_postVFP lumiFile=data/lumi_json/Cert_271036-284044_13TeV_Legacy2016_Collisions16_JSON.txt disTauTagOutputOpt=1 pfCandExtraCut=hasTrackDetails
+
+# Taken from:
+# https://cms.cern.ch/iCMS/jsp/db_notes/noteInfo.jsp?cmsnoteid=CMS%20AN-2021/182
+# https://twiki.cern.ch/twiki/bin/view/CMS/PdmVDatasetsUL2016
+
+MET_Run2016F_UL_postVFP                 /MET/Run2016F-21Feb2020_UL2016-v1/MINIAOD
+MET_Run2016G_UL_postVFP                 /MET/Run2016G-21Feb2020_UL2016-v1/MINIAOD
+MET_Run2016H_UL_postVFP                 /MET/Run2016H-21Feb2020_UL2016-v2/MINIAOD

@@ -1,0 +1,11 @@
+sampleType=Data era=2017 lumiFile=data/lumi_json/Cert_294927-306462_13TeV_UL2017_Collisions17_GoldenJSON.txt disTauTagOutputOpt=1 pfCandExtraCut=hasTrackDetails
+
+# Taken from:
+# https://twiki.cern.ch/twiki/bin/view/CMS/PdmVDatasetsUL2017
+
+SingleMuon_Run2017B_UL                 /SingleMuon/Run2017B-UL2017_MiniAODv2-v1/MINIAOD
+SingleMuon_Run2017C_UL                 /SingleMuon/Run2017C-UL2017_MiniAODv2-v1/MINIAOD
+SingleMuon_Run2017D_UL                 /SingleMuon/Run2017D-UL2017_MiniAODv2-v1/MINIAOD
+SingleMuon_Run2017E_UL                 /SingleMuon/Run2017E-UL2017_MiniAODv2-v1/MINIAOD
+SingleMuon_Run2017F_UL                 /SingleMuon/Run2017F-UL2017_MiniAODv2-v1/MINIAOD
+

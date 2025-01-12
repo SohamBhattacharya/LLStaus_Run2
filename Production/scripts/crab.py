@@ -286,6 +286,15 @@ def resubmit(args):
             runCrabCommand('resubmit', dir='%s/%s' % (work_area, dirname), **kwargs)
 
 
+def report(args):
+    import os
+    kwargs = parseOptions(args)
+    for work_area in args.work_area:
+        for dirname in os.listdir(work_area):
+            logger.info('Reporting job %s/%s with options %s' % (work_area, dirname, str(kwargs)))
+            runCrabCommand('report', dir='%s/%s' % (work_area, dirname), **kwargs)
+
+
 def _analyze_crab_status(ret):
     # https://github.com/dmwm/CRABClient/blob/master/src/python/CRABClient/Commands/status.py
     states = {}
@@ -546,6 +555,10 @@ def main():
     #                    action='store_true', default=False,
     #                    help='Disable auto resubmit of SUBMITFAILED tasks when checking job status. Default: %(default)s'
     #                    )
+    parser.add_argument('--report',
+                        action='store_true', default=False,
+                        help='Get job report'
+                        )
     parser.add_argument('--resubmit',
                         action='store_true', default=False,
                         help='Resubmit jobs. Default: %(default)s'
@@ -589,6 +602,10 @@ def main():
 
     if args.status or args.prepare_recovery_task or args.submit_recovery_task:
         status(args)
+        return
+    
+    if args.report:
+        report(args)
         return
 
     if args.resubmit:

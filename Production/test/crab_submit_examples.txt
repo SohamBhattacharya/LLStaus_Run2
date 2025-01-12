@@ -1,9 +1,35 @@
 # Private MC (like signal)
 python3 $(which crab_submit.py) --inputDBS phys03 --workArea crab_projects --cfg LLStaus_Run2/Production/python/myNanoProd.py --site T2_DE_DESY --output /store/user/sobhatta/LongLivedStaus/NanoAOD/ ./LLStaus_Run2/Production/configs/crab/UL2018/Staus.txt --maxMemory 2500
 
-# Background
-python3 $(which crab_submit.py) --workArea crab_projects --cfg LLStaus_Run2/Production/python/myNanoProd.py --site T2_DE_DESY --output /store/user/sobhatta/LongLivedStaus/NanoAOD/ ./LLStaus_Run2/Production/configs/crab/UL2018/TTbar.txt --maxMemory 2500
+# IMPORTANT: For both signal and data, provide the era-named output directory
+# 2016_preVFP:      --output /store/user/sobhatta/LongLivedStaus/NanoAOD/2016_preVFP
+# 2016_postVFP:     --output /store/user/sobhatta/LongLivedStaus/NanoAOD/2016_postVFP
+# 2017:             --output /store/user/sobhatta/LongLivedStaus/NanoAOD/2017   
+# 2018:             --output /store/user/sobhatta/LongLivedStaus/NanoAOD/2018
+
+# Central MC (signal and background)
+python3 $(which crab_submit.py) --workArea crab_projects --cfg LLStaus_Run2/Production/python/myNanoProd.py --site T2_DE_DESY --output /store/user/sobhatta/LongLivedStaus/NanoAOD/ ./LLStaus_Run2/Production/configs/crab/UL2018/TTbar.txt --maxMemory 2500 --splitting FileBased --unitsPerJob 10
 
 # Data
 python3 $(which crab_submit.py) --workArea crab_projects --cfg LLStaus_Run2/Production/python/myNanoProd.py --site T2_DE_DESY --output /store/user/sobhatta/LongLivedStaus/NanoAOD/ ./LLStaus_Run2/Production/configs/crab/UL2018/Data_MET.txt --lumiMask <lumimaskfile> --maxMemory 2500
-# For '--dryrun', add '--splitting LumiBased  --unitsPerJob 500'
+# For '--dryrun', add: --splitting LumiBased  --unitsPerJob 500
+# For 2016, add: --splitting LumiBased --unitsPerJob 15
+# For 2017, add: --splitting LumiBased --unitsPerJob 10
+
+# MC commands
+
+# 2016_preVFP:
+python3 $(which crab_submit.py) --workArea crab_projects_2016_UL_preVFP --cfg LLStaus_Run2/Production/python/myNanoProd.py --site T2_DE_DESY --output /store/user/sobhatta/LongLivedStaus/NanoAOD/2016_preVFP --maxMemory 2500 `find LLStaus_Run2/Production/configs/crab/UL2016_preVFP -type f | grep -v Data | grep -v not | grep -v Stau.txt | sort -V` --splitting FileBased --unitsPerJob 2
+
+python3 $(which crab_submit.py) --workArea crab_projects_2016_UL_preVFP_stau --cfg LLStaus_Run2/Production/python/myNanoProd.py --site T2_DE_DESY --output /store/user/sobhatta/LongLivedStaus/NanoAOD/2016_preVFP --maxMemory 2500 LLStaus_Run2/Production/configs/crab/UL2016_preVFP/Stau.txt --splitting FileBased --unitsPerJob 1
+
+# 2016_postVFP:
+python3 $(which crab_submit.py) --workArea crab_projects_2016_UL_postVFP --cfg LLStaus_Run2/Production/python/myNanoProd.py --site T2_DE_DESY --output /store/user/sobhatta/LongLivedStaus/NanoAOD/2016_postVFP --maxMemory 2500 `find LLStaus_Run2/Production/configs/crab/UL2016_postVFP -type f | grep -v Data | grep -v not | grep -v Stau.txt | sort -V` --splitting FileBased --unitsPerJob 2
+
+python3 $(which crab_submit.py) --workArea crab_projects_2016_UL_postVFP_stau --cfg LLStaus_Run2/Production/python/myNanoProd.py --site T2_DE_DESY --output /store/user/sobhatta/LongLivedStaus/NanoAOD/2016_postVFP --maxMemory 2500 LLStaus_Run2/Production/configs/crab/UL2016_postVFP/Stau.txt --splitting FileBased --unitsPerJob 1
+
+
+# 2017:
+python3 $(which crab_submit.py) --workArea crab_projects_2017_UL --cfg LLStaus_Run2/Production/python/myNanoProd.py --site T2_DE_DESY --output /store/user/sobhatta/LongLivedStaus/NanoAOD/2017 --maxMemory 2500 `find LLStaus_Run2/Production/configs/crab/UL2017/ -type f | grep -v Data | grep -v not | grep -v Stau.txt | sort -V` --splitting FileBased --unitsPerJob 2
+
+python3 $(which crab_submit.py) --workArea crab_projects_2017_UL_stau --cfg LLStaus_Run2/Production/python/myNanoProd.py --site T2_DE_DESY --output /store/user/sobhatta/LongLivedStaus/NanoAOD/2017 --maxMemory 2500 LLStaus_Run2/Production/configs/crab/UL2017/Stau.txt --splitting FileBased --unitsPerJob 1

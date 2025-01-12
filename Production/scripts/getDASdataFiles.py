@@ -11,8 +11,15 @@ parser = argparse.ArgumentParser(formatter_class = argparse.ArgumentDefaultsHelp
 
 
 parser.add_argument(
-    "--getCount",
+    "--getEventCount",
     help = "Get the number of events",
+    default = False,
+    action = "store_true",
+)
+
+parser.add_argument(
+    "--getLumiCount",
+    help = "Get the number of lumisections",
     default = False,
     action = "store_true",
 )
@@ -54,6 +61,14 @@ parser.add_argument(
     type = str,
     required = False,
     default = None,
+)
+
+parser.add_argument(
+    "--lifetime",
+    help = "Lifetime for Rucio rule (in seconds); default 1 month",
+    type = int,
+    required = False,
+    default = 2592000,
 )
 
 parser.add_argument(
@@ -103,7 +118,7 @@ if (args.createRucioRule and args.tier2site is not None) :
     print("")
     
     print("REALLY create Rucio rules?")
-    inputStr = str(raw_input("Enter CONFIRM to confirm: ")).strip()
+    inputStr = str(input("Enter CONFIRM to confirm: ")).strip()
     
     rucioConfirmed = (inputStr == "CONFIRM")
     
@@ -122,9 +137,16 @@ for iSample, sampleName in enumerate(l_sampleName) :
     
     instance_str = "instance=%s" %(args.instance) if len(args.instance) else ""
     
-    if (args.getCount) :
+    if (args.getEventCount) :
         
         command = "dasgoclient -query=\"file dataset=%s %s | sum(file.nevents)\"" %(sampleName, instance_str)
+        print("Command:", command)
+        os.system(command)
+    
+    if (args.getLumiCount) :
+        
+        command = "dasgoclient -query=\"run dataset=%s %s | sum(run.nlumis)\"" %(sampleName, instance_str)
+        print("Command:", command)
         os.system(command)
     
     
@@ -171,7 +193,8 @@ for iSample, sampleName in enumerate(l_sampleName) :
     if (rucioConfirmed) :
         
         #command = "rucio add-rule cms:%s 1 %s" %(sampleName, args.tier2site)
-        command = "rucio add-rule --ask-approval cms:%s 1 %s" %(sampleName, args.tier2site)
+        # 1 month lifetime (in seconds)
+        command = "rucio add-rule --ask-approval cms:%s 1 %s --lifetime %d" %(sampleName, args.tier2site, args.lifetime)
         print("Command:", command)
         print("")
         os.system(command)

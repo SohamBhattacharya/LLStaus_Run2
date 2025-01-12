@@ -10,47 +10,6 @@ import FWCore.ParameterSet.Config as cms
 from LLStaus_Run2.Production.arg_config import *
 args = get_args()
 
-d_procConfig = {
-    "Data": {
-        "2016": {
-            "condition": "auto:run2_data",
-            "era": "Run2_2016",
-            "eramodifier": "run2_nanoAOD_106Xv2",
-        },
-        "2017":{
-            "condition": "auto:run2_data",
-            "era": "Run2_2017",
-            "eramodifier": "run2_nanoAOD_106Xv2",
-        },
-        "2018":{
-            "condition": "auto:run2_data",
-            "era": "Run2_2018",
-            "eramodifier": "run2_nanoAOD_106Xv2",
-        },
-    },
-    
-    "MC": {
-        # 2016 conditions not checked yet; just a placeholder for now
-        "2016": {
-            "condition": "auto:phase1_2016_realistic",
-            "era": "Run2_2016",
-            "eramodifier": "run2_nanoAOD_106Xv2",
-        },
-        "2017":{
-            "condition": "auto:phase1_2017_realistic",
-            "era": "Run2_2017",
-            "eramodifier": "run2_nanoAOD_106Xv2",
-        },
-        "2018":{
-            "condition": "auto:phase1_2018_realistic",
-            "era": "Run2_2018",
-            "eramodifier": "run2_nanoAOD_106Xv2",
-        },
-    }
-}
-
-d_procConfig["Embed"] = d_procConfig["Data"]
-
 isMC = (args.sampleType == "MC")
 condition_str = d_procConfig[args.sampleType][args.era]["condition"]
 era_str = d_procConfig[args.sampleType][args.era]["era"]
@@ -110,7 +69,7 @@ process.options = cms.untracked.PSet()
 
 # Production Info
 process.configurationMetadata = cms.untracked.PSet(
-    annotation = cms.untracked.string("myNanoProd{args.sampleType}{args.era}"),
+    annotation = cms.untracked.string(f"myNanoProd{args.sampleType}{args.era}"),
     name = cms.untracked.string("Applications"),
     version = cms.untracked.string("$Revision: 1.19 $")
 )
@@ -168,7 +127,7 @@ else :
 
 if (args.sampleType == "Embed") :
     
-    process.nanoAOD_step += cms.Path(
+    process.nanoAOD_step += cmsagainstElectronDeadECAL.Path(
         process.genParticleSequence +
         #process.nanoSequenceCommon +
         #process.nanoSequenceOnlyFullSim +
@@ -201,7 +160,14 @@ else :
     process = nanoAOD_customizeData(process)
 
 from LLStaus_Run2.Production.customize_nanoaod_eventcontent_cff import *
-customize_process_and_associate(process, isMC = isMC, disTauTagOutputOpt = args.disTauTagOutputOpt)
+customize_process_and_associate(
+    process,
+    isMC = isMC,
+    era_str = era_str,
+    eramodifier = eramodifier,
+    disTauTagOutputOpt = args.disTauTagOutputOpt,
+    pfCandExtraCut = args.pfCandExtraCut
+)
 
 # End of customisation functions
 
@@ -213,6 +179,7 @@ from Configuration.StandardSequences.earlyDeleteSettings_cff import customiseEar
 process = customiseEarlyDelete(process)
 # End adding early deletion
 
+#print(process.electronTable.src)
 
 # Debug EDM
 if (args.debugEDM) :

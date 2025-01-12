@@ -6,7 +6,14 @@ from PhysicsTools.NanoAOD.taus_cff import *
 from PhysicsTools.NanoAOD.jetsAK4_CHS_cff import *
 #from PhysicsTools.NanoAOD.jets_cff import *
 
-def customize_process_and_associate(process, isMC, disTauTagOutputOpt = 1) :
+def customize_process_and_associate(
+    process,
+    isMC,
+    era_str,
+    eramodifier,
+    disTauTagOutputOpt = 1,
+    pfCandExtraCut = ""
+    ) :
     
     # Lost tracks
     process.lostTrackTable = cms.EDProducer("SimpleCandidateFlatTableProducer",
@@ -32,6 +39,11 @@ def customize_process_and_associate(process, isMC, disTauTagOutputOpt = 1) :
     )
     
     trk_cond = "hasTrackDetails"
+    pfCandCut = "pt > 1"
+    pfCandExtraCut = pfCandExtraCut.strip()
+    
+    if len(pfCandExtraCut) :
+        pfCandCut = f"{(pfCandCut)} && ({pfCandExtraCut})"
     
     # https://twiki.cern.ch/twiki/bin/view/CMSPublic/WorkBookMiniAOD2017#Packed_ParticleFlow_Candidates
     # https://cmsdoxygen.web.cern.ch/cmsdoxygen/CMSSW_12_4_0/doc/html/d8/d79/classpat_1_1PackedCandidate.html
@@ -39,8 +51,7 @@ def customize_process_and_associate(process, isMC, disTauTagOutputOpt = 1) :
     # fromPV: https://cmsdoxygen.web.cern.ch/cmsdoxygen/CMSSW_12_4_0/doc/html/d8/d79/classpat_1_1PackedCandidate.html#a1e86b4e893738b7cbae410b7f106f339
     process.pfCandTable = cms.EDProducer("SimpleCandidateFlatTableProducer",
         src = cms.InputTag("packedPFCandidates"),
-        #cut = cms.string(""),
-        cut = cms.string("pt > 1"),
+        cut = cms.string(pfCandCut),
         name= cms.string("PFCandidate"),
         doc = cms.string("PF candidates"),
         singleton = cms.bool(False), # the number of entries is variable
@@ -185,6 +196,27 @@ def customize_process_and_associate(process, isMC, disTauTagOutputOpt = 1) :
         process.custom_nanoaod_task = cms.Task(process.disTauTag)
     
     
+    # Remove unnecessary stuff
+
+    process.nanoTableTaskCommon.remove(process.boostedTauTask)
+    process.nanoTableTaskCommon.remove(process.boostedTauTablesTask)
+    process.nanoTableTaskFS.remove(process.boostedTauMCTask)
+    eramodifier.toModify(process.linkedObjects, boostedTaus = None)
+
+    process.nanoTableTaskCommon.remove(process.lowPtElectronTask)
+    process.nanoTableTaskCommon.remove(process.lowPtElectronTablesTask)
+    process.nanoTableTaskFS.remove(process.lowPtElectronMCTask)
+    eramodifier.toModify(process.linkedObjects, lowPtElectrons = None)
+    
+    if ("2016" in era_str) :
+        
+        process.nanoTableTaskFS.remove(process.genProtonTablesTask)
+        
+        eramodifier.toModify(process.jetTable.variables, hfsigmaEtaEta = None)
+        eramodifier.toModify(process.jetTable.variables, hfsigmaPhiPhi = None)
+        eramodifier.toModify(process.jetTable.variables, hfcentralEtaStripSize = None)
+        eramodifier.toModify(process.jetTable.variables, hfadjacentEtaStripsSize = None)
+        eramodifier.toModify(process.tauTable.variables, idAntiEleDeadECal = None)
     
     # Associate the task to the associate
     process.schedule.associate(process.custom_nanoaod_task)

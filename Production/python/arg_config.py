@@ -6,6 +6,56 @@ from FWCore.ParameterSet.VarParsing import VarParsing
 
 ############################## Parse arguments ##############################
 
+d_procConfig = {
+    "Data": {
+        "2016_preVFP": {
+            "condition": "auto:run2_data",
+            "era": "Run2_2016_HIPM",
+            "eramodifier": "run2_nanoAOD_106Xv2",
+        },
+        "2016_postVFP": {
+            "condition": "auto:run2_data",
+            "era": "Run2_2016",
+            "eramodifier": "run2_nanoAOD_106Xv2",
+        },
+        "2017":{
+            "condition": "auto:run2_data",
+            "era": "Run2_2017",
+            "eramodifier": "run2_nanoAOD_106Xv2",
+        },
+        "2018":{
+            "condition": "auto:run2_data",
+            "era": "Run2_2018",
+            "eramodifier": "run2_nanoAOD_106Xv2",
+        },
+    },
+    
+    "MC": {
+        "2016_preVFP": {
+            "condition": "auto:run2_mc_pre_vfp",
+            "era": "Run2_2016_HIPM",
+            "eramodifier": "run2_nanoAOD_106Xv2",
+        },
+        "2016_postVFP": {
+            "condition": "auto:run2_mc",
+            "era": "Run2_2016",
+            "eramodifier": "run2_nanoAOD_106Xv2",
+        },
+        "2017":{
+            "condition": "auto:phase1_2017_realistic",
+            "era": "Run2_2017",
+            "eramodifier": "run2_nanoAOD_106Xv2",
+        },
+        "2018":{
+            "condition": "auto:phase1_2018_realistic",
+            "era": "Run2_2018",
+            "eramodifier": "run2_nanoAOD_106Xv2",
+        },
+    }
+}
+
+d_procConfig["Embed"] = d_procConfig["Data"]
+
 def get_args() :
     
     args = VarParsing("analysis")
@@ -27,7 +77,7 @@ def get_args() :
         "nanoaod.root", # Default value
         VarParsing.multiplicity.singleton, # singleton or list
         VarParsing.varType.string, # string, int, or float
-        "Output file base name (w/o extension): [base name].root" # Description
+        "Output file name" # Description
     )
 
     args.register("fileNamePrefix",
@@ -70,6 +120,13 @@ def get_args() :
         "0: NANOAOD, 1: NANOAOD + disTauTagger, 2: disTauTagger only" # Description
     )
     
+    args.register("pfCandExtraCut",
+        "", # Default value
+        VarParsing.multiplicity.singleton, # singleton or list
+        VarParsing.varType.string, # string, int, or float
+        "Enter NanoAOD compatible cut as a string" # Description
+    )
+    
     # args.register("debug",
     #     0, # Default value
     #     VarParsing.VarParsing.multiplicity.singleton, # singleton or list
@@ -104,10 +161,10 @@ def get_args() :
         outDir = args.outFile[0: args.outFile.rfind("/")]
         os.system("mkdir -p %s" %(outDir))
     
-    if (args.sampleType not in ["Data", "MC", "Embed"]) :
-        raise ValueError("sampleType must be one of the following: [Data, MC, Embed]")
+    if (args.sampleType not in d_procConfig.keys()) :
+        raise ValueError(f"sampleType must be one of the following: [{', '.join(d_procConfig.keys())}]")
     
-    if (args.era not in ["2016", "2017", "2018"]) :
-        raise ValueError("Era must be one of the following: [2016, 2017, 2018]")
+    if (args.era not in d_procConfig[args.sampleType].keys()) :
+        raise ValueError(f"Era for {args.sampleType} must be one of the following: [{', '.join(d_procConfig[args.sampleType].keys())}]")
     
     return args

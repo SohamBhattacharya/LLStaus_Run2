@@ -32,6 +32,8 @@ parser.add_argument('--unitsPerJob', required=False, type=int, default=1000, hel
 parser.add_argument('--totalUnits', required=False, type=int, default=-1, help="total number of units")
 parser.add_argument('--maxMemory', required=False, type=int, default=2000,
 					help="maximum amount of memory (in MB) a job is allowed to use (default: 2000 MB )")
+parser.add_argument('--maxJobRuntimeMin', required=False, type=int, default=1315,
+                    help="maximum runtime (in minutes) per job. Jobs running longer than this amount of time will be removed. Defaults to 1315 (21 hours 55 minutes)")
 parser.add_argument('--numCores', required=False, type=int, default=1, help="number of cores per job (default: 1)")
 parser.add_argument('--allowNonValid', action="store_true", help="Allow nonvalid dataset as an input.")
 parser.add_argument('--vomsGroup',required=False, type=str, default="", help="custom VOMS group of used proxy")

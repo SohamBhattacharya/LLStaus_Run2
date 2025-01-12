@@ -1,0 +1,5 @@
+sampleType=Data era=2016_postVFP lumiFile=data/lumi_json/Cert_271036-284044_13TeV_Legacy2016_Collisions16_JSON.txt disTauTagOutputOpt=1 pfCandExtraCut=hasTrackDetails
+
+SingleMuon_Run2016F_UL_postVFP                  /SingleMuon/Run2016F-21Feb2020_UL2016-v1/MINIAOD
+SingleMuon_Run2016G_UL_postVFP                  /SingleMuon/Run2016G-21Feb2020_UL2016-v1/MINIAOD
+SingleMuon_Run2016H_UL_postVFP                  /SingleMuon/Run2016H-21Feb2020_UL2016-v1/MINIAOD

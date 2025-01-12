@@ -1,0 +1,259 @@
+analysis: "DisTauSF"
+channel: "mutau_fail"
+era: "2018"
+lumi: 59.83
+
+obs:
+  scaleby: "1"
+  samples:
+    - "SingleMuon"
+  histfile: "/afs/desy.de/user/m/mykytaua/nfscms/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_3/output_zmutau/zmutau_v7/hist_qcd/Cut_019_final_state_fake_rate_dxy_hist.root"
+  nominal: "not{wp}/iso/OS/gen-tau/hist"
+
+sig: 
+  procs:
+    "ZMT_{nametag}":
+      ismc: true
+      issusy: false
+      xsnorm: false
+      scaleby: "1"
+      samples:
+        - "DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8"
+        - "DY1JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8"
+        - "DY2JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8"
+        - "DY3JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8"
+        - "DY4JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8"
+  
+  histfile: "/afs/desy.de/user/m/mykytaua/nfscms/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_3/output_zmutau/zmutau_v7/hist_qcd/Cut_019_final_state_fake_rate_dxy_hist.root"
+  nominal: "not{wp}/iso/OS/gen-tau/hist"
+  xsecfile: "/nfs/dust/cms/user/sobhatta/work/LongLivedStaus/LLStaus_Run2/Analysis/configs/crosssections.json"
+  cutflowsfile: "/afs/desy.de/user/m/mykytaua/nfscms/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_3/output_zmutau/zmutau_v7/cutflows.json"
+  neventkey: "all.BeforeCuts"
+
+bkg:
+  procs:
+    
+    "QCD":
+      ismc: false
+      xsnorm: false
+      scaleby: "1"
+      samples:
+        - "QCD-pred"
+      histfile: "/afs/desy.de/user/m/mykytaua/nfscms/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_3/output_zmutau/zmutau_v7/hist_qcd/Cut_019_final_state_fake_rate_dxy_hist.root"
+      nominal: "not{wp}/iso/OS/gen-all/hist"
+    
+    "ZLL":
+      ismc: true
+      xsnorm: false
+      scaleby: "1"
+      samples:
+        - "DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8"
+        - "DY1JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8"
+        - "DY2JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8"
+        - "DY3JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8"
+        - "DY4JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8"
+      histfile: "/afs/desy.de/user/m/mykytaua/nfscms/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_3/output_zmutau/zmutau_v7/hist_qcd/Cut_019_final_state_fake_rate_dxy_hist.root"
+      nominal: "not{wp}/iso/OS/gen-other/hist"
+    
+    "WLNu":
+      ismc: true
+      xsnorm: false
+      scaleby: "1"
+      samples:
+        - "WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8"
+        - "W1JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8"
+        - "W2JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8"
+        - "W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8"
+        - "W4JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8"
+      histfile: "/afs/desy.de/user/m/mykytaua/nfscms/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_3/output_zmutau/zmutau_v7/hist_qcd/Cut_019_final_state_fake_rate_dxy_hist.root"
+      nominal: "not{wp}/iso/OS/gen-all/hist"
+    
+    "ST":
+      ismc: true
+      xsnorm: true
+      scaleby: "1"
+      samples:
+        - "ST_t-channel_top_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8"
+        - "ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8"
+        - "ST_tW_top_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8"
+        - "ST_tW_antitop_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8"
+      histfile: "/afs/desy.de/user/m/mykytaua/nfscms/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_3/output_zmutau/zmutau_v7/hist_qcd/Cut_019_final_state_fake_rate_dxy_hist.root"
+      nominal: "not{wp}/iso/OS/gen-all/hist"
+    
+    "TT":
+      ismc: true
+      xsnorm: true
+      scaleby: "1"
+      samples:
+        - "TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8"
+        - "TTToHadronic_TuneCP5_13TeV-powheg-pythia8"
+        - "TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8"
+      histfile: "/afs/desy.de/user/m/mykytaua/nfscms/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_3/output_zmutau/zmutau_v7/hist_qcd/Cut_019_final_state_fake_rate_dxy_hist.root"
+      nominal: "not{wp}/iso/OS/gen-all/hist"
+    
+    "TTX":
+      ismc: true
+      xsnorm: true
+      scaleby: "1"
+      samples:
+        - "TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8"
+        - "TTWJetsToQQ_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8"
+        - "TTZToLLNuNu_M-10_TuneCP5_13TeV-amcatnlo-pythia8"
+        - "TTZToQQ_TuneCP5_13TeV-amcatnlo-pythia8"
+        - "ttHToNonbb_M125_TuneCP5_13TeV-powheg-pythia8"
+      histfile: "/afs/desy.de/user/m/mykytaua/nfscms/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_3/output_zmutau/zmutau_v7/hist_qcd/Cut_019_final_state_fake_rate_dxy_hist.root"
+      nominal: "not{wp}/iso/OS/gen-all/hist"
+    
+    #"TX":
+    #  ismc: true
+    #  xsnorm: true
+    #  scaleby: "1"
+    #  samples:
+    #    - "ST_t-channel_top_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8"
+    #    - "ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8"
+    #    - "ST_tW_top_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8"
+    #    - "ST_tW_antitop_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8"
+    #    - "TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8"
+    #    - "TTToHadronic_TuneCP5_13TeV-powheg-pythia8"
+    #    - "TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8"
+    #    - "TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8"
+    #    - "TTWJetsToQQ_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8"
+    #    - "TTZToLLNuNu_M-10_TuneCP5_13TeV-amcatnlo-pythia8"
+    #    - "TTZToQQ_TuneCP5_13TeV-amcatnlo-pythia8"
+    #    - "ttHToNonbb_M125_TuneCP5_13TeV-powheg-pythia8"
+    #  histfile: "/afs/desy.de/user/m/mykytaua/nfscms/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_3/output_zmutau/zmutau_v7/hist_qcd/Cut_019_final_state_fake_rate_dxy_hist.root"
+    #  nominal: "not{wp}/iso/OS/gen-all/hist"
+    
+    "Other":
+      ismc: true
+      xsnorm: true
+      scaleby: "1"
+      samples:
+        - "VVTo2L2Nu_MLL-1toInf_TuneCP5_13TeV-amcatnloFXFX-pythia8"
+        - "WGToLNuG_TuneCP5_13TeV-madgraphMLM-pythia8"
+        - "WWTo1L1Nu2Q_4f_TuneCP5_13TeV-amcatnloFXFX-pythia8"
+        - "WWW_4F_TuneCP5_13TeV-amcatnlo-pythia8"
+        - "WWZ_4F_TuneCP5_13TeV-amcatnlo-pythia8"
+        - "WZTo1L1Nu2Q_4f_TuneCP5_13TeV-amcatnloFXFX-pythia8"
+        - "WZTo1L3Nu_4f_TuneCP5_13TeV-amcatnloFXFX-pythia8"
+        - "WZTo2Q2L_mllmin4p0_TuneCP5_13TeV-amcatnloFXFX-pythia8"
+        - "WZTo3LNu_TuneCP5_13TeV-amcatnloFXFX-pythia8"
+        - "ZZTo2Q2L_mllmin4p0_TuneCP5_13TeV-amcatnloFXFX-pythia8"
+        - "ZZTo4L_TuneCP5_13TeV_powheg_pythia8"
+        - "VHToNonbb_M125_TuneCP5_13TeV-amcatnloFXFX_madspin_pythia8"
+        - "GluGluToContinToZZTo2e2tau_TuneCP5_13TeV-mcfm701-pythia8"
+        - "GluGluToContinToZZTo2mu2tau_TuneCP5_13TeV-mcfm701-pythia8"
+        - "GluGluToContinToZZTo4tau_TuneCP5_13TeV-mcfm701-pythia8"
+        #- "ZJetsToNuNu_HT-100To200_TuneCP5_13TeV-madgraphMLM-pythia8"
+        #- "ZJetsToNuNu_HT-200To400_TuneCP5_13TeV-madgraphMLM-pythia8"
+        #- "ZJetsToNuNu_HT-400To600_TuneCP5_13TeV-madgraphMLM-pythia8"
+        #- "ZJetsToNuNu_HT-600To800_TuneCP5_13TeV-madgraphMLM-pythia8"
+        #- "WJetsToQQ_HT-200to400_TuneCP5_13TeV-madgraphMLM-pythia8"
+        #- "WJetsToQQ_HT-400to600_TuneCP5_13TeV-madgraphMLM-pythia8"
+        #- "WJetsToQQ_HT-600to800_TuneCP5_13TeV-madgraphMLM-pythia8"
+        #- "WJetsToQQ_HT-800toInf_TuneCP5_13TeV-madgraphMLM-pythia8"
+      histfile: "/afs/desy.de/user/m/mykytaua/nfscms/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_3/output_zmutau/zmutau_v7/hist_qcd/Cut_019_final_state_fake_rate_dxy_hist.root"
+      nominal: "not{wp}/iso/OS/gen-all/hist"
+    
+    
+  xsecfile: "/nfs/dust/cms/user/sobhatta/work/LongLivedStaus/LLStaus_Run2/Analysis/configs/crosssections.json"
+  cutflowsfile: "/afs/desy.de/user/m/mykytaua/nfscms/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_3/output_zmutau/zmutau_v7/cutflows.json"
+  neventkey: "all.BeforeCuts"
+
+systematics:
+  "lumi_corr":
+    procs:
+      sig: ["ZMT"]
+      bkg: ["ZLL", "WLNu", "ST", "TT", "TTX", "TX", "Other"]
+    iseracorr: true
+    u: 1.02
+    d: 0.98
+  "lumi_uncorr":
+    procs:
+      sig: ["ZMT"]
+      bkg: ["ZLL", "WLNu", "ST", "TT", "TTX", "TX", "Other"]
+    iseracorr: false
+    u: 1.015
+    d: 0.985
+  "muon_trig_id":
+    procs:
+      sig: ["ZMT"]
+      bkg: ["ZLL", "WLNu", "ST", "TT", "TTX", "TX", "Other"]
+    iseracorr: true
+    u: 1.02
+    d: 0.98
+  "tauid":
+    procs:
+      sig: ["ZMT"]
+      bkg: []
+    iseracorr: true
+    u: 1.1
+    d: 0.9
+  "qcd_pred":
+    procs:
+      sig: []
+      bkg: ["QCD"]
+    iseracorr: false
+    u: 1.1
+    d: 0.9
+  "dy_xs":
+    procs:
+      sig: []
+      bkg: ["ZMT", "ZLL"]
+    iseracorr: true
+    u: 1.1
+    d: 0.9
+  "wjets_xs":
+    procs:
+      sig: []
+      bkg: ["WLNu"]
+    iseracorr: true
+    u: 1.1
+    d: 0.9
+  "st_xs":
+    procs:
+      sig: []
+      bkg: ["ST"]
+    iseracorr: true
+    u: 1.1
+    d: 0.9
+  "tt_xs":
+    procs:
+      sig: []
+      bkg: ["TT"]
+    iseracorr: true
+    u: 1.1
+    d: 0.9
+  "ttx_xs":
+    procs:
+      sig: []
+      bkg: ["TTX"]
+    iseracorr: true
+    u: 1.1
+    d: 0.9
+  "tx_xs":
+    procs:
+      sig: []
+      bkg: ["TX"]
+    iseracorr: true
+    u: 1.1
+    d: 0.9
+  "other_xs":
+    procs:
+      sig: []
+      bkg: ["Other"]
+    iseracorr: true
+    u: 1.1
+    d: 0.9
+
+rateparams:
+  "dy_norm":
+    procs:
+      sig: ["ZMT"]
+      bkg: ["ZLL"]
+    iseracorr: false
+    init: 1.0
+
+rebin: {rebin}
+binstart: {binstart}
+nbins: {nbins}

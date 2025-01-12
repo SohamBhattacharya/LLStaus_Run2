@@ -1,0 +1,67 @@
+
+#analysis: "llstau_mass-degenerate"
+analysis: "llstau_maximally-mixed"
+
+channel: "RT2"
+era: "2018"
+#lumi: 59.83
+lumi: 137.62
+
+sig:
+  loadconfig: "configs/sig_procs.yml"
+  #xsecfile: "/nfs/dust/cms/user/sobhatta/work/LongLivedStaus/LLStaus_Run2/Analysis/configs/crosssections_stau_mass-degenerate.csv"
+  xsecfile: "/nfs/dust/cms/user/sobhatta/work/LongLivedStaus/LLStaus_Run2/Analysis/configs/crosssections_stau_maximally-mixed.csv"
+  histfile: "/afs/desy.de/user/m/mykytaua/nfscms/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_3/output_signal/signal_v23/hists/Cut_014_two_loose_jets_final_binning_schema.root"
+  cutflowsfile: "/afs/desy.de/user/m/mykytaua/nfscms/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_3/output_signal/signal_v23/cutflows.json"
+  # Count to use (from cutflowsfile) in the denominator when normalizing
+  # Nested keys separated by "."
+  # For e.g. if "a.b.c", will read the dictionary entry dict[a][b][c]
+  neventkey: "all.BeforeCuts"
+  
+  # Nominal histogram path
+  # Will look for the histogram <dirname>/<nominal> 
+  nominal: "nominal/bin2/hist"
+  
+  # <key>: <up and down hostograms>
+  # Will use <key> for the datacards
+  systs:
+    "distauid":
+      iseracorr: true
+      u: 1.3
+      d: 0.7
+
+bkg:
+  # ...
+  procs:
+    "misid":
+      ismc: false
+      scaleby: "137.62/59.83"
+      #scaleby: "1"
+      samples:
+        - "DATA_MET"
+      histfile: "/afs/desy.de/user/m/mykytaua/nfscms/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_3/output_signal/signal_v23/hists/Cut_014_two_loose_jets_final_binning_schema_yield_bin1to2.root"
+      nominal: "nominal/hist"
+      systs:
+        "fr_stat":
+          iseracorr: true
+          u: "stat_up/hist"
+          d: "stat_down/hist"
+        "fr_region":
+          iseracorr: true
+          u: "sys_up/hist"
+          d: "sys_down/hist"
+  
+  xsecfile: "/nfs/dust/cms/user/sobhatta/work/LongLivedStaus/LLStaus_Run2/Analysis/configs/crosssections.json"
+  cutflowsfile: "/afs/desy.de/user/m/mykytaua/nfscms/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_3/output_signal/signal_v23/cutflows.json"
+  neventkey: "all.BeforeCuts"
+
+systscommonmc:
+  "pileup":
+    iseracorr: false
+    u: "pileup_up/bin2/hist"
+    d: "pileup_down/bin2/hist"
+
+rebin: null
+
+binstart: 3
+nbins: 5

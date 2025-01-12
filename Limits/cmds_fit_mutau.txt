@@ -1,0 +1,28 @@
+#!/bin/bash
+
+python3 prepare_cards.py --configs configs/config_datacard_mutau_pass.yaml configs/config_datacard_mutau_fail.yaml configs/config_datacard_mumu.yaml --outdir tmp/test_DisTauSF
+cd tmp/test_DisTauSF/
+text2workspace.py DisTauSF/channels_all/eras_all/ZMT/DisTauSF_ZMT.txt -o workspace.root -m 90 -P TauFW.Fitter.models.TagAndProbeModel:tagAndProbe --PO verbose=2 --PO pass=pass --PO fail=fail
+
+combine -M FitDiagnostics workspace.root --redefineSignalPOIs SF #--setParameters rp_dy_norm_2018=1 #--cminDefaultMinimizerStrategy 0 #--setParameters SF=1.0
+combine -M FitDiagnostics workspace.root --redefineSignalPOIs SF --saveShapes --saveWithUncertainties --robustFit 1 --forceRecreateNLL --setRobustFitStrategy=2 --setRobustFitTolerance=0.01 --skipBOnlyFit
+combine -M FitDiagnostics workspace.root --redefineSignalPOIs SF --saveShapes --saveWithUncertainties --forceRecreateNLL --skipBOnlyFit --cminDefaultMinimizerStrategy 0
+
+combine -M MultiDimFit workspace.root --cl 0.6827 --saveSpecifiedFunc SF_fail,rp_dy_norm_2018 --setParameterRanges SF=0,3 --robustFit 1 --forceRecreateNLL --algo grid --points 100 --setRobustFitStrategy=2 --setRobustFitTolerance=0.01
+combine -M MultiDimFit workspace.root --cl 0.6827 --saveSpecifiedFunc SF_fail,rp_dy_norm_2018 --setParameterRanges SF=0,3 --robustFit 1 --forceRecreateNLL --algo grid --points 100 --cminDefaultMinimizerStrategy 0
+combine -M MultiDimFit workspace.root --algo=cross --cl 0.6827 -P SF --saveSpecifiedFunc SF_fail
+
+PostFitShapesFromWorkspace -w workspace.root --output postfit_s.root --sampling --print -f fitDiagnosticsTest.root:fit_s --postfit
+
+
+combineTool.py -M T2W -i tmp/test_DisTauSF/DisTauSF/channels_all/eras_all/ZMT_*/card_DisTauSF_ZMT_*.txt -o workspace.root -m 90 -P TauFW.Fitter.models.TagAndProbeModel:tagAndProbe --PO verbose=2 --PO pass=pass --PO fail=fail --parallel 15
+
+combineTool.py -M FitDiagnostics -d tmp/test_DisTauSF/DisTauSF/channels_all/eras_all/ZMT_*/workspace.root --redefineSignalPOIs SF --saveShapes --saveWithUncertainties --forceRecreateNLL --skipBOnlyFit --cminDefaultMinimizerStrategy 0 --there -n ".DisTauSF" --parallel 15
+
+combineTool.py -M MultiDimFit -d tmp/test_DisTauSF/DisTauSF/channels_all/eras_all/ZMT_*/workspace.root --cl 0.6827 --saveSpecifiedFunc SF_fail,rp_dy_norm_2018 --setParameterRanges SF=0,3 --robustFit 1 --forceRecreateNLL --algo grid --points 100 --cminDefaultMinimizerStrategy 0 --there -n ".DisTauSF" --parallel 15
+
+PostFitShapesFromWorkspace -w tmp/test_DisTauSF/DisTauSF/channels_all/eras_all/ZMT/workspace.root --output postfit_s.root --sampling --print -f tmp/test_DisTauSF/DisTauSF/channels_all/eras_all/ZMT/fitDiagnostics.DisTauSF.root:fit_s --postfit
+
+combineTool.py -M CollectLimits tmp/test_DisTauSF/DisTauSF/channels_all/eras_all/ZMT_*/higgsCombine.DisTauSF.FitDiagnostics.mH120.root --use-dirs -o tmp/test_DisTauSF/fit_result.json
+
+--parallel 15

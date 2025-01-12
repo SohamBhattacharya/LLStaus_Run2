@@ -1,59 +1,91 @@
 #!/usr/bin/env python3
 
-import aghast
 import awkward
-import boost_histogram
 import coffea
-import coffea.hist
 import coffea.processor
 import dataclasses
 import hist
-import logging
-import numba
-import numpy
 import os
 import sortedcontainers
 import typing
 import uproot
-import uproot3
 
 import ROOT
 ROOT.gROOT.SetBatch(True)
 
-#import CMS_lumi, tdrstyle
-import utils
-
 from coffea.nanoevents import NanoEventsFactory, NanoAODSchema
+
 
 @dataclasses.dataclass
 class MyProcessor(coffea.processor.ProcessorABC) :
     
-    datasets         : typing.List[str]
+    #datasets         : typing.List[str]
+    dataset_args     : typing.Dict
     
     def __post_init__(self) :
         
         #self.dataset_axis = coffea.hist.Cat("dataset", "dataset")
-        self.dataset_axis = hist.axis.StrCategory(self.datasets, growth = True, name = "dataset", label = "dataset")
         
-        self._accumulator = sortedcontainers.SortedDict({
-            "GenVisTauh": hist.Hist(
-                self.dataset_axis,
-                hist.axis.Regular(100, 0, 1000, name = "GenVisTauh_e", label = "GenVisTauh_e"),
-                hist.axis.Regular(100, 0, 1000, name = "GenVisTauh_pt", label = "GenVisTauh_pt"),
-                hist.axis.Regular(200, 0, 2, name = "GenVisTauh_e_by_stau_mass", label = "GenVisTauh_e_by_stau_mass"),
-                storage = "weight",
-                name = "Counts"
-            ),
+        #self.dataset_axis = hist.axis.StrCategory(self.datasets, growth = True, name = "dataset", label = "dataset")
+        #
+        #self._accumulator = sortedcontainers.SortedDict({
+        #    "GenVisTauh": hist.Hist(
+        #        self.dataset_axis,
+        #        hist.axis.Regular(100, 0, 1000, name = "GenVisTauh_e", label = "GenVisTauh_e"),
+        #        hist.axis.Regular(100, 0, 1000, name = "GenVisTauh_pt", label = "GenVisTauh_pt"),
+        #        hist.axis.Regular(200, 0, 2, name = "GenVisTauh_e_by_stau_mass", label = "GenVisTauh_e_by_stau_mass"),
+        #        storage = "weight",
+        #        name = "Counts"
+        #    ),
+        #    
+        #    "GenVisTaul": hist.Hist(
+        #        self.dataset_axis,
+        #        hist.axis.Regular(100, 0, 1000, name = "GenVisTaul_e", label = "GenVisTaul_e"),
+        #        hist.axis.Regular(100, 0, 1000, name = "GenVisTaul_pt", label = "GenVisTaul_pt"),
+        #        hist.axis.Regular(200, 0, 2, name = "GenVisTaul_e_by_stau_mass", label = "GenVisTaul_e_by_stau_mass"),
+        #        storage = "weight",
+        #        name = "Counts"
+        #    ),
+        #})
+        
+        self.dataset_axis = hist.axis.StrCategory([], growth = True, name = "dataset", label = "dataset")
+        
+        self.d_hist_axis = {
+            "e": {"bins": 100, "start": 0, "stop": 1000},
+            "pt": {"bins": 100, "start": 0, "stop": 1000},
+            "ebym": {"bins": 200, "start": 0, "stop": 2},
+        }
+        
+        self.d_hist_scheme = {
+            "GenVisTauh": {"pt": "pt", "ebym": "ebym"},
+            #"GenVisTauh": {"energy": "e", "pt": "pt", "ebym": "ebym"},
+            #"GenVisTaul": {"energy": "e", "pt": "pt", "ebym": "ebym"},
             
-            "GenVisTaul": hist.Hist(
-                self.dataset_axis,
-                hist.axis.Regular(100, 0, 1000, name = "GenVisTaul_e", label = "GenVisTaul_e"),
-                hist.axis.Regular(100, 0, 1000, name = "GenVisTaul_pt", label = "GenVisTaul_pt"),
-                hist.axis.Regular(200, 0, 2, name = "GenVisTaul_e_by_stau_mass", label = "GenVisTaul_e_by_stau_mass"),
-                storage = "weight",
-                name = "Counts"
-            ),
-        })
+            "GenVisTauh1": {"pt": "pt"},
+            "GenVisTauh2": {"pt": "pt"},
+            
+            "Jet1": {"pt": "pt"},
+            "Jet2": {"pt": "pt"},
+            
+            "MET": {"pt": "pt"},
+        }
+        
+        self._accumulator = {}
+        
+        for obj, d_qty in self.d_hist_scheme.items() :
+            
+            for qty, ax_key in d_qty.items() :
+                
+                d_ax_args = {}
+                d_ax_args.update(self.d_hist_axis[ax_key])
+                
+                ax_name = f"{obj}_{qty}"
+                d_ax_args["name"] = ax_name
+                d_ax_args["label"] = ax_name
+                
+                self._accumulator[ax_name] = hist.Hist(self.dataset_axis, hist.axis.Regular(**d_ax_args))
+        
+        print(self._accumulator.keys())
     
     
     @property
@@ -69,6 +101,9 @@ class MyProcessor(coffea.processor.ProcessorABC) :
         
         stau_mass = 250.0
         
+        sel_idx = (awkward.num(events.GenVisTau, axis = 1) == 2)
+        events = events[sel_idx]
+        
         GenStau = events.GenPart[
             ((abs(events.GenPart.pdgId) == 1000015) | (abs(events.GenPart.pdgId) == 2000015))
             #& (abs(events.GenPart.pdgId[events.GenPart.genPartIdxMother]) != 1000015)
@@ -76,10 +111,6 @@ class MyProcessor(coffea.processor.ProcessorABC) :
             & events.GenPart.hasFlags(["isFirstCopy"])
             & (events.GenPart.mass == stau_mass)
         ]
-        
-        #print("GenStau.distinctChildren.pdgId:", GenStau.distinctChildren.pdgId)
-        #print(GenStau.pdgId)
-        #print(GenStau.mass)
         
         GenLsp = events.GenPart[
             (abs(events.GenPart.pdgId) == 1000022)
@@ -92,81 +123,127 @@ class MyProcessor(coffea.processor.ProcessorABC) :
         sel_idx = (awkward.num(GenStau, axis = 1) == 2) & (awkward.num(GenLsp, axis = 1) == 2)
         events = events[sel_idx]
         
-        #distinctChildren
+        #GenTau = events.GenPart[
+        #    (abs(events.GenPart.pdgId) == 15)
+        #    & events.GenPart.hasFlags(["isHardProcess"])
+        #    & events.GenPart.hasFlags(["isFirstCopy"])
+        #]
         
-        GenTau = events.GenPart[
-            (abs(events.GenPart.pdgId) == 15)
-            & events.GenPart.hasFlags(["isHardProcess"])
-            & events.GenPart.hasFlags(["isFirstCopy"])
-            #& ((abs(events.GenPart.distinctParent.pdgId) == 1000015) | (abs(events.GenPart.distinctParent.pdgId) == 2000015))
+        
+        #GenVisTaul = events.GenPart[
+        #    ((abs(events.GenPart.pdgId) == 11) | (abs(events.GenPart.pdgId) == 13))
+        #    & events.GenPart.hasFlags(["isFirstCopy"])
+        #    & events.GenPart.hasFlags(["isDirectHardProcessTauDecayProduct"])
+        #]
+        #
+        #print(GenVisTaul)
+        #print(awkward.num(GenVisTaul, axis = 1))
+        #
+        #GenStaul = GenVisTaul.distinctParent.distinctParent
+        #GenVisTaul_stauRF = GenVisTaul.boost(-GenStaul.boostvec)
+        
+        
+        events["GenVisTauh"] = events.GenVisTau
+        
+        GenVisTauh_sorted = events.GenVisTauh[awkward.argsort(events.GenVisTauh.pt, axis = 1, ascending = False)]
+        events["GenVisTauh1"] = GenVisTauh_sorted[:, 0]
+        events["GenVisTauh2"] = GenVisTauh_sorted[:, 1]
+        
+        events["GenTauh"] = events.GenVisTau.parent
+        
+        #GenStauh = events.GenTauh.distinctParent
+        #GenStauh = GenStauh[
+        #    ((abs(GenStauh.pdgId) == 1000015) | (abs(GenStauh.pdgId) == 2000015))
+        #    | ((abs(GenStauh.distinctParent.pdgId) == 1000015) | (abs(GenStauh.distinctParent.pdgId) == 2000015))
+        #]
+        
+        GenStauh_set0 = events.GenTauh
+        GenStauh_set0 = GenStauh_set0[((abs(GenStauh_set0.pdgId) == 1000015) | (abs(GenStauh_set0.pdgId) == 2000015))]
+        #GenStauh_set0[~awkward.is_none(GenStauh_set0)]
+        
+        GenStauh_set1 = events.GenTauh.distinctParent
+        GenStauh_set1 = GenStauh_set1[((abs(GenStauh_set1.pdgId) == 1000015) | (abs(GenStauh_set1.pdgId) == 2000015))]
+        #GenStauh_set1[~awkward.is_none(GenStauh_set1)]
+        
+        GenStauh_set2 = events.GenTauh.distinctParent.distinctParent
+        GenStauh_set2 = GenStauh_set2[((abs(GenStauh_set2.pdgId) == 1000015) | (abs(GenStauh_set2.pdgId) == 2000015))]
+        
+        #GenStauh_set2[~awkward.is_none(GenStauh_set2)]
+        GenStauh = awkward.concatenate([GenStauh_set0, GenStauh_set1, GenStauh_set2], axis = 1)
+        GenStauh = GenStauh[~awkward.is_none(GenStauh, axis = 1)]
+        
+        #events["GenStauh"] = GenStauh_set1
+        events["GenStauh"] = GenStauh
+        
+        #print(events.GenVisTauh)
+        #print(events.GenStauh)
+        #print(awkward.num(events.GenStauh, axis = 1))
+        #print(events.GenStauh.boostvec)
+        
+        sel_idx = (awkward.num(events.GenStauh, axis = 1) == 2)
+        events = events[sel_idx]
+        
+        events["GenVisTauh_stauRF"] = events.GenVisTauh.boost(-events.GenStauh.boostvec)
+        events["GenVisTauh", "ebym"] = events.GenVisTauh_stauRF.energy / events.GenStauh.mass
+        
+        #print("GenTauh.pdgId:", events.GenTauh.pdgId)
+        #print("GenStauh.pdgId:", events.GenStauh.pdgId)
+        ##print("GenStauh.distinctParent.pdgId:", GenStauh.distinctParent.pdgId)
+        #print("num(events.GenVisTau):", awkward.num(events.GenVisTau, axis = 1))
+        #print("GenVisTauh.ebym:", events.GenVisTauh.ebym)
+        
+        jets = events.Jet[
+            (events.Jet.pt > 30)
+            & (abs(events.Jet.eta) < 2.4)
+            & (events.Jet.jetId >= 6)
         ]
         
-        GenVisTaul = events.GenPart[
-            ((abs(events.GenPart.pdgId) == 11) | (abs(events.GenPart.pdgId) == 13))
-            & events.GenPart.hasFlags(["isFirstCopy"])
-            #& events.GenPart.hasFlags(["isLastCopy"])
-            #& events.GenPart.hasFlags(["isDirectPromptTauDecayProduct"])
-            & events.GenPart.hasFlags(["isDirectHardProcessTauDecayProduct"])
-            #& (abs(events.GenPart.distinctParent.pdgId) == 15)
-            #& ((abs(events.GenPart.distinctParent.distinctParent.pdgId) == 1000015) | (abs(events.GenPart.distinctParent.distinctParent.pdgId) == 2000015))
-        ]
+        (dr, (_, _jets)) = jets.metric_table(events.GenVisTauh, metric = coffea.nanoevents.methods.vector.LorentzVector.delta_r, return_combinations = True)
+        jets = _jets[(dr < 0.4)]
+        jets = jets[~awkward.is_none(jets, axis = 1)]
         
-        print(GenVisTaul)
-        print(awkward.num(GenVisTaul, axis = 1))
+        events["Jet"] = jets
+        sel_idx = (awkward.num(events.Jet, axis = 1) >= 2)
+        events = events[sel_idx]
         
-        #sel_idx = (awkward.num(events.GenVisTau, axis = 1) >= 1) | (awkward.num(GenVisTaul, axis = 1) >= 1)
-        #sel_idx = (awkward.num(GenVisTaul, axis = 1) >= 1)
-        #events = events[sel_idx]
-        #GenVisTaul = GenVisTaul[sel_idx]
-        
-        GenStaul = GenVisTaul.distinctParent.distinctParent
-        GenVisTaul_stauRF = GenVisTaul.boost(-GenStaul.boostvec)
-        
-        #print(awkward.sum(GenStaul.mass == 0, axis = None))
-        print(awkward.flatten(GenStaul.pdgId[(abs(GenStaul.pdgId) != 1000015) & (abs(GenStaul.pdgId) != 2000015)]))
-        
-        #print("GenVisTaul.distinctParent.pdgId:", GenVisTaul.distinctParent.pdgId)
-        #print("GenVisTaul.distinctParent.distinctParent.pdgId:", GenVisTaul.distinctParent.distinctParent.pdgId)
-        #print("GenVisTau.distinctParent.pdgId:", events.GenPart.pdgId[events.GenVisTau.genPartIdxMother])
-        
-        #print(events)
-        
-        #GenTauh = events[awkward.num(events.GenVisTau, axis = 1) >= 1].GenPart[events.GenVisTau.genPartIdxMother]
-        GenTauh = events.GenVisTau.parent
-        #awkward.drop_none(GenTauh)
-        #GenTauh = GenTauh[~awkward.is_none(GenTauh, axis = 1)]
-        #GenTauh = GenTauh[(abs(GenTauh.pdgId) == 15)]
-        
-        GenStauh = GenTauh.distinctParent
-        GenStauh = GenStauh[
-            ((abs(GenStauh.pdgId) == 1000015) | (abs(GenStauh.pdgId) == 2000015))
-            | ((abs(GenStauh.distinctParent.pdgId) == 1000015) | (abs(GenStauh.distinctParent.pdgId) == 2000015))
-        ]
-        
-        
-        print("GenTauh.pdgId:", GenTauh.pdgId)
-        print("GenStauh.pdgId:", GenStauh.pdgId)
-        #print("GenStauh.distinctParent.pdgId:", GenStauh.distinctParent.pdgId)
-        print("num(events.GenVisTau):", awkward.num(events.GenVisTau, axis = 1))
+        events["Jet1"] = events.Jet[:, 0]
+        events["Jet2"] = events.Jet[:, 1]
         
         # Skip processing as it is an EmptyArray
         if not len(events) :
             
             return output
         
-        output["GenVisTauh"].fill(
-            dataset = events.metadata["dataset"],
-            GenVisTauh_e = awkward.flatten(events.GenVisTau.energy),
-            GenVisTauh_pt = awkward.flatten(events.GenVisTau.pt),
-            GenVisTauh_e_by_stau_mass = awkward.flatten(events.GenVisTau.pt),
-        )
+        #output["GenVisTauh"].fill(
+        #    dataset = events.metadata["dataset"],
+        #    GenVisTauh_e = awkward.flatten(events.GenVisTau.energy),
+        #    GenVisTauh_pt = awkward.flatten(events.GenVisTau.pt),
+        #    GenVisTauh_e_by_stau_mass = awkward.flatten(events.GenVisTau.pt),
+        #)
         
-        output["GenVisTaul"].fill(
-            dataset = events.metadata["dataset"],
-            GenVisTaul_e = awkward.flatten(GenVisTaul.energy),
-            GenVisTaul_pt = awkward.flatten(GenVisTaul.pt),
-            GenVisTaul_e_by_stau_mass = awkward.flatten(GenVisTaul_stauRF.energy / GenStaul.mass),
-        )
+        #output["GenVisTaul"].fill(
+        #    dataset = events.metadata["dataset"],
+        #    GenVisTaul_e = awkward.flatten(GenVisTaul.energy),
+        #    GenVisTaul_pt = awkward.flatten(GenVisTaul.pt),
+        #    GenVisTaul_e_by_stau_mass = awkward.flatten(GenVisTaul_stauRF.energy / GenStaul.mass),
+        #)
+        
+        for obj, d_qty in self.d_hist_scheme.items() :
+            
+            for qty, ax_key in d_qty.items() :
+                
+                d_ax_args = {}
+                d_ax_args.update(self.d_hist_axis[ax_key])
+                
+                ax_name = f"{obj}_{qty}"
+                
+                d_hist_args = {"dataset": events.metadata["dataset"]}
+                
+                #if (qty not in events[obj]) :
+                #    print(obj, events[obj].__dict__)
+                    
+                d_hist_args[ax_name] = awkward.flatten([events[obj][qty]], axis = None)
+                output[ax_name].fill(**d_hist_args)
         
         return output
     
@@ -200,47 +277,82 @@ def main() :
         "stau_MM": d_fnamelist["stau_MM"],
     })
     
+    dataset_args = {
+        "stau_LH": {},
+        "stau_RH": {},
+        "stau_MM": {},
+    }
+    
+    #output = coffea.processor.run_uproot_job(
+    #    datasets,
+    #    "Events",
+    #    MyProcessor(
+    #        datasets = list(datasets.keys())
+    #    ),
+    #    #executor = coffea.processor.iterative_executor,
+    #    executor = coffea.processor.futures_executor,
+    #    executor_args = {
+    #        "schema": NanoAODSchema,
+    #        #"skipbadfiles": True,
+    #        "xrootdtimeout": 600, #sec
+    #        "workers": 10
+    #    },
+    #)
     
     output = coffea.processor.run_uproot_job(
         datasets,
         "Events",
         MyProcessor(
-            datasets = list(datasets.keys())
+            dataset_args = dataset_args,
         ),
-        #executor = coffea.processor.iterative_executor,
         executor = coffea.processor.futures_executor,
         executor_args = {
             "schema": NanoAODSchema,
-            #"skipbadfiles": True,
-            "xrootdtimeout": 600, #sec
-            "workers": 10
+            "skipbadfiles": True,
+            "workers": 10,
         },
     )
     
     print(output)
     
-    with uproot.recreate("output_stau_kinematics_study.root") as fout:
+    #with uproot.recreate("output_stau_kinematics_study.root") as fout:
+    #    
+    #    for key in output:
+    #        
+    #        histo = output[key]
+    #        print(key)
+    #        print(histo.axes)
+    #        #print(histo.axes["dataset"])
+    #        print(histo.__dict__)
+    #        print(histo.axes.__dict__)
+    #        
+    #        for s in histo.axes["dataset"]:
+    #            
+    #            for ax in histo.axes :
+    #                
+    #                if ax.name == "dataset" :
+    #                    
+    #                    continue
+    #                    
+    #                print(s, ax)
+    #                fout[f"{s}/{ax.name}"] = histo[{"dataset": s}].project(ax.name)
+    
+    
+    with uproot.recreate("output/stau_kinematics_study/output_stau_kinematics_study.root") as fout:
         
-        for key in output:
+        for dataset_key in datasets.keys() :
             
-            histo = output[key]
-            print(key)
-            print(histo.axes)
-            #print(histo.axes["dataset"])
-            print(histo.__dict__)
-            print(histo.axes.__dict__)
-            
-            for s in histo.axes["dataset"]:
+            for hist_key, histo in output.items() :
                 
                 for ax in histo.axes :
                     
                     if ax.name == "dataset" :
-                        
                         continue
-                        
-                    print(s, ax)
-                    fout[f"{s}/{ax.name}"] = histo[{"dataset": s}].project(ax.name)
-        
+                    
+                    print(dataset_key, ax)
+                    h_tmp = histo[{"dataset": dataset_key}].project(ax.name)
+                    h_tmp = h_tmp / h_tmp.sum(flow = True)
+                    fout[f"{dataset_key}/{ax.name}"] = h_tmp
     
     return 0
 

@@ -1,0 +1,66 @@
+{
+
+    "year": "ul2016pre",
+    "file_mode": "local",
+    "xrootddomain": "xrootd-cms.infn.it",
+    "datadir": "/pnfs/desy.de/cms/tier2/store/user/sobhatta/LongLivedStaus/NanoAOD",
+    //"bad_file_paths": "$CONFDIR/nano_v11_bad-pnfs-files.json",
+    "rng_seed_file": "$CONFDIR/seed.txt",
+    "compute_systematics": false,
+    "luminosity": 1.0,
+    "apply_met_filters": true,
+    "crosssections": "$CONFDIR/crosssections.json",
+    "exp_datasets": {
+        "SingleMuon_2016_preVFP" :  [
+            "$DATADIR/SingleMuon/crab_SingleMuon_Run2016B_ver2_UL_preVFP/240518_032345/*/*.root",
+            "$DATADIR/SingleMuon/crab_SingleMuon_Run2016C_UL_preVFP/240518_032354/*/*.root",
+            "$DATADIR/SingleMuon/crab_SingleMuon_Run2016D_UL_preVFP/240518_032405/*/*.root",
+            "$DATADIR/SingleMuon/crab_SingleMuon_Run2016E_UL_preVFP/240518_032414/*/*.root",
+            "$DATADIR/SingleMuon/crab_SingleMuon_Run2016F_UL_preVFP/240518_032423/*/*.root"
+        ]
+    },
+    "mc_datasets": {
+        "WNJetsToLNu" :  [
+            "$DATADIR/2016_preVFP/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/crab_WJetsToLNu/240522_043351/*/*.root",
+            "$DATADIR/2016_preVFP/W1JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/crab_W1JetsToLNu/240522_043359/*/*.root",
+            "$DATADIR/2016_preVFP/W2JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/crab_W2JetsToLNu/240522_043408/*/*.root",
+            "$DATADIR/2016_preVFP/W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/crab_W3JetsToLNu/240522_043416/*/*.root",
+            "$DATADIR/2016_preVFP/W4JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/crab_W4JetsToLNu/240522_043424/*/*.root"
+        ]
+    },
+    "dataset_for_systematics": {
+    },
+    
+    "dataset_trigger_order": [
+        "SingleMuon_2016_preVFP"
+    ],
+    
+    "tag_trigger_map": {
+        "SingleMuon_2016_preVFP": [
+            "HLT_IsoMu24",
+            "HLT_IsoMu27",
+            
+            "HLT_IsoTkMu24",
+            "HLT_IsoTkMu27"
+        ]
+    },
+    
+    "probe_trigger_map": {
+        "SingleMuon_2016_preVFP": [
+            "HLT_PFMET100_PFMHT100_IDTight",
+            "HLT_PFMET110_PFMHT110_IDTight",
+            "HLT_PFMET120_PFMHT120_IDTight"
+        ]
+    },
+    
+    // Njets: [0, 1, 2, 3, 4]
+    "W_jet_reweight": [
+        0.82391030511438,
+        0.189256900222238,
+        0.121678319426202,
+        0.0650217772733247,
+        0.111995273518105
+    ],
+    
+    "hists": "$CONFDIR/histograms_trigger_eff_MET.json"
+}

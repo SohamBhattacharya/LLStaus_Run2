@@ -16,13 +16,13 @@
 
 # Just some stuff one might have for local tests
 *.bak
-*debug*
-*tmp*
-*temp*
-*log*
-*misc*
-
-soft/*
+debug/
+tmp/
+temp/
+log/
+misc/
+test/
+soft/
 
 # Analysis output extension
 *.coffea

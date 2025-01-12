@@ -1,4 +1,4 @@
-sampleType=MC era=2018 disTauTagOutputOpt=1
+sampleType=MC era=2018 disTauTagOutputOpt=1 pfCandExtraCut=hasTrackDetails
 
 WToTauNu_M-100          /WToTauNu_M-100_TuneCP5_13TeV-pythia8-tauola/RunIISummer20UL18MiniAODv2-106X_upgrade2018_realistic_v16_L1v1-v2/MINIAODSIM
 WToTauNu_M-200          /WToTauNu_M-200_TuneCP5_13TeV-pythia8-tauola/RunIISummer20UL18MiniAODv2-106X_upgrade2018_realistic_v16_L1v1-v1/MINIAODSIM

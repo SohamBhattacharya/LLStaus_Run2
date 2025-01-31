@@ -9,15 +9,15 @@ obs:
   scaleby: "137.62/59.83"
   samples:
     - "DATA_MET"
-  histfile: "/nfs/dust/cms/user/mykytaua/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_6/2018/output_signal/signal_v3_0btag/hists/Cut_016_two_loose_jets_final_binning_schema_pass.root"
+  histfile: "/data/dust/user/mykytaua/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_6/2018/output_signal/signal_v3_0btag/hists/Cut_016_two_loose_jets_final_binning_schema_pass.root"
   nominal: "nominal/bin2/hist"
 
 
 sig:
   loadconfig: "configs/limits/sig_procs.yaml"
-  xsecfile: "/nfs/dust/cms/user/sobhatta/work/LongLivedStaus/LLStaus_Run2/Analysis/configs/crosssections_stau_maximally-mixed.csv"
-  histfile: "/nfs/dust/cms/user/mykytaua/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_6/2018/output_signal/signal_v3_0btag/hists/Cut_016_two_loose_jets_final_binning_schema_pass.root"
-  cutflowsfile: "/nfs/dust/cms/user/mykytaua/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_6/2018/output_signal/signal_v3_0btag/cutflows.json"
+  xsecfile: "/data/dust/user/sobhatta/work/LongLivedStaus/LLStaus_Run2/Analysis/configs/crosssections_stau_maximally-mixed.csv"
+  histfile: "/data/dust/user/mykytaua/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_6/2018/output_signal/signal_v3_0btag/hists/Cut_016_two_loose_jets_final_binning_schema_pass.root"
+  cutflowsfile: "/data/dust/user/mykytaua/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_6/2018/output_signal/signal_v3_0btag/cutflows.json"
   # Count to use (from cutflowsfile) in the denominator when normalizing
   # Nested keys separated by "."
   # For e.g. if "a.b.c", will read the dictionary entry dict[a][b][c]
@@ -35,11 +35,11 @@ bkg:
       scaleby: "137.62/59.83"
       samples:
         - "DATA_MET"
-      histfile: "/nfs/dust/cms/user/mykytaua/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_6/2018/output_signal/signal_v3_0btag/hists/Cut_016_two_loose_jets_final_binning_schema_yield_bin1to2.root"
+      histfile: "/data/dust/user/mykytaua/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_6/2018/output_signal/signal_v3_0btag/hists/Cut_016_two_loose_jets_final_binning_schema_yield_bin1to2.root"
       nominal: "nominal/hist"
   
-  xsecfile: "/nfs/dust/cms/user/sobhatta/work/LongLivedStaus/LLStaus_Run2/Analysis/configs/crosssections.json"
-  cutflowsfile: "/nfs/dust/cms/user/mykytaua/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_6/2018/output_signal/signal_v3_0btag/cutflows.json"
+  xsecfile: "/data/dust/user/sobhatta/work/LongLivedStaus/LLStaus_Run2/Analysis/configs/crosssections.json"
+  cutflowsfile: "/data/dust/user/mykytaua/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_6/2018/output_signal/signal_v3_0btag/cutflows.json"
   neventkey: "all.BeforeCuts"
 
 systematics:

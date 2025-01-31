@@ -21,9 +21,12 @@ NPARALLEL=5
 WSPACE="workspace.root"
 
 task(){
-    wd=$1
+    indir=$1
+    wd="${indir}/impacts"
     
+    mkdir -p $wd
     pushd $wd
+    cp ../$WSPACE ./
     
     # First Stage: obtain the best fit for each POI with all nuisance profiling
     
@@ -71,6 +74,8 @@ task(){
     -i impacts.json \
     -o impacts \
     --POI SF \
+    --summary \
+    --cms-label "Private work" \
     
     popd
 }

@@ -8,39 +8,70 @@ import utils.commonutils as cmut
 
 def main() :
     
+    # Argument parser
+    parser = argparse.ArgumentParser(formatter_class = argparse.ArgumentDefaultsHelpFormatter)
+    
+    parser.add_argument(
+        "--era",
+        help = "Era",
+        type = str,
+        required = True,
+        choices = ["2016_preVFP", "2016_postVFP", "2017", "2018"]
+    )
+    
+    parser.add_argument(
+        "--outsuffix",
+        help = "Will append \"_outsuffix\" to the output directory",
+        type = str,
+        required = False,
+    )
+    
+    # Parse arguments
+    args = parser.parse_args()
+    
     # label: dir name
     d_wp = {
         ##"wp-p00": "all",
+        
         "wp-p70": "p7000",
-        "wp-p80": "p8000",
-        "wp-p90": "p9000",
-        "wp-p95": "p9500",
-        "wp-p97": "p9700",
-        "wp-p98": "p9800",
-        "wp-p99": "p9900",
+        #"wp-p80": "p8000",
+        #"wp-p90": "p9000",
+        #"wp-p95": "p9500",
+        #"wp-p97": "p9700",
+        #"wp-p98": "p9800",
+        #"wp-p99": "p9900",
     }
     
     d_dxy = {
         "dxy-gt-0p00"    : "all",
-        "dxy-gt-0p01"    : "dxy0p1",
-        "dxy-gt-0p02"    : "dxy0p2",
-        "dxy-gt-0p03"    : "dxy0p3",
-        "dxy-gt-0p05"    : "dxy0p5",
-        "dxy-gt-0p07"    : "dxy0p7",
-        "dxy-gt-0p09"    : "dxy0p9",
+        "dxy-gt-0p01"    : "dxy01",
+        #"dxy-gt-0p02"    : "dxy02",
+        #"dxy-gt-0p03"    : "dxy03",
+        #"dxy-gt-0p05"    : "dxy05",
+        #"dxy-gt-0p07"    : "dxy07",
+        "dxy-gt-0p09"    : "dxy09",
     }
     
-    config_files = [
-        "configs/config_datacard_mutau_pass_mass.yaml",
-        "configs/config_datacard_mutau_fail_mass.yaml",
-        "configs/config_datacard_mumu.yaml",
+    d_config_files = {}
+    
+    d_config_files["2017"] = [
+        "configs/DisTauSF/mutau_mass/2017/config_datacard_mutau_pass_mass.yaml",
+        "configs/DisTauSF/mutau_mass/2017/config_datacard_mutau_fail_mass.yaml",
     ]
     
-    #out_suffix = ""
-    out_suffix = "mumu-scaled-1em2"
-    #out_suffix = "mumu-scaled-1em3"
-    #out_suffix = "mumu-scaled-1em4"
-    #out_suffix = "no-dy-rateparam"
+    d_config_files["2018"] = [
+        "configs/DisTauSF/mutau_mass/2018/config_datacard_mutau_pass_mass.yaml",
+        "configs/DisTauSF/mutau_mass/2018/config_datacard_mutau_fail_mass.yaml",
+        #"configs/DisTauSF/mumu/2018/config_datacard_mumu.yaml",
+    ]
+    
+    l_config_files = d_config_files[args.era]
+    
+    #outsuffix = ""
+    #outsuffix = "mumu-scaled-1em2"
+    #outsuffix = "mumu-scaled-1em3"
+    #outsuffix = "mumu-scaled-1em4"
+    #outsuffix = "no-dy-rateparam"
     
     username = getpass.getuser()
     tmp_dir = f"/tmp/{username}"
@@ -59,9 +90,10 @@ def main() :
     #binstart = 1
     #nbins = 3
     
-    outdir = f"tmp/test_DisTauSF_mass_nbins{nbins}-{'-'.join([str(_ele) for _ele in rebin])}"
+    #outdir = f"tmp/test_DisTauSF_mass_nbins{nbins}-{'-'.join([str(_ele) for _ele in rebin])}"
+    outdir = f"results/DisTauSF/DisTauSF_mass_nbins{nbins}-{'-'.join([str(_ele) for _ele in rebin])}"
     
-    outdir = f"{outdir}_{out_suffix}" if len(out_suffix) else outdir
+    outdir = f"{outdir}_{args.outsuffix}" if len(args.outsuffix) else outdir
     
     for key_wp, val_wp in d_wp.items() :
         
@@ -73,7 +105,7 @@ def main() :
             
             config_files_wp = []
             
-            for cfg_file in config_files:
+            for cfg_file in l_config_files:
                 
                 file_content = None
                 
@@ -94,7 +126,7 @@ def main() :
                 
                 fname, fext = os.path.splitext(os.path.basename(cfg_file))
                 os.system(f"mkdir -p {tmp_dir}")
-                fout_name = f"{tmp_dir}/{fname}_{time.time_ns()}{fext}"
+                fout_name = f"{tmp_dir}/{fname}_{key_wp}_{key_dxy}_{time.time_ns()}{fext}"
                 cmut.logger.info(f"Writing {cfg_file} --> {fout_name}")
                 
                 with open(fout_name, "w") as fout :
@@ -103,10 +135,12 @@ def main() :
                     config_files_wp.append(fout_name)
             
             cmd = (
-                "python3 prepare_cards.py "
-                f"--configs {' '.join(config_files_wp)}"
+                "python3 prepare_cards.py"
+                f" --configs {' '.join(config_files_wp)}"
                 f" --outdir {outdir}"
-                f" --chcombos mutau_pass,mutau_fail"
+                " --combpars channel"
+                #" --yields_uncs"
+                #f" --chcombos mutau_pass,mutau_fail"
             )
             
             cmd_retval = os.system(cmd)
@@ -120,8 +154,8 @@ def main() :
                 cmut.logger.info(f"Failure preparing cards for [wp {key_wp}], [dxy {key_dxy}]. Exiting...")
                 exit(cmd_retval)
             
-            print("="*100)
-            print("\n\n")
+            #print("="*100)
+            #print("\n\n")
 
 if (__name__ == "__main__") :
     

@@ -1,0 +1,217 @@
+
+analysis: "llstau_maximally-mixed"
+
+channel: "BRT2"
+era: "2017"
+lumi: 41.48
+
+obs:
+  scaleby: "1"
+  samples:
+    - "DATA_MET"
+  histfile: "/data/dust/user/sobhatta/work/LongLivedStaus/shedprog_2017-studies/LLStaus_Run2/Analysis/output/2017/output_signal/signal_v6/hists/Cut_017_ht_soft_forward_cut_binning_schema_pass.root"
+  nominal: "nominal/bin2/hist"
+
+
+sig:
+  loadconfig: "configs/limits/sig_procs_test-sig-scale-0p64.yaml"
+  xsecfile: "/data/dust/user/sobhatta/work/LongLivedStaus/LLStaus_Run2/Analysis/configs/crosssections_stau_maximally-mixed_hepi-fast.csv"
+  histfile: "/data/dust/user/sobhatta/work/LongLivedStaus/shedprog_2017-studies/LLStaus_Run2/Analysis/output/2017/output_signal/signal_v6/hists/Cut_017_ht_soft_forward_cut_binning_schema_pass.root"
+  cutflowsfile: "/data/dust/user/sobhatta/work/LongLivedStaus/shedprog_2017-studies/LLStaus_Run2/Analysis/output/2017/output_signal/signal_v6/cutflows.json"
+  # Count to use (from cutflowsfile) in the denominator when normalizing
+  # Nested keys separated by "."
+  # For e.g. if "a.b.c", will read the dictionary entry dict[a][b][c]
+  neventkey: "all.BeforeCuts"
+  
+  # Nominal histogram path
+  # Will look for the histogram <dirname>/<nominal> 
+  nominal: "nominal/bin2/hist"
+
+
+bkg:
+  procs:
+    "misid":
+      ismc: false
+      scaleby: "1"
+      samples:
+        - "DATA_MET"
+      histfile: "/data/dust/user/sobhatta/work/LongLivedStaus/shedprog_2017-studies/LLStaus_Run2/Analysis/output/2017/output_signal/signal_v6/hists/Cut_017_ht_soft_forward_cut_binning_schema_yield_bin1to2.root"
+      nominal: "nominal/hist"
+      alpha: 0.060
+  
+  xsecfile: "/data/dust/user/sobhatta/work/LongLivedStaus/LLStaus_Run2/Analysis/configs/crosssections.json"
+  cutflowsfile: "/data/dust/user/sobhatta/work/LongLivedStaus/shedprog_2017-studies/LLStaus_Run2/Analysis/output/2017/output_signal/signal_v6/cutflows.json"
+  neventkey: "all.BeforeCuts"
+
+
+systcombos:
+  "lumi": 
+    procs:
+      sig: ["sig"]
+      bkg: []
+    names: ["lumi_corr161718", "lumi_corr1718", "lumi_uncorr"]
+
+
+systematics:
+  
+  "lumi_corr161718":
+    procs:
+      sig: ["sig"]
+      bkg: []
+    iseracorr: true
+    u: 1.009
+    d: 0.991
+  
+  "lumi_corr1718":
+    procs:
+      sig: ["sig"]
+      bkg: []
+    iseracorr: true
+    u: 1.006
+    d: 0.994
+  
+  "lumi_uncorr":
+    procs:
+      sig: ["sig"]
+      bkg: []
+    iseracorr: false
+    u: 1.02
+    d: 0.98
+  
+  "met_trigger":
+    procs:
+      sig: ["sig"]
+      bkg: []
+    iseracorr: false
+    u:
+      "*": "MET_trigger_sfs_up/bin2/hist"
+    d:
+      "*": "MET_trigger_sfs_down/bin2/hist"
+  
+  "distauid":
+    procs:
+      sig: ["sig"]
+      bkg: []
+    iseracorr: false
+    #u: 1.4
+    #d: 0.6
+    u:
+      "*": "signal_eff_unc_up/bin2/hist"
+    d:
+      "*": "signal_eff_unc_down/bin2/hist"
+  
+  "uncl_met":
+    procs:
+      sig: ["sig"]
+      bkg: []
+    iseracorr: false
+    u:
+      "*": "UncMET_up/bin2/hist"
+    d:
+      "*": "UncMET_down/bin2/hist"
+  
+  "pileup":
+    procs:
+      sig: ["sig"]
+      bkg: []
+    iseracorr: false
+    u:
+      "*": "pileup_up/bin2/hist"
+    d:
+      "*": "pileup_down/bin2/hist"
+  
+  "l1_prefiring":
+    procs:
+      sig: ["sig"]
+      bkg: []
+    iseracorr: true
+    u:
+      "*": "L1prefiring_up/bin2/hist"
+    d:
+      "*": "L1prefiring_down/bin2/hist"
+  
+  "ren_scale":
+    procs:
+      sig: ["sig"]
+      bkg: []
+    iseracorr: true
+    u:
+      "*": "MEren_up/bin2/hist"
+    d:
+      "*": "MEren_down/bin2/hist"
+  
+  "fac_scale":
+    procs:
+      sig: ["sig"]
+      bkg: []
+    iseracorr: true
+    u:
+      "*": "MEfac_up/bin2/hist"
+    d:
+      "*": "MEfac_down/bin2/hist"
+  
+  "pdf":
+    procs:
+      sig: ["sig"]
+      bkg: []
+    iseracorr: true
+    u:
+      "*": "PDF_up/bin2/hist"
+    d:
+      "*": "PDF_down/bin2/hist"
+  
+  "jes":
+    procs:
+      sig: ["sig"]
+      bkg: []
+    iseracorr: false
+    u:
+      "*": "Junc_up/bin2/hist"
+    d:
+      "*": "Junc_down/bin2/hist"
+  
+  "jer":
+    procs:
+      sig: ["sig"]
+      bkg: []
+    iseracorr: false
+    u:
+      "*": "Jer_up/bin2/hist"
+    d:
+      "*": "Jer_down/bin2/hist"
+  
+  "fr_stat":
+    iseracorr: false
+    procs:
+      sig: []
+      bkg: ["misid"]
+    u:
+      "*": "stat_up/hist"
+    d:
+      "*": "stat_down/hist"
+  
+  "fr_region":
+    iseracorr: true
+    procs:
+      sig: []
+      bkg: ["misid"]
+    u:
+      "*": "sys_up/hist"
+    d:
+      "*": "sys_down/hist"
+
+
+rebin: null
+binstart: 3
+nbins: 8
+
+#rebin:
+#  - -1
+#  - 1
+#  - 2
+#  - 3
+#  - 4
+#  - 6
+#  - 11
+#binstart: 2
+#nbins: 4

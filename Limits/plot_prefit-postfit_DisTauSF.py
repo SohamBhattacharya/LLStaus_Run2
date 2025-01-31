@@ -51,9 +51,10 @@ def main () :
     
     parser.add_argument(
         "--era",
-        help = "Era string",
+        help = "Era",
         type = str,
         required = True,
+        choices = ["2016_preVFP", "2016_postVFP", "2017", "2018"],
     )
     
     parser.add_argument(
@@ -92,7 +93,8 @@ def main () :
     d_channel_info["mumu"] = {
         "label": "#mu#mu",
         "nbins": 1,
-        "eras": ["2018"],
+        #"eras": ["2018"],
+        "eras": [args.era],
         "categories": [""],
         "data": "data_obs",
         "processes_bkg": ["ZLL", "WLNu", "TTX", "TT", "ST", "Other"],
@@ -106,10 +108,12 @@ def main () :
     d_channel_info["mutau"] = {
         "label": "#mu#tau_{h}",
         "nbins": 1,
-        "eras": ["2018"],
+        #"eras": ["2018"],
+        "eras": [args.era],
         "categories": ["pass", "fail"],
         "data": "data_obs",
-        "processes_bkg": ["ZLL", "WLNu", "TTX", "TT", "ST", "QCD", "Other"],
+        #"processes_bkg": ["ZLL", "WLNu", "TTX", "TT", "ST", "QCD", "Other"],
+        "processes_bkg": ["Other", "QCD", "WLNu", "Top", "ZLL"],
         "processes_sig": ["sig"],
         "bkg_total": "TotalBkg",
         "sig_total": "TotalSig",
@@ -129,18 +133,23 @@ def main () :
         },
         "WLNu": {
             "label": "W+jets",
-            "color": "#bd1f01",
+            #"color": "#bd1f01",
+            "color": "#b9ac70",
         },
-        "TTX": {
-            "label": "t#bar{t}X",
-            "color": "#94a4a2",
-        },
-        "TT": {
-            "label": "t#bar{t}",
-            "color": "#832db6",
-        },
-        "ST": {
-            "label": "single t",
+        #"TTX": {
+        #    "label": "t#bar{t}X",
+        #    "color": "#94a4a2",
+        #},
+        #"TT": {
+        #    "label": "t#bar{t}",
+        #    "color": "#832db6",
+        #},
+        #"ST": {
+        #    "label": "single t",
+        #    "color": "#a96b59",
+        #},
+        "Top": {
+            "label": "Top",
             "color": "#a96b59",
         },
         "QCD": {
@@ -149,7 +158,8 @@ def main () :
         },
         "Other": {
             "label": "Other SM",
-            "color": "#b9ac70",
+            #"color": "#b9ac70",
+            "color": "#94a4a2",
         },
     }
     
@@ -315,11 +325,12 @@ def main () :
                             legendtextsize = 0.045,
                             legendtitle = title,
                             legendheightscale = 0.65, legendwidthscale = 1.5,
-                            CMSextraText = "Preliminary",
+                            #CMSextraText = "Preliminary",
+                            CMSextraText = "Private Work",
                             lumiText = f"{args.era} (13 TeV)"
                         )
                         
-                        os.system(f"pdftoppm -png -r 600 -cropbox {plotfile} {plotfile}")
+                        #os.system(f"pdftoppm -png -r 600 -cropbox -singlefile {plotfile} {plotfile}")
         
         infile.Close()
     

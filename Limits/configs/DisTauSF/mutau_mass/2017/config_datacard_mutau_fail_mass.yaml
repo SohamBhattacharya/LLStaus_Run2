@@ -1,13 +1,13 @@
 analysis: "DisTauSF"
 channel: "mutau_fail"
-era: "2018"
-lumi: 59.83
+era: "2017"
+lumi: 41.48
 
 obs:
   scaleby: "1"
   samples:
     - "SingleMuon"
-  histfile: "/nfs/dust/cms/user/mykytaua/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_3/output_zmutau/zmutau_v8_sys/hists_root/hists/Cut_020_final_state_fake_rate_mass_hist.root"
+  histfile: "/afs/desy.de/user/m/mykytaua/nfscms/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_6/2017/output_zmutau/zmutau_v1/hists/Cut_020_final_state_fake_rate_mass_hist.root"
   nominal: "nominal/not{wp}/{dxy}/iso/OS/gen-tau/hist"
 
 sig: 
@@ -23,14 +23,19 @@ sig:
         - "DY2JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8"
         - "DY3JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8"
         - "DY4JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8"
+      alpha: 2 # xsec(DYJetsToLL)*lumi/nevents(DY*JetsToLL)*BR(Z->tau tau)
   
-  histfile: "/nfs/dust/cms/user/mykytaua/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_3/output_zmutau/zmutau_v8_sys/hists_root/hists/Cut_020_final_state_fake_rate_mass_hist.root"
+  histfile: "/afs/desy.de/user/m/mykytaua/nfscms/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_6/2017/output_zmutau/zmutau_v1/hists/Cut_020_final_state_fake_rate_mass_hist.root"
   nominal: "nominal/not{wp}/{dxy}/iso/OS/gen-tau/hist"
-  xsecfile: "/nfs/dust/cms/user/sobhatta/work/LongLivedStaus/LLStaus_Run2/Analysis/configs/crosssections.json"
-  cutflowsfile: "/nfs/dust/cms/user/mykytaua/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_3/output_zmutau/zmutau_v8_sys/cutflows.json"
+  xsecfile: "/data/dust/user/sobhatta/work/LongLivedStaus/LLStaus_Run2/Analysis/configs/crosssections.json"
+  cutflowsfile: "/afs/desy.de/user/m/mykytaua/nfscms/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_6/2017/output_zmutau/zmutau_v1/cutflows.json"
   neventkey: "all.BeforeCuts"
 
 bkg:
+  xsecfile: "/data/dust/user/sobhatta/work/LongLivedStaus/LLStaus_Run2/Analysis/configs/crosssections.json"
+  cutflowsfile: "/afs/desy.de/user/m/mykytaua/nfscms/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_6/2017/output_zmutau/zmutau_v1/cutflows.json"
+  neventkey: "all.BeforeCuts"
+  
   procs:
     
     "QCD":
@@ -39,8 +44,9 @@ bkg:
       scaleby: "1"
       samples:
         - "QCD-pred"
-      histfile: "/nfs/dust/cms/user/mykytaua/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_3/output_zmutau/zmutau_v8_sys/hists_root/hists_qcd_fit2/Cut_020_final_state_fake_rate_mass_hist.root"
+      histfile: "/afs/desy.de/user/m/mykytaua/nfscms/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_6/2017/output_zmutau/zmutau_v1/hists_qcd_fit/Cut_020_final_state_fake_rate_mass_hist.root"
       nominal: "nominal/not{wp}/{dxy}/iso/OS/gen-all/hist"
+      alpha: 1.04
     
     "ZLL":
       ismc: true
@@ -52,8 +58,9 @@ bkg:
         - "DY2JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8"
         - "DY3JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8"
         - "DY4JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8"
-      histfile: "/nfs/dust/cms/user/mykytaua/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_3/output_zmutau/zmutau_v8_sys/hists_root/hists/Cut_020_final_state_fake_rate_mass_hist.root"
+      histfile: "/afs/desy.de/user/m/mykytaua/nfscms/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_6/2017/output_zmutau/zmutau_v1/hists/Cut_020_final_state_fake_rate_mass_hist.root"
       nominal: "nominal/not{wp}/{dxy}/iso/OS/gen-other/hist"
+      alpha: 1.4 # xsec(DYJetsToLL)*lumi/nevents(DY*JetsToLL)*BR(Z->tau tau)
     
     "WLNu":
       ismc: true
@@ -65,10 +72,48 @@ bkg:
         - "W2JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8"
         - "W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8"
         - "W4JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8"
-      histfile: "/nfs/dust/cms/user/mykytaua/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_3/output_zmutau/zmutau_v8_sys/hists_root/hists/Cut_020_final_state_fake_rate_mass_hist.root"
+      histfile: "/afs/desy.de/user/m/mykytaua/nfscms/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_6/2017/output_zmutau/zmutau_v1/hists/Cut_020_final_state_fake_rate_mass_hist.root"
       nominal: "nominal/not{wp}/{dxy}/iso/OS/gen-all/hist"
+      alpha: null
+      #alpha: 6 # xsec(WJetsToLNu)*lumi/nevents(W*JetsToLL)*BR(W->mu nu)
     
-    "ST":
+    #"ST":
+    #  ismc: true
+    #  xsnorm: true
+    #  scaleby: "1"
+    #  samples:
+    #    - "ST_t-channel_top_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8"
+    #    - "ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8"
+    #    - "ST_tW_top_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8"
+    #    - "ST_tW_antitop_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8"
+    #  histfile: "/afs/desy.de/user/m/mykytaua/nfscms/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_6/2017/output_zmutau/zmutau_v1/hists/Cut_020_final_state_fake_rate_mass_hist.root"
+    #  nominal: "nominal/not{wp}/{dxy}/iso/OS/gen-all/hist"
+    #
+    #"TT":
+    #  ismc: true
+    #  xsnorm: true
+    #  scaleby: "1"
+    #  samples:
+    #    - "TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8"
+    #    - "TTToHadronic_TuneCP5_13TeV-powheg-pythia8"
+    #    - "TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8"
+    #  histfile: "/afs/desy.de/user/m/mykytaua/nfscms/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_6/2017/output_zmutau/zmutau_v1/hists/Cut_020_final_state_fake_rate_mass_hist.root"
+    #  nominal: "nominal/not{wp}/{dxy}/iso/OS/gen-all/hist"
+    #
+    #"TTX":
+    #  ismc: true
+    #  xsnorm: true
+    #  scaleby: "1"
+    #  samples:
+    #    - "TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8"
+    #    - "TTWJetsToQQ_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8"
+    #    - "TTZToLLNuNu_M-10_TuneCP5_13TeV-amcatnlo-pythia8"
+    #    - "TTZToQQ_TuneCP5_13TeV-amcatnlo-pythia8"
+    #    - "ttHToNonbb_M125_TuneCP5_13TeV-powheg-pythia8"
+    #  histfile: "/afs/desy.de/user/m/mykytaua/nfscms/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_6/2017/output_zmutau/zmutau_v1/hists/Cut_020_final_state_fake_rate_mass_hist.root"
+    #  nominal: "nominal/not{wp}/{dxy}/iso/OS/gen-all/hist"
+    
+    "Top":
       ismc: true
       xsnorm: true
       scaleby: "1"
@@ -77,31 +122,15 @@ bkg:
         - "ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8"
         - "ST_tW_top_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8"
         - "ST_tW_antitop_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8"
-      histfile: "/nfs/dust/cms/user/mykytaua/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_3/output_zmutau/zmutau_v8_sys/hists_root/hists/Cut_020_final_state_fake_rate_mass_hist.root"
-      nominal: "nominal/not{wp}/{dxy}/iso/OS/gen-all/hist"
-    
-    "TT":
-      ismc: true
-      xsnorm: true
-      scaleby: "1"
-      samples:
         - "TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8"
         - "TTToHadronic_TuneCP5_13TeV-powheg-pythia8"
         - "TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8"
-      histfile: "/nfs/dust/cms/user/mykytaua/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_3/output_zmutau/zmutau_v8_sys/hists_root/hists/Cut_020_final_state_fake_rate_mass_hist.root"
-      nominal: "nominal/not{wp}/{dxy}/iso/OS/gen-all/hist"
-    
-    "TTX":
-      ismc: true
-      xsnorm: true
-      scaleby: "1"
-      samples:
         - "TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8"
         - "TTWJetsToQQ_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8"
         - "TTZToLLNuNu_M-10_TuneCP5_13TeV-amcatnlo-pythia8"
         - "TTZToQQ_TuneCP5_13TeV-amcatnlo-pythia8"
         - "ttHToNonbb_M125_TuneCP5_13TeV-powheg-pythia8"
-      histfile: "/nfs/dust/cms/user/mykytaua/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_3/output_zmutau/zmutau_v8_sys/hists_root/hists/Cut_020_final_state_fake_rate_mass_hist.root"
+      histfile: "/afs/desy.de/user/m/mykytaua/nfscms/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_6/2017/output_zmutau/zmutau_v1/hists/Cut_020_final_state_fake_rate_mass_hist.root"
       nominal: "nominal/not{wp}/{dxy}/iso/OS/gen-all/hist"
     
     "Other":
@@ -135,36 +164,48 @@ bkg:
         #- "WJetsToQQ_HT-400to600_TuneCP5_13TeV-madgraphMLM-pythia8"
         #- "WJetsToQQ_HT-600to800_TuneCP5_13TeV-madgraphMLM-pythia8"
         #- "WJetsToQQ_HT-800toInf_TuneCP5_13TeV-madgraphMLM-pythia8"
-      histfile: "/nfs/dust/cms/user/mykytaua/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_3/output_zmutau/zmutau_v8_sys/hists_root/hists/Cut_020_final_state_fake_rate_mass_hist.root"
+      histfile: "/afs/desy.de/user/m/mykytaua/nfscms/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_6/2017/output_zmutau/zmutau_v1/hists/Cut_020_final_state_fake_rate_mass_hist.root"
       nominal: "nominal/not{wp}/{dxy}/iso/OS/gen-all/hist"
-    
-    
-  xsecfile: "/nfs/dust/cms/user/sobhatta/work/LongLivedStaus/LLStaus_Run2/Analysis/configs/crosssections.json"
-  cutflowsfile: "/nfs/dust/cms/user/mykytaua/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_3/output_zmutau/zmutau_v8_sys/cutflows.json"
-  neventkey: "all.BeforeCuts"
 
-systematics:
-  "lumi_corr":
+
+systcombos:
+  "lumi": 
     procs:
       sig: ["ZMT_{nametag}"]
-      bkg: ["ZLL", "WLNu", "ST", "TT", "TTX", "Other"]
+      bkg: ["ZLL", "WLNu", "Top", "Other"]
+    names: ["lumi_corr161718", "lumi_corr1718", "lumi_uncorr"]
+
+
+systematics:
+  "lumi_corr161718":
+    procs:
+      sig: ["ZMT_{nametag}"]
+      bkg: ["ZLL", "WLNu", "Top", "Other"]
     iseracorr: true
-    u: 1.02
-    d: 0.98
+    u: 1.009
+    d: 0.991
+    
+  "lumi_corr1718":
+    procs:
+      sig: ["ZMT_{nametag}"]
+      bkg: ["ZLL", "WLNu", "Top", "Other"]
+    iseracorr: true
+    u: 1.006
+    d: 0.994
   
   "lumi_uncorr":
     procs:
       sig: ["ZMT_{nametag}"]
-      bkg: ["ZLL", "WLNu", "ST", "TT", "TTX", "Other"]
+      bkg: ["ZLL", "WLNu", "Top", "Other"]
     iseracorr: false
-    u: 1.015
-    d: 0.985
+    u: 1.02
+    d: 0.98
   
   "pileup":
     procs:
       sig: ["ZMT_{nametag}"]
-      bkg: ["ZLL", "WLNu", "ST", "TT", "TTX", "Other"]
-    iseracorr: true
+      bkg: ["ZLL", "WLNu", "Top", "Other"]
+    iseracorr: false
     u:
       "ZMT_{nametag}": "pileup_up/not{wp}/{dxy}/iso/OS/gen-tau/hist"
       "ZLL": "pileup_up/not{wp}/{dxy}/iso/OS/gen-other/hist"
@@ -174,11 +215,11 @@ systematics:
       "ZLL": "pileup_down/not{wp}/{dxy}/iso/OS/gen-other/hist"
       "*"  : "pileup_down/not{wp}/{dxy}/iso/OS/gen-all/hist"
   
-  "muon_trig":
+  "muon_trigger":
     procs:
       sig: ["ZMT_{nametag}"]
-      bkg: ["ZLL", "WLNu", "ST", "TT", "TTX", "Other"]
-    iseracorr: true
+      bkg: ["ZLL", "WLNu", "Top", "Other"]
+    iseracorr: false
     u:
       "ZMT_{nametag}": "muon_sf_trigger0_up/not{wp}/{dxy}/iso/OS/gen-tau/hist"
       "ZLL": "muon_sf_trigger0_up/not{wp}/{dxy}/iso/OS/gen-other/hist"
@@ -191,8 +232,8 @@ systematics:
   "muon_id":
     procs:
       sig: ["ZMT_{nametag}"]
-      bkg: ["ZLL", "WLNu", "ST", "TT", "TTX", "Other"]
-    iseracorr: true
+      bkg: ["ZLL", "WLNu", "Top", "Other"]
+    iseracorr: false
     u:
       "ZMT_{nametag}": "muon_sf0_up/not{wp}/{dxy}/iso/OS/gen-tau/hist"
       "ZLL": "muon_sf0_up/not{wp}/{dxy}/iso/OS/gen-other/hist"
@@ -205,8 +246,8 @@ systematics:
   "muon_iso":
     procs:
       sig: ["ZMT_{nametag}"]
-      bkg: ["ZLL", "WLNu", "ST", "TT", "TTX", "Other"]
-    iseracorr: true
+      bkg: ["ZLL", "WLNu", "Top", "Other"]
+    iseracorr: false
     u:
       "ZMT_{nametag}": "muon_sf1_up/not{wp}/{dxy}/iso/OS/gen-tau/hist"
       "ZLL": "muon_sf1_up/not{wp}/{dxy}/iso/OS/gen-other/hist"
@@ -216,21 +257,21 @@ systematics:
       "ZLL": "muon_sf1_down/not{wp}/{dxy}/iso/OS/gen-other/hist"
       "*"  : "muon_sf1_down/not{wp}/{dxy}/iso/OS/gen-all/hist"
   
-  "tauid":
+  "tau_id":
     procs:
       sig: ["ZMT_{nametag}"]
       bkg: []
-    iseracorr: true
+    iseracorr: false
     u:
       "ZMT_{nametag}": "tau_id_sf_up/not{wp}/{dxy}/iso/OS/gen-tau/hist"
     d:
       "ZMT_{nametag}": "tau_id_sf_down/not{wp}/{dxy}/iso/OS/gen-tau/hist"
   
-  "jet_scale":
+  "jes":
     procs:
       sig: ["ZMT_{nametag}"]
-      bkg: ["ZLL", "WLNu", "ST", "TT", "TTX", "Other"]
-    iseracorr: true
+      bkg: ["ZLL", "WLNu", "Top", "Other"]
+    iseracorr: false
     u:
       "ZMT_{nametag}": "Junc_up/not{wp}/{dxy}/iso/OS/gen-tau/hist"
       "ZLL": "Junc_up/not{wp}/{dxy}/iso/OS/gen-other/hist"
@@ -240,11 +281,11 @@ systematics:
       "ZLL": "Junc_down/not{wp}/{dxy}/iso/OS/gen-other/hist"
       "*"  : "Junc_down/not{wp}/{dxy}/iso/OS/gen-all/hist"
   
-  "jet_res":
+  "jer":
     procs:
       sig: ["ZMT_{nametag}"]
-      bkg: ["ZLL", "WLNu", "ST", "TT", "TTX", "Other"]
-    iseracorr: true
+      bkg: ["ZLL", "WLNu", "Top", "Other"]
+    iseracorr: false
     u:
       "ZMT_{nametag}": "Jer_up/not{wp}/{dxy}/iso/OS/gen-tau/hist"
       "ZLL": "Jer_up/not{wp}/{dxy}/iso/OS/gen-other/hist"
@@ -254,11 +295,11 @@ systematics:
       "ZLL": "Jer_down/not{wp}/{dxy}/iso/OS/gen-other/hist"
       "*"  : "Jer_down/not{wp}/{dxy}/iso/OS/gen-all/hist"
   
-  "met_uncl":
+  "uncl_met":
     procs:
       sig: ["ZMT_{nametag}"]
-      bkg: ["ZLL", "WLNu", "ST", "TT", "TTX", "Other"]
-    iseracorr: true
+      bkg: ["ZLL", "WLNu", "Top", "Other"]
+    iseracorr: false
     u:
       "ZMT_{nametag}": "UncMET_up/not{wp}/{dxy}/iso/OS/gen-tau/hist"
       "ZLL": "UncMET_up/not{wp}/{dxy}/iso/OS/gen-other/hist"
@@ -285,10 +326,10 @@ systematics:
       sig: []
       bkg: ["QCD"]
     iseracorr: false
-    u: 1.15
-    d: 0.85
+    u: 1.2
+    d: 0.8
   
-  "wjets_xs":
+  "wjets_norm":
     procs:
       sig: []
       bkg: ["WLNu"]
@@ -296,7 +337,7 @@ systematics:
     u: 1.1
     d: 0.9
   
-  "st_xs":
+  "st_norm":
     procs:
       sig: []
       bkg: ["ST"]
@@ -304,7 +345,7 @@ systematics:
     u: 1.1
     d: 0.9
   
-  "tt_xs":
+  "tt_norm":
     procs:
       sig: []
       bkg: ["TT"]
@@ -312,7 +353,7 @@ systematics:
     u: 1.1
     d: 0.9
   
-  "ttx_xs":
+  "ttx_norm":
     procs:
       sig: []
       bkg: ["TTX"]
@@ -320,7 +361,7 @@ systematics:
     u: 1.1
     d: 0.9
   
-  "other_xs":
+  "other_norm":
     procs:
       sig: []
       bkg: ["Other"]
@@ -328,21 +369,21 @@ systematics:
     u: 1.1
     d: 0.9
   
-  #"dy_xs":
-  #  procs:
-  #    sig: ["ZMT_{nametag}"]
-  #    bkg: ["ZLL"]
-  #  iseracorr: true
-  #  u: 1.1
-  #  d: 0.9
-
-rateparams:
   "dy_norm":
     procs:
       sig: ["ZMT_{nametag}"]
       bkg: ["ZLL"]
-    iseracorr: false
-    init: 1.0
+    iseracorr: true
+    u: 1.1
+    d: 0.9
+
+#rateparams:
+#  "dy_rp_norm":
+#    procs:
+#      sig: ["ZMT_{nametag}"]
+#      bkg: ["ZLL"]
+#    iseracorr: false
+#    init: 1.0
 
 rebin: {rebin}
 binstart: {binstart}

@@ -127,7 +127,7 @@ bkg:
       nominal: "nominal/iso/OS/hist"
     
     
-  xsecfile: "/nfs/dust/cms/user/sobhatta/work/LongLivedStaus/LLStaus_Run2/Analysis/configs/crosssections.json"
+  xsecfile: "/data/dust/user/sobhatta/work/LongLivedStaus/LLStaus_Run2/Analysis/configs/crosssections.json"
   cutflowsfile: "/afs/desy.de/user/m/mykytaua/nfscms/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_3/output_zmumu/zmumu_v22_sys/cutflows.json"
   neventkey: "all.BeforeCuts"
 

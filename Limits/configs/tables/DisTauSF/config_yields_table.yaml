@@ -1,0 +1,38 @@
+obs: # This key is the type of process. Must be one of [obs, bkg, sig]
+  obs: # This key needs to be there in the input yaml
+    label: "Data"
+
+
+bkg:
+  sig:
+    label: "DY (#mu#tau_{h})"
+    color: "#3f90da"
+    
+  ZLL:
+      label: "DY (other)"
+      color: "#ffa90e"
+  
+  WLNu:
+      label: "W+jets"
+      color: "#b9ac70"
+  
+  Top:
+      label: "Top"
+      color: "#a96b59"
+  
+  QCD:
+      label: "Multijet"
+      color: "#e76300"
+  
+  Other:
+      label: "Other SM"
+      color: "#94a4a2"
+
+
+bin_header: "SR bins"
+
+plot_bins: [1]
+
+bins:
+  1:
+    label: 1

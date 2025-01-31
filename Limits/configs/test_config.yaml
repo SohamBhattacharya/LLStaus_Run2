@@ -91,11 +91,11 @@ inhistfile: "/afs/desy.de/user/m/mykytaua/nfscms/softLLSTAU/LLStaus_Run2/Analysi
 # Can be an empty string
 histnametag: "_D_INCL_S_INCL"
 
-xsecfile_bkg: "/nfs/dust/cms/user/sobhatta/work/LongLivedStaus/LLStaus_Run2/Analysis/configs/crosssections.json"
+xsecfile_bkg: "/data/dust/user/sobhatta/work/LongLivedStaus/LLStaus_Run2/Analysis/configs/crosssections.json"
 
 # The signal xsecs should be in a csv file
-xsecfile_sig: "/nfs/dust/cms/user/sobhatta/work/LongLivedStaus/LLStaus_Run2/Analysis/configs/crosssections_stau_mass-degenerate.csv"
-#xsecfile_sig: "/nfs/dust/cms/user/sobhatta/work/LongLivedStaus/LLStaus_Run2/Analysis/configs/crosssections_stau_maximally-mixed.csv"
+xsecfile_sig: "/data/dust/user/sobhatta/work/LongLivedStaus/LLStaus_Run2/Analysis/configs/crosssections_stau_mass-degenerate.csv"
+#xsecfile_sig: "/data/dust/user/sobhatta/work/LongLivedStaus/LLStaus_Run2/Analysis/configs/crosssections_stau_maximally-mixed.csv"
 
 cutflowsfile: "/afs/desy.de/user/m/mykytaua/nfscms/softLLSTAU/LLStaus_Run2/Analysis/output_condor/control_cat_plots_MET_METnoMu/cutflows.json"
 

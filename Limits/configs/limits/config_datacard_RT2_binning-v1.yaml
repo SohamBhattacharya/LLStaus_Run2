@@ -9,8 +9,8 @@ lumi: 137.62
 
 sig:
   loadconfig: "configs/sig_procs.yml"
-  #xsecfile: "/nfs/dust/cms/user/sobhatta/work/LongLivedStaus/LLStaus_Run2/Analysis/configs/crosssections_stau_mass-degenerate.csv"
-  xsecfile: "/nfs/dust/cms/user/sobhatta/work/LongLivedStaus/LLStaus_Run2/Analysis/configs/crosssections_stau_maximally-mixed.csv"
+  #xsecfile: "/data/dust/user/sobhatta/work/LongLivedStaus/LLStaus_Run2/Analysis/configs/crosssections_stau_mass-degenerate.csv"
+  xsecfile: "/data/dust/user/sobhatta/work/LongLivedStaus/LLStaus_Run2/Analysis/configs/crosssections_stau_maximally-mixed.csv"
   histfile: "/afs/desy.de/user/m/mykytaua/nfscms/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_3/output_signal/signal_v23/hists/Cut_014_two_loose_jets_final_binning_schema.root"
   cutflowsfile: "/afs/desy.de/user/m/mykytaua/nfscms/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_3/output_signal/signal_v23/cutflows.json"
   # Count to use (from cutflowsfile) in the denominator when normalizing
@@ -51,7 +51,7 @@ bkg:
           u: "sys_up/hist"
           d: "sys_down/hist"
   
-  xsecfile: "/nfs/dust/cms/user/sobhatta/work/LongLivedStaus/LLStaus_Run2/Analysis/configs/crosssections.json"
+  xsecfile: "/data/dust/user/sobhatta/work/LongLivedStaus/LLStaus_Run2/Analysis/configs/crosssections.json"
   cutflowsfile: "/afs/desy.de/user/m/mykytaua/nfscms/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_3/output_signal/signal_v23/cutflows.json"
   neventkey: "all.BeforeCuts"
 

@@ -223,7 +223,7 @@ def main() :
         yrange = (0, 2.5),
         #no_xerror = True,
         logx = False, logy = False,
-        xtitle = "Jet d_{xy} threshold [cm]", ytitle = "SF",
+        xtitle = "Jet d_{xy} threshold [cm] group", ytitle = "SF",
         centertitlex = True, centertitley = True,
         centerlabelx = False, centerlabely = False,
         gridx = True, gridy = True,
@@ -235,11 +235,12 @@ def main() :
         legendtextsize = 0.03,
         legendtitle = args.title,
         legendheightscale = 1.5, legendwidthscale = 1.5,
-        CMSextraText = "Preliminary",
+        #CMSextraText = "Preliminary",
+        CMSextraText = "Private Work",
         lumiText = f"{args.era} (13 TeV)"
     )
     
-    os.system(f"pdftoppm -png -r 600 -cropbox {plotfile} {plotfile}")
+    #os.system(f"pdftoppm -png -r 600 -cropbox {plotfile} {plotfile}")
     
     min_wp = 0.6
     max_wp = 1.1
@@ -254,7 +255,7 @@ def main() :
         yrange = (0, 2.5),
         #no_xerror = True,
         logx = False, logy = False,
-        xtitle = "DisTau threshold", ytitle = "SF",
+        xtitle = "DisTau threshold group", ytitle = "SF",
         centertitlex = True, centertitley = True,
         centerlabelx = False, centerlabely = False,
         gridx = True, gridy = True,
@@ -266,11 +267,12 @@ def main() :
         legendtextsize = 0.03,
         legendtitle = args.title,
         legendheightscale = 1.5, legendwidthscale = 1.5,
-        CMSextraText = "Preliminary",
+        #CMSextraText = "Preliminary",
+        CMSextraText = "Private Work",
         lumiText = f"{args.era} (13 TeV)"
     )
     
-    os.system(f"pdftoppm -png -r 600 -cropbox {plotfile} {plotfile}")
+    #os.system(f"pdftoppm -png -r 600 -cropbox {plotfile} {plotfile}")
     
     return 0
 

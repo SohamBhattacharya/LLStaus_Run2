@@ -66,6 +66,7 @@ def main() :
     
     for ipoint, infilename in enumerate(args.input) :
         
+        cmut.logger.info(f"Processing file [{infilename}]")
         parsed_result = cmut.parse_string_regex(
             s = infilename,
             regexp = "ZMT_wp-(?P<wp>\w+)_dxy-gt-(?P<dxy>\w+)/",
@@ -179,11 +180,12 @@ def main() :
             legendtextsize = 0.03,
             legendtitle = args.title,
             legendheightscale = 1.5, legendwidthscale = 1.9,
-            CMSextraText = "Preliminary",
+            #CMSextraText = "Preliminary",
+            CMSextraText = "Private Work",
             lumiText = f"{args.era} (13 TeV)"
         )
         
-        os.system(f"pdftoppm -png -r 600 -cropbox {plotfile} {plotfile}")
+        #os.system(f"pdftoppm -png -r 600 -cropbox -singlefile {plotfile} {plotfile}")
     
     
     return 0

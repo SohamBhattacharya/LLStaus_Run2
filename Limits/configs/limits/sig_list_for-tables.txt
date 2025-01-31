@@ -1,0 +1,4 @@
+SMS-TStauStau_MStau-100_ctau-50mm_mLSP-1
+SMS-TStauStau_MStau-100_ctau-100mm_mLSP-1
+SMS-TStauStau_MStau-200_ctau-50mm_mLSP-1
+SMS-TStauStau_MStau-200_ctau-100mm_mLSP-1

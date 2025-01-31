@@ -9,15 +9,15 @@ obs:
   scaleby: "1"
   samples:
     - "DATA_MET"
-  histfile: "/nfs/dust/cms/user/mykytaua/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_6/2016pre/output_signal/signal_v3_yield_b-veto/hists/Cut_016_two_loose_jets_final_binning_schema_pass.root"
+  histfile: "/data/dust/user/sobhatta/work/LongLivedStaus/shedprog_2017-studies/LLStaus_Run2/Analysis/output/2016pre/output_signal/signal_v6/hists/Cut_017_ht_soft_forward_cut_binning_schema_pass.root"
   nominal: "nominal/bin2/hist"
 
 
 sig:
   loadconfig: "configs/limits/sig_procs.yaml"
-  xsecfile: "/nfs/dust/cms/user/sobhatta/work/LongLivedStaus/LLStaus_Run2/Analysis/configs/crosssections_stau_mass-degenerate_hepi-fast.csv"
-  histfile: "/nfs/dust/cms/user/mykytaua/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_6/2016pre/output_signal/signal_v3_yield_b-veto/hists/Cut_016_two_loose_jets_final_binning_schema_pass.root"
-  cutflowsfile: "/nfs/dust/cms/user/mykytaua/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_6/2016pre/output_signal/signal_v3_yield_b-veto/cutflows.json"
+  xsecfile: "/data/dust/user/sobhatta/work/LongLivedStaus/LLStaus_Run2/Analysis/configs/crosssections_stau_mass-degenerate_hepi-fast.csv"
+  histfile: "/data/dust/user/sobhatta/work/LongLivedStaus/shedprog_2017-studies/LLStaus_Run2/Analysis/output/2016pre/output_signal/signal_v6/hists/Cut_017_ht_soft_forward_cut_binning_schema_pass.root"
+  cutflowsfile: "/data/dust/user/sobhatta/work/LongLivedStaus/shedprog_2017-studies/LLStaus_Run2/Analysis/output/2016pre/output_signal/signal_v6/cutflows.json"
   # Count to use (from cutflowsfile) in the denominator when normalizing
   # Nested keys separated by "."
   # For e.g. if "a.b.c", will read the dictionary entry dict[a][b][c]
@@ -35,16 +35,26 @@ bkg:
       scaleby: "1"
       samples:
         - "DATA_MET"
-      histfile: "/nfs/dust/cms/user/mykytaua/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_6/2016pre/output_signal/signal_v3_yield_b-veto/hists/Cut_016_two_loose_jets_final_binning_schema_yield_bin1to2.root"
+      histfile: "/data/dust/user/sobhatta/work/LongLivedStaus/shedprog_2017-studies/LLStaus_Run2/Analysis/output/2016pre/output_signal/signal_v6/hists/Cut_017_ht_soft_forward_cut_binning_schema_yield_bin1to2.root"
       nominal: "nominal/hist"
+      alpha: 0.089
   
-  xsecfile: "/nfs/dust/cms/user/sobhatta/work/LongLivedStaus/LLStaus_Run2/Analysis/configs/crosssections.json"
-  cutflowsfile: "/nfs/dust/cms/user/mykytaua/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_6/2016pre/output_signal/signal_v3_yield_b-veto/cutflows.json"
+  xsecfile: "/data/dust/user/sobhatta/work/LongLivedStaus/LLStaus_Run2/Analysis/configs/crosssections.json"
+  cutflowsfile: "/data/dust/user/sobhatta/work/LongLivedStaus/shedprog_2017-studies/LLStaus_Run2/Analysis/output/2016pre/output_signal/signal_v6/cutflows.json"
   neventkey: "all.BeforeCuts"
+
+
+systcombos:
+  "lumi": 
+    procs:
+      sig: ["sig"]
+      bkg: []
+    names: ["lumi_corr161718", "lumi_uncorr"]
+
 
 systematics:
   
-  "lumi_corr":
+  "lumi_corr161718":
     procs:
       sig: ["sig"]
       bkg: []
@@ -75,6 +85,8 @@ systematics:
       sig: ["sig"]
       bkg: []
     iseracorr: false
+    #u: 1.4
+    #d: 0.6
     u:
       "*": "signal_eff_unc_up/bin2/hist"
     d:
@@ -183,7 +195,7 @@ systematics:
 
 rebin: null
 binstart: 3
-nbins: 5
+nbins: 8
 
 #rebin:
 #  - -1

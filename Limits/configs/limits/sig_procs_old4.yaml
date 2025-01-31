@@ -1,0 +1,1429 @@
+procs:
+  SMS-TStauStau_MStau-90_ctau-1mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-90_ctau-1mm_mLSP-1
+  SMS-TStauStau_MStau-90_ctau-2p5mm_mLSP-1_from_ctau-5mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-90_ctau-2p5mm_mLSP-1_from_ctau-5mm
+  SMS-TStauStau_MStau-90_ctau-3p5mm_mLSP-1_from_ctau-5mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-90_ctau-3p5mm_mLSP-1_from_ctau-5mm
+  SMS-TStauStau_MStau-90_ctau-5mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-90_ctau-5mm_mLSP-1
+  SMS-TStauStau_MStau-90_ctau-6p5mm_mLSP-1_from_ctau-10mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-90_ctau-6p5mm_mLSP-1_from_ctau-10mm
+  SMS-TStauStau_MStau-90_ctau-8p5mm_mLSP-1_from_ctau-10mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-90_ctau-8p5mm_mLSP-1_from_ctau-10mm
+  SMS-TStauStau_MStau-90_ctau-10mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-90_ctau-10mm_mLSP-1
+  SMS-TStauStau_MStau-90_ctau-25mm_mLSP-1_from_ctau-50mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-90_ctau-25mm_mLSP-1_from_ctau-50mm
+  SMS-TStauStau_MStau-90_ctau-35mm_mLSP-1_from_ctau-50mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-90_ctau-35mm_mLSP-1_from_ctau-50mm
+  SMS-TStauStau_MStau-90_ctau-50mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-90_ctau-50mm_mLSP-1
+  SMS-TStauStau_MStau-90_ctau-60mm_mLSP-1_from_ctau-100mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-90_ctau-60mm_mLSP-1_from_ctau-100mm
+  SMS-TStauStau_MStau-90_ctau-80mm_mLSP-1_from_ctau-100mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-90_ctau-80mm_mLSP-1_from_ctau-100mm
+  SMS-TStauStau_MStau-90_ctau-100mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-90_ctau-100mm_mLSP-1
+  SMS-TStauStau_MStau-90_ctau-200mm_mLSP-1_from_ctau-1000mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-90_ctau-200mm_mLSP-1_from_ctau-1000mm
+  SMS-TStauStau_MStau-90_ctau-300mm_mLSP-1_from_ctau-1000mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-90_ctau-300mm_mLSP-1_from_ctau-1000mm
+  SMS-TStauStau_MStau-90_ctau-500mm_mLSP-1_from_ctau-1000mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-90_ctau-500mm_mLSP-1_from_ctau-1000mm
+  SMS-TStauStau_MStau-90_ctau-700mm_mLSP-1_from_ctau-1000mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-90_ctau-700mm_mLSP-1_from_ctau-1000mm
+  SMS-TStauStau_MStau-90_ctau-1000mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-90_ctau-1000mm_mLSP-1
+  SMS-TStauStau_MStau-100_ctau-1mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-100_ctau-1mm_mLSP-1
+  SMS-TStauStau_MStau-100_ctau-2p5mm_mLSP-1_from_ctau-5mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-100_ctau-2p5mm_mLSP-1_from_ctau-5mm
+  SMS-TStauStau_MStau-100_ctau-3p5mm_mLSP-1_from_ctau-5mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-100_ctau-3p5mm_mLSP-1_from_ctau-5mm
+  SMS-TStauStau_MStau-100_ctau-5mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-100_ctau-5mm_mLSP-1
+  SMS-TStauStau_MStau-100_ctau-6p5mm_mLSP-1_from_ctau-10mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-100_ctau-6p5mm_mLSP-1_from_ctau-10mm
+  SMS-TStauStau_MStau-100_ctau-8p5mm_mLSP-1_from_ctau-10mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-100_ctau-8p5mm_mLSP-1_from_ctau-10mm
+  SMS-TStauStau_MStau-100_ctau-10mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-100_ctau-10mm_mLSP-1
+  SMS-TStauStau_MStau-100_ctau-25mm_mLSP-1_from_ctau-50mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-100_ctau-25mm_mLSP-1_from_ctau-50mm
+  SMS-TStauStau_MStau-100_ctau-35mm_mLSP-1_from_ctau-50mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-100_ctau-35mm_mLSP-1_from_ctau-50mm
+  SMS-TStauStau_MStau-100_ctau-50mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-100_ctau-50mm_mLSP-1
+  SMS-TStauStau_MStau-100_ctau-60mm_mLSP-1_from_ctau-100mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-100_ctau-60mm_mLSP-1_from_ctau-100mm
+  SMS-TStauStau_MStau-100_ctau-80mm_mLSP-1_from_ctau-100mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-100_ctau-80mm_mLSP-1_from_ctau-100mm
+  SMS-TStauStau_MStau-100_ctau-100mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-100_ctau-100mm_mLSP-1
+  SMS-TStauStau_MStau-100_ctau-200mm_mLSP-1_from_ctau-1000mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-100_ctau-200mm_mLSP-1_from_ctau-1000mm
+  SMS-TStauStau_MStau-100_ctau-300mm_mLSP-1_from_ctau-1000mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-100_ctau-300mm_mLSP-1_from_ctau-1000mm
+  SMS-TStauStau_MStau-100_ctau-500mm_mLSP-1_from_ctau-1000mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-100_ctau-500mm_mLSP-1_from_ctau-1000mm
+  SMS-TStauStau_MStau-100_ctau-700mm_mLSP-1_from_ctau-1000mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-100_ctau-700mm_mLSP-1_from_ctau-1000mm
+  SMS-TStauStau_MStau-100_ctau-1000mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-100_ctau-1000mm_mLSP-1
+  SMS-TStauStau_MStau-125_ctau-1mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-125_ctau-1mm_mLSP-1
+  SMS-TStauStau_MStau-125_ctau-5mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-125_ctau-5mm_mLSP-1
+  SMS-TStauStau_MStau-125_ctau-10mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-125_ctau-10mm_mLSP-1
+  SMS-TStauStau_MStau-125_ctau-50mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-125_ctau-50mm_mLSP-1
+  SMS-TStauStau_MStau-125_ctau-100mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-125_ctau-100mm_mLSP-1
+  SMS-TStauStau_MStau-125_ctau-1000mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-125_ctau-1000mm_mLSP-1
+  SMS-TStauStau_MStau-150_ctau-1mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-150_ctau-1mm_mLSP-1
+  SMS-TStauStau_MStau-150_ctau-2p5mm_mLSP-1_from_ctau-5mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-150_ctau-2p5mm_mLSP-1_from_ctau-5mm
+  SMS-TStauStau_MStau-150_ctau-3p5mm_mLSP-1_from_ctau-5mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-150_ctau-3p5mm_mLSP-1_from_ctau-5mm
+  SMS-TStauStau_MStau-150_ctau-5mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-150_ctau-5mm_mLSP-1
+  SMS-TStauStau_MStau-150_ctau-6p5mm_mLSP-1_from_ctau-10mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-150_ctau-6p5mm_mLSP-1_from_ctau-10mm
+  SMS-TStauStau_MStau-150_ctau-8p5mm_mLSP-1_from_ctau-10mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-150_ctau-8p5mm_mLSP-1_from_ctau-10mm
+  SMS-TStauStau_MStau-150_ctau-10mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-150_ctau-10mm_mLSP-1
+  SMS-TStauStau_MStau-150_ctau-25mm_mLSP-1_from_ctau-50mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-150_ctau-25mm_mLSP-1_from_ctau-50mm
+  SMS-TStauStau_MStau-150_ctau-35mm_mLSP-1_from_ctau-50mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-150_ctau-35mm_mLSP-1_from_ctau-50mm
+  SMS-TStauStau_MStau-150_ctau-50mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-150_ctau-50mm_mLSP-1
+  SMS-TStauStau_MStau-150_ctau-60mm_mLSP-1_from_ctau-100mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-150_ctau-60mm_mLSP-1_from_ctau-100mm
+  SMS-TStauStau_MStau-150_ctau-80mm_mLSP-1_from_ctau-100mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-150_ctau-80mm_mLSP-1_from_ctau-100mm
+  SMS-TStauStau_MStau-150_ctau-100mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-150_ctau-100mm_mLSP-1
+  SMS-TStauStau_MStau-150_ctau-200mm_mLSP-1_from_ctau-1000mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-150_ctau-200mm_mLSP-1_from_ctau-1000mm
+  SMS-TStauStau_MStau-150_ctau-300mm_mLSP-1_from_ctau-1000mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-150_ctau-300mm_mLSP-1_from_ctau-1000mm
+  SMS-TStauStau_MStau-150_ctau-500mm_mLSP-1_from_ctau-1000mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-150_ctau-500mm_mLSP-1_from_ctau-1000mm
+  SMS-TStauStau_MStau-150_ctau-700mm_mLSP-1_from_ctau-1000mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-150_ctau-700mm_mLSP-1_from_ctau-1000mm
+  SMS-TStauStau_MStau-150_ctau-1000mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-150_ctau-1000mm_mLSP-1
+  SMS-TStauStau_MStau-175_ctau-1mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-175_ctau-1mm_mLSP-1
+  SMS-TStauStau_MStau-175_ctau-5mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-175_ctau-5mm_mLSP-1
+  SMS-TStauStau_MStau-175_ctau-10mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-175_ctau-10mm_mLSP-1
+  SMS-TStauStau_MStau-175_ctau-50mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-175_ctau-50mm_mLSP-1
+  SMS-TStauStau_MStau-175_ctau-100mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-175_ctau-100mm_mLSP-1
+  SMS-TStauStau_MStau-175_ctau-1000mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-175_ctau-1000mm_mLSP-1
+  SMS-TStauStau_MStau-200_ctau-1mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-200_ctau-1mm_mLSP-1
+  SMS-TStauStau_MStau-200_ctau-2p5mm_mLSP-1_from_ctau-5mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-200_ctau-2p5mm_mLSP-1_from_ctau-5mm
+  SMS-TStauStau_MStau-200_ctau-3p5mm_mLSP-1_from_ctau-5mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-200_ctau-3p5mm_mLSP-1_from_ctau-5mm
+  SMS-TStauStau_MStau-200_ctau-5mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-200_ctau-5mm_mLSP-1
+  SMS-TStauStau_MStau-200_ctau-6p5mm_mLSP-1_from_ctau-10mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-200_ctau-6p5mm_mLSP-1_from_ctau-10mm
+  SMS-TStauStau_MStau-200_ctau-8p5mm_mLSP-1_from_ctau-10mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-200_ctau-8p5mm_mLSP-1_from_ctau-10mm
+  SMS-TStauStau_MStau-200_ctau-10mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-200_ctau-10mm_mLSP-1
+  SMS-TStauStau_MStau-200_ctau-25mm_mLSP-1_from_ctau-50mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-200_ctau-25mm_mLSP-1_from_ctau-50mm
+  SMS-TStauStau_MStau-200_ctau-35mm_mLSP-1_from_ctau-50mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-200_ctau-35mm_mLSP-1_from_ctau-50mm
+  SMS-TStauStau_MStau-200_ctau-50mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-200_ctau-50mm_mLSP-1
+  SMS-TStauStau_MStau-200_ctau-60mm_mLSP-1_from_ctau-100mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-200_ctau-60mm_mLSP-1_from_ctau-100mm
+  SMS-TStauStau_MStau-200_ctau-80mm_mLSP-1_from_ctau-100mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-200_ctau-80mm_mLSP-1_from_ctau-100mm
+  SMS-TStauStau_MStau-200_ctau-100mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-200_ctau-100mm_mLSP-1
+  SMS-TStauStau_MStau-200_ctau-200mm_mLSP-1_from_ctau-1000mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-200_ctau-200mm_mLSP-1_from_ctau-1000mm
+  SMS-TStauStau_MStau-200_ctau-300mm_mLSP-1_from_ctau-1000mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-200_ctau-300mm_mLSP-1_from_ctau-1000mm
+  SMS-TStauStau_MStau-200_ctau-500mm_mLSP-1_from_ctau-1000mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-200_ctau-500mm_mLSP-1_from_ctau-1000mm
+  SMS-TStauStau_MStau-200_ctau-700mm_mLSP-1_from_ctau-1000mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-200_ctau-700mm_mLSP-1_from_ctau-1000mm
+  SMS-TStauStau_MStau-200_ctau-1000mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-200_ctau-1000mm_mLSP-1
+  SMS-TStauStau_MStau-225_ctau-1mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-225_ctau-1mm_mLSP-1
+  SMS-TStauStau_MStau-225_ctau-5mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-225_ctau-5mm_mLSP-1
+  SMS-TStauStau_MStau-225_ctau-10mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-225_ctau-10mm_mLSP-1
+  SMS-TStauStau_MStau-225_ctau-50mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-225_ctau-50mm_mLSP-1
+  SMS-TStauStau_MStau-225_ctau-100mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-225_ctau-100mm_mLSP-1
+  SMS-TStauStau_MStau-225_ctau-1000mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-225_ctau-1000mm_mLSP-1
+  SMS-TStauStau_MStau-250_ctau-1mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-250_ctau-1mm_mLSP-1
+  SMS-TStauStau_MStau-250_ctau-2p5mm_mLSP-1_from_ctau-5mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-250_ctau-2p5mm_mLSP-1_from_ctau-5mm
+  SMS-TStauStau_MStau-250_ctau-3p5mm_mLSP-1_from_ctau-5mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-250_ctau-3p5mm_mLSP-1_from_ctau-5mm
+  SMS-TStauStau_MStau-250_ctau-5mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-250_ctau-5mm_mLSP-1
+  SMS-TStauStau_MStau-250_ctau-6p5mm_mLSP-1_from_ctau-10mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-250_ctau-6p5mm_mLSP-1_from_ctau-10mm
+  SMS-TStauStau_MStau-250_ctau-8p5mm_mLSP-1_from_ctau-10mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-250_ctau-8p5mm_mLSP-1_from_ctau-10mm
+  SMS-TStauStau_MStau-250_ctau-10mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-250_ctau-10mm_mLSP-1
+  SMS-TStauStau_MStau-250_ctau-25mm_mLSP-1_from_ctau-50mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-250_ctau-25mm_mLSP-1_from_ctau-50mm
+  SMS-TStauStau_MStau-250_ctau-35mm_mLSP-1_from_ctau-50mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-250_ctau-35mm_mLSP-1_from_ctau-50mm
+  SMS-TStauStau_MStau-250_ctau-50mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-250_ctau-50mm_mLSP-1
+  SMS-TStauStau_MStau-250_ctau-60mm_mLSP-1_from_ctau-100mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-250_ctau-60mm_mLSP-1_from_ctau-100mm
+  SMS-TStauStau_MStau-250_ctau-80mm_mLSP-1_from_ctau-100mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-250_ctau-80mm_mLSP-1_from_ctau-100mm
+  SMS-TStauStau_MStau-250_ctau-100mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-250_ctau-100mm_mLSP-1
+  SMS-TStauStau_MStau-250_ctau-200mm_mLSP-1_from_ctau-1000mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-250_ctau-200mm_mLSP-1_from_ctau-1000mm
+  SMS-TStauStau_MStau-250_ctau-300mm_mLSP-1_from_ctau-1000mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-250_ctau-300mm_mLSP-1_from_ctau-1000mm
+  SMS-TStauStau_MStau-250_ctau-500mm_mLSP-1_from_ctau-1000mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-250_ctau-500mm_mLSP-1_from_ctau-1000mm
+  SMS-TStauStau_MStau-250_ctau-700mm_mLSP-1_from_ctau-1000mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-250_ctau-700mm_mLSP-1_from_ctau-1000mm
+  SMS-TStauStau_MStau-250_ctau-1000mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-250_ctau-1000mm_mLSP-1
+  SMS-TStauStau_MStau-275_ctau-1mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-275_ctau-1mm_mLSP-1
+  SMS-TStauStau_MStau-275_ctau-5mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-275_ctau-5mm_mLSP-1
+  SMS-TStauStau_MStau-275_ctau-10mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-275_ctau-10mm_mLSP-1
+  SMS-TStauStau_MStau-275_ctau-50mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-275_ctau-50mm_mLSP-1
+  SMS-TStauStau_MStau-275_ctau-100mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-275_ctau-100mm_mLSP-1
+  SMS-TStauStau_MStau-275_ctau-1000mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-275_ctau-1000mm_mLSP-1
+  SMS-TStauStau_MStau-300_ctau-1mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-300_ctau-1mm_mLSP-1
+  SMS-TStauStau_MStau-300_ctau-2p5mm_mLSP-1_from_ctau-5mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-300_ctau-2p5mm_mLSP-1_from_ctau-5mm
+  SMS-TStauStau_MStau-300_ctau-3p5mm_mLSP-1_from_ctau-5mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-300_ctau-3p5mm_mLSP-1_from_ctau-5mm
+  SMS-TStauStau_MStau-300_ctau-5mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-300_ctau-5mm_mLSP-1
+  SMS-TStauStau_MStau-300_ctau-6p5mm_mLSP-1_from_ctau-10mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-300_ctau-6p5mm_mLSP-1_from_ctau-10mm
+  SMS-TStauStau_MStau-300_ctau-8p5mm_mLSP-1_from_ctau-10mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-300_ctau-8p5mm_mLSP-1_from_ctau-10mm
+  SMS-TStauStau_MStau-300_ctau-10mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-300_ctau-10mm_mLSP-1
+  SMS-TStauStau_MStau-300_ctau-25mm_mLSP-1_from_ctau-50mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-300_ctau-25mm_mLSP-1_from_ctau-50mm
+  SMS-TStauStau_MStau-300_ctau-35mm_mLSP-1_from_ctau-50mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-300_ctau-35mm_mLSP-1_from_ctau-50mm
+  SMS-TStauStau_MStau-300_ctau-50mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-300_ctau-50mm_mLSP-1
+  SMS-TStauStau_MStau-300_ctau-60mm_mLSP-1_from_ctau-100mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-300_ctau-60mm_mLSP-1_from_ctau-100mm
+  SMS-TStauStau_MStau-300_ctau-80mm_mLSP-1_from_ctau-100mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-300_ctau-80mm_mLSP-1_from_ctau-100mm
+  SMS-TStauStau_MStau-300_ctau-100mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-300_ctau-100mm_mLSP-1
+  SMS-TStauStau_MStau-300_ctau-200mm_mLSP-1_from_ctau-1000mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-300_ctau-200mm_mLSP-1_from_ctau-1000mm
+  SMS-TStauStau_MStau-300_ctau-300mm_mLSP-1_from_ctau-1000mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-300_ctau-300mm_mLSP-1_from_ctau-1000mm
+  SMS-TStauStau_MStau-300_ctau-500mm_mLSP-1_from_ctau-1000mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-300_ctau-500mm_mLSP-1_from_ctau-1000mm
+  SMS-TStauStau_MStau-300_ctau-700mm_mLSP-1_from_ctau-1000mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-300_ctau-700mm_mLSP-1_from_ctau-1000mm
+  SMS-TStauStau_MStau-300_ctau-1000mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-300_ctau-1000mm_mLSP-1
+  SMS-TStauStau_MStau-350_ctau-1mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-350_ctau-1mm_mLSP-1
+  SMS-TStauStau_MStau-350_ctau-5mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-350_ctau-5mm_mLSP-1
+  SMS-TStauStau_MStau-350_ctau-10mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-350_ctau-10mm_mLSP-1
+  SMS-TStauStau_MStau-350_ctau-50mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-350_ctau-50mm_mLSP-1
+  SMS-TStauStau_MStau-350_ctau-100mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-350_ctau-100mm_mLSP-1
+  SMS-TStauStau_MStau-350_ctau-1000mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-350_ctau-1000mm_mLSP-1
+  SMS-TStauStau_MStau-400_ctau-1mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-400_ctau-1mm_mLSP-1
+  SMS-TStauStau_MStau-400_ctau-2p5mm_mLSP-1_from_ctau-5mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-400_ctau-2p5mm_mLSP-1_from_ctau-5mm
+  SMS-TStauStau_MStau-400_ctau-3p5mm_mLSP-1_from_ctau-5mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-400_ctau-3p5mm_mLSP-1_from_ctau-5mm
+  SMS-TStauStau_MStau-400_ctau-5mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-400_ctau-5mm_mLSP-1
+  SMS-TStauStau_MStau-400_ctau-6p5mm_mLSP-1_from_ctau-10mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-400_ctau-6p5mm_mLSP-1_from_ctau-10mm
+  SMS-TStauStau_MStau-400_ctau-8p5mm_mLSP-1_from_ctau-10mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-400_ctau-8p5mm_mLSP-1_from_ctau-10mm
+  SMS-TStauStau_MStau-400_ctau-10mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-400_ctau-10mm_mLSP-1
+  SMS-TStauStau_MStau-400_ctau-25mm_mLSP-1_from_ctau-50mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-400_ctau-25mm_mLSP-1_from_ctau-50mm
+  SMS-TStauStau_MStau-400_ctau-35mm_mLSP-1_from_ctau-50mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-400_ctau-35mm_mLSP-1_from_ctau-50mm
+  SMS-TStauStau_MStau-400_ctau-50mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-400_ctau-50mm_mLSP-1
+  SMS-TStauStau_MStau-400_ctau-60mm_mLSP-1_from_ctau-100mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-400_ctau-60mm_mLSP-1_from_ctau-100mm
+  SMS-TStauStau_MStau-400_ctau-80mm_mLSP-1_from_ctau-100mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-400_ctau-80mm_mLSP-1_from_ctau-100mm
+  SMS-TStauStau_MStau-400_ctau-100mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-400_ctau-100mm_mLSP-1
+  SMS-TStauStau_MStau-400_ctau-200mm_mLSP-1_from_ctau-1000mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-400_ctau-200mm_mLSP-1_from_ctau-1000mm
+  SMS-TStauStau_MStau-400_ctau-300mm_mLSP-1_from_ctau-1000mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-400_ctau-300mm_mLSP-1_from_ctau-1000mm
+  SMS-TStauStau_MStau-400_ctau-500mm_mLSP-1_from_ctau-1000mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-400_ctau-500mm_mLSP-1_from_ctau-1000mm
+  SMS-TStauStau_MStau-400_ctau-700mm_mLSP-1_from_ctau-1000mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-400_ctau-700mm_mLSP-1_from_ctau-1000mm
+  SMS-TStauStau_MStau-400_ctau-1000mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-400_ctau-1000mm_mLSP-1
+  SMS-TStauStau_MStau-450_ctau-1mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-450_ctau-1mm_mLSP-1
+  SMS-TStauStau_MStau-450_ctau-5mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-450_ctau-5mm_mLSP-1
+  SMS-TStauStau_MStau-450_ctau-10mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-450_ctau-10mm_mLSP-1
+  SMS-TStauStau_MStau-450_ctau-50mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-450_ctau-50mm_mLSP-1
+  SMS-TStauStau_MStau-450_ctau-100mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-450_ctau-100mm_mLSP-1
+  SMS-TStauStau_MStau-450_ctau-1000mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-450_ctau-1000mm_mLSP-1
+  SMS-TStauStau_MStau-500_ctau-1mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-500_ctau-1mm_mLSP-1
+  SMS-TStauStau_MStau-500_ctau-2p5mm_mLSP-1_from_ctau-5mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-500_ctau-2p5mm_mLSP-1_from_ctau-5mm
+  SMS-TStauStau_MStau-500_ctau-3p5mm_mLSP-1_from_ctau-5mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-500_ctau-3p5mm_mLSP-1_from_ctau-5mm
+  SMS-TStauStau_MStau-500_ctau-5mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-500_ctau-5mm_mLSP-1
+  SMS-TStauStau_MStau-500_ctau-6p5mm_mLSP-1_from_ctau-10mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-500_ctau-6p5mm_mLSP-1_from_ctau-10mm
+  SMS-TStauStau_MStau-500_ctau-8p5mm_mLSP-1_from_ctau-10mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-500_ctau-8p5mm_mLSP-1_from_ctau-10mm
+  SMS-TStauStau_MStau-500_ctau-10mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-500_ctau-10mm_mLSP-1
+  SMS-TStauStau_MStau-500_ctau-25mm_mLSP-1_from_ctau-50mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-500_ctau-25mm_mLSP-1_from_ctau-50mm
+  SMS-TStauStau_MStau-500_ctau-35mm_mLSP-1_from_ctau-50mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-500_ctau-35mm_mLSP-1_from_ctau-50mm
+  SMS-TStauStau_MStau-500_ctau-50mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-500_ctau-50mm_mLSP-1
+  SMS-TStauStau_MStau-500_ctau-60mm_mLSP-1_from_ctau-100mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-500_ctau-60mm_mLSP-1_from_ctau-100mm
+  SMS-TStauStau_MStau-500_ctau-80mm_mLSP-1_from_ctau-100mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-500_ctau-80mm_mLSP-1_from_ctau-100mm
+  SMS-TStauStau_MStau-500_ctau-100mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-500_ctau-100mm_mLSP-1
+  SMS-TStauStau_MStau-500_ctau-200mm_mLSP-1_from_ctau-1000mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-500_ctau-200mm_mLSP-1_from_ctau-1000mm
+  SMS-TStauStau_MStau-500_ctau-300mm_mLSP-1_from_ctau-1000mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-500_ctau-300mm_mLSP-1_from_ctau-1000mm
+  SMS-TStauStau_MStau-500_ctau-500mm_mLSP-1_from_ctau-1000mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-500_ctau-500mm_mLSP-1_from_ctau-1000mm
+  SMS-TStauStau_MStau-500_ctau-700mm_mLSP-1_from_ctau-1000mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-500_ctau-700mm_mLSP-1_from_ctau-1000mm
+  SMS-TStauStau_MStau-500_ctau-1000mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-500_ctau-1000mm_mLSP-1
+  SMS-TStauStau_MStau-550_ctau-1mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-550_ctau-1mm_mLSP-1
+  SMS-TStauStau_MStau-550_ctau-5mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-550_ctau-5mm_mLSP-1
+  SMS-TStauStau_MStau-550_ctau-10mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-550_ctau-10mm_mLSP-1
+  SMS-TStauStau_MStau-550_ctau-50mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-550_ctau-50mm_mLSP-1
+  SMS-TStauStau_MStau-550_ctau-100mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-550_ctau-100mm_mLSP-1
+  SMS-TStauStau_MStau-550_ctau-1000mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-550_ctau-1000mm_mLSP-1
+  SMS-TStauStau_MStau-600_ctau-1mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-600_ctau-1mm_mLSP-1
+  SMS-TStauStau_MStau-600_ctau-2p5mm_mLSP-1_from_ctau-5mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-600_ctau-2p5mm_mLSP-1_from_ctau-5mm
+  SMS-TStauStau_MStau-600_ctau-3p5mm_mLSP-1_from_ctau-5mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-600_ctau-3p5mm_mLSP-1_from_ctau-5mm
+  SMS-TStauStau_MStau-600_ctau-5mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-600_ctau-5mm_mLSP-1
+  SMS-TStauStau_MStau-600_ctau-6p5mm_mLSP-1_from_ctau-10mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-600_ctau-6p5mm_mLSP-1_from_ctau-10mm
+  SMS-TStauStau_MStau-600_ctau-8p5mm_mLSP-1_from_ctau-10mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-600_ctau-8p5mm_mLSP-1_from_ctau-10mm
+  SMS-TStauStau_MStau-600_ctau-10mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-600_ctau-10mm_mLSP-1
+  SMS-TStauStau_MStau-600_ctau-25mm_mLSP-1_from_ctau-50mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-600_ctau-25mm_mLSP-1_from_ctau-50mm
+  SMS-TStauStau_MStau-600_ctau-35mm_mLSP-1_from_ctau-50mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-600_ctau-35mm_mLSP-1_from_ctau-50mm
+  SMS-TStauStau_MStau-600_ctau-50mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-600_ctau-50mm_mLSP-1
+  SMS-TStauStau_MStau-600_ctau-60mm_mLSP-1_from_ctau-100mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-600_ctau-60mm_mLSP-1_from_ctau-100mm
+  SMS-TStauStau_MStau-600_ctau-80mm_mLSP-1_from_ctau-100mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-600_ctau-80mm_mLSP-1_from_ctau-100mm
+  SMS-TStauStau_MStau-600_ctau-100mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-600_ctau-100mm_mLSP-1
+  SMS-TStauStau_MStau-600_ctau-200mm_mLSP-1_from_ctau-1000mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-600_ctau-200mm_mLSP-1_from_ctau-1000mm
+  SMS-TStauStau_MStau-600_ctau-300mm_mLSP-1_from_ctau-1000mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-600_ctau-300mm_mLSP-1_from_ctau-1000mm
+  SMS-TStauStau_MStau-600_ctau-500mm_mLSP-1_from_ctau-1000mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-600_ctau-500mm_mLSP-1_from_ctau-1000mm
+  SMS-TStauStau_MStau-600_ctau-700mm_mLSP-1_from_ctau-1000mm:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-600_ctau-700mm_mLSP-1_from_ctau-1000mm
+  SMS-TStauStau_MStau-600_ctau-1000mm_mLSP-1:
+    ismc: true
+    issusy: true
+    xsnorm: true
+    scaleby: '1'
+    samples:
+    - SMS-TStauStau_MStau-600_ctau-1000mm_mLSP-1

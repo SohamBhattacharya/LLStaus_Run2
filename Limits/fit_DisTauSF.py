@@ -22,7 +22,7 @@ def main() :
     
     parser.add_argument(
         "--indir",
-        help = "Input directory; can have wild cards, e.g.""dirA/dirB*\"",
+        help = "Input directory; can have wild cards, e.g.\"dirA/dirB*\"",
         type = str,
         required = True,
     )
@@ -80,9 +80,9 @@ def main() :
     if (args.wspace) :
         
         cmd = (
-            "combineTool.py"
+            "nice -n 10 combineTool.py"
             " -M T2W"
-            f" -i {args.indir}/card_DisTauSF_ZMT_*.txt"
+            f" -i {args.indir}/card_ana_DisTauSF_mss_ZMT_*.txt"
             " -o workspace.root"
             " -m 90"
             " -P TauFW.Fitter.models.TagAndProbeModel:tagAndProbe"
@@ -97,7 +97,7 @@ def main() :
     if (args.fit) :
         
         cmd = (
-            "combineTool.py"
+            "nice -n 10 combineTool.py"
             " -M FitDiagnostics"
             f" -d {args.indir}/workspace.root"
             " --redefineSignalPOIs SF"
@@ -110,6 +110,7 @@ def main() :
             " --forceRecreateNLL"
             " --skipBOnlyFit"
             " --cminDefaultMinimizerStrategy 0"
+            " --robustFit 1"
             " --plots"
             " --there"
             " -n \".DisTauSF\""
@@ -121,7 +122,7 @@ def main() :
     if (args.collfits) :
         
         cmd = (
-            "combineTool.py"
+            "nice -n 10 combineTool.py"
             " -M CollectLimits"
             f" {args.indir}/higgsCombine.DisTauSF.FitDiagnostics.mH120.root"
             " --use-dirs"
@@ -141,10 +142,14 @@ def main() :
     
     if (args.scan) :
         
+        wkdir_scan = "scan"
+        cmd = f"for dir in $(find {args.indir} -mindepth 0 -maxdepth 0 -type d); do mkdir -pv $dir/{wkdir_scan}; cp -v $dir/workspace.root $dir/{wkdir_scan}/; done"
+        cmds.append(cmd)
+        
         cmd = (
-            "combineTool.py"
+            "nice -n 10 combineTool.py"
             " -M MultiDimFit"
-            f" -d {args.indir}/workspace.root"
+            f" -d {args.indir}/{wkdir_scan}/workspace.root"
             " --saveSpecifiedFunc SF_fail"
             " --setParameterRanges SF=0,3"
             " --robustFit 1"
@@ -177,77 +182,3 @@ def main() :
 if (__name__ == "__main__") :
     
     main()
-
-#!/bin/bash
-
-# Exit if a command fails
-#set -Eeu -o pipefail
-
-# Prints command before executing
-#set -o xtrace
-
-
-#DIR="$1"
-#DIR=tmp/test_DisTauSF_mass_nbins1-60-80/DisTauSF/channels_all/eras_all/ZMT_wp-*_dxy-gt-*
-#DIR=tmp/test_DisTauSF_mass_nbins2-60-70-80/DisTauSF/channels_all/eras_all/ZMT_wp-*_dxy-gt-*
-#DIR=tmp/test_DisTauSF_mass_nbins3-60-66-72-80/DisTauSF/channels_all/eras_all/ZMT_wp-*_dxy-gt-*
-#OUTDIR=tmp/test_DisTauSF_mass_nbins1-60-80
-#OUTDIR=$(dirname "$DIR")
-
-#echo $DIR
-#echo $OUTDIR
-#exit
-
-#combineTool.py"
-#-M T2W"
-#-i $DIR/card_DisTauSF_ZMT_*.txt"
-#-o workspace.root"
-#-m 90"
-#-P TauFW.Fitter.models.TagAndProbeModel:tagAndProbe"
-#--PO verbose=2"
-#--PO pass=pass"
-#--PO fail=fail"
-#--parallel 15
-
-
-#combineTool.py"
-#-M FitDiagnostics"
-#-d $DIR/workspace.root"
-#--redefineSignalPOIs SF"
-#--setParameterRanges SF=0,3"
-#--saveShapes"
-#--saveWithUncertainties"
-#--saveOverallShapes"
-#--numToysForShapes 200"
-#--forceRecreateNLL"
-#--skipBOnlyFit"
-#--cminDefaultMinimizerStrategy 0"
-#--plots"
-#--there"
-#-n ".DisTauSF""
-#--parallel 15
-
-
-#combineTool.py"
-#-M MultiDimFit"
-#-d $DIR/workspace.root"
-#--saveSpecifiedFunc SF_fail"
-#--setParameterRanges SF=0,3"
-#--robustFit 1"
-#--forceRecreateNLL"
-#--algo grid"
-#--points 300"
-#--cminDefaultMinimizerStrategy 0"
-#--there"
-#-n ".DisTauSF""
-#--parallel 15
-
-#--saveSpecifiedFunc SF_fail,rp_dy_norm_2018"
-#--cl 0.6827"
-
-#
-#combineTool.py"
-#-M CollectLimits"
-#$DIR/higgsCombine.DisTauSF.FitDiagnostics.mH120.root"
-#--use-dirs"
-#-o $OUTDIR/fit_result.json

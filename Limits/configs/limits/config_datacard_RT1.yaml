@@ -9,10 +9,10 @@ lumi: 137.62
 
 sig: 
   loadconfig: "configs/sig_procs.yml"
-  #xsecfile: "/nfs/dust/cms/user/sobhatta/work/LongLivedStaus/LLStaus_Run2/Analysis/configs/crosssections_stau_mass-degenerate.csv"
-  xsecfile: "/nfs/dust/cms/user/sobhatta/work/LongLivedStaus/LLStaus_Run2/Analysis/configs/crosssections_stau_maximally-mixed.csv"
-  histfile: "/nfs/dust/cms/user/mykytaua/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_3/output_signal/signal_v17_sys/hists/Cut_012_two_loose_jets_final_jet2_pt_pass.root"
-  cutflowsfile: "/nfs/dust/cms/user/mykytaua/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_3/output_signal/signal_v17_sys/cutflows.json"
+  #xsecfile: "/data/dust/user/sobhatta/work/LongLivedStaus/LLStaus_Run2/Analysis/configs/crosssections_stau_mass-degenerate.csv"
+  xsecfile: "/data/dust/user/sobhatta/work/LongLivedStaus/LLStaus_Run2/Analysis/configs/crosssections_stau_maximally-mixed.csv"
+  histfile: "/data/dust/user/mykytaua/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_3/output_signal/signal_v17_sys/hists/Cut_012_two_loose_jets_final_jet2_pt_pass.root"
+  cutflowsfile: "/data/dust/user/mykytaua/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_3/output_signal/signal_v17_sys/cutflows.json"
   # Count to use (from cutflowsfile) in the denominator when normalizing
   # Nested keys separated by "."
   # For e.g. if "a.b.c", will read the dictionary entry dict[a][b][c]
@@ -39,7 +39,7 @@ bkg:
       scaleby: "137.62/59.83"
       samples:
         - "DATA_MET"
-      histfile: "/nfs/dust/cms/user/mykytaua/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_3/output_signal/signal_v17_sys/hists/Cut_012_two_loose_jets_final_jet2_pt_yield_bin0to1.root"
+      histfile: "/data/dust/user/mykytaua/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_3/output_signal/signal_v17_sys/hists/Cut_012_two_loose_jets_final_jet2_pt_yield_bin0to1.root"
       nominal: "nominal/hist"
       systs:
         "fr_stat":
@@ -51,8 +51,8 @@ bkg:
           u: "sys_up/hist"
           d: "sys_down/hist"
     
-  xsecfile: "/nfs/dust/cms/user/sobhatta/work/LongLivedStaus/LLStaus_Run2/Analysis/configs/crosssections.json"
-  cutflowsfile: "/nfs/dust/cms/user/mykytaua/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_3/output_signal/signal_v17_sys/cutflows.json"
+  xsecfile: "/data/dust/user/sobhatta/work/LongLivedStaus/LLStaus_Run2/Analysis/configs/crosssections.json"
+  cutflowsfile: "/data/dust/user/mykytaua/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_3/output_signal/signal_v17_sys/cutflows.json"
   neventkey: "all.BeforeCuts"
 
 systscommonmc:

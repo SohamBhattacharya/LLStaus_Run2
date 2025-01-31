@@ -6,9 +6,11 @@ from ruamel.yaml import YAML
 
 def main() :
     
-    sigfile = "configs/limits/sig_list_test.txt"
+    #sigfile = "configs/limits/sig_list_test.txt"
+    #outfile = "configs/limits/sig_procs_test.yaml"
     
-    outfile = "configs/limits/sig_procs_test.yaml"
+    sigfile = "configs/limits/sig_list.txt"
+    outfile = "configs/limits/sig_procs.yaml"
     
     l_sig = numpy.loadtxt(sigfile, dtype = str)
     #print(l_sig)

@@ -1,0 +1,68 @@
+#obs:
+#  "obs":
+#    label: Data
+
+procs:
+  
+  misid:
+    label: "Misid. jets"
+  
+  SMS-TStauStau_MStau-100_ctau-50mm_mLSP-1:
+      label: "${[m_{\\PSGt}(100),\\ c\\tau_{0}(50)]}$"
+  SMS-TStauStau_MStau-100_ctau-100mm_mLSP-1:
+    label: "${[m_{\\PSGt}(100),\\ c\\tau_{0}(100)]}$"
+  SMS-TStauStau_MStau-200_ctau-50mm_mLSP-1:
+    label: "${[m_{\\PSGt}(200),\\ c\\tau_{0}(50)]}$"
+  SMS-TStauStau_MStau-200_ctau-100mm_mLSP-1:
+    label: "${[m_{\\PSGt}(200), c\\tau_{0}(100)]}$"
+
+syst_header: "Uncertainty source"
+
+systematics:
+  
+  ren_scale:
+    label: "$\\mu_{\\text{R}}$ scale"
+  
+  fac_scale:
+    label: "$\\mu_{\\text{F}}$ scale"
+  
+  pdf:
+    label: "pdf"
+  
+  met_trigger:
+    label: "$\\ptmiss$ trigger"
+  
+  distauid:
+    label: "\\distau ID"
+  
+  jer:
+    label: "JER"
+  
+  jes:
+    label: "JES"
+  
+  uncl_met:
+    label: "$\\ptmiss$ unclustered energy"
+  
+  #lumi_corr:
+  #  label: "Luminosity (corr)"
+  #
+  #lumi_uncorr:
+  #  label: "Luminosity (uncorr)"
+  
+  lumi:
+    label: "Luminosity"
+  
+  l1_prefiring:
+    label: "L1 prefiring"
+  
+  pileup:
+    label: "Pileup"
+  
+  fr_region:
+    label: "Fake rate region"
+  
+  fr_stat:
+    label: "Fake rate statistics"
+  
+

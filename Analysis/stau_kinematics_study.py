@@ -351,7 +351,7 @@ def main() :
                     
                     print(dataset_key, ax)
                     h_tmp = histo[{"dataset": dataset_key}].project(ax.name)
-                    h_tmp = h_tmp / h_tmp.sum(flow = True)
+                    #h_tmp = h_tmp / h_tmp.sum(flow = True)
                     fout[f"{dataset_key}/{ax.name}"] = h_tmp
     
     return 0

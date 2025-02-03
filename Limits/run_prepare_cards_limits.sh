@@ -14,5 +14,5 @@ configs/limits/$TYPE/2018/config_datacard_BRT2.yaml \
 --yields_uncs \
 --yields_uncs_sigs configs/limits/sig_list_for-tables.txt \
 --outdir results/limits${OUTSUFFIX} \
---combpars channel era \
+--combpars era \
 $1

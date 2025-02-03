@@ -3,9 +3,17 @@
 import json
 import logging
 import numpy
+import os
 import re
-import yaml
+#import yaml
+
+from ruamel.yaml import YAML
+yaml = YAML()
+yaml.preserve_quotes = True
+yaml.width = 1024
+
 import ROOT
+ROOT.gROOT.SetBatch(True)
 
 
 logging.basicConfig(format = "[%(levelname)s] [%(asctime)s] %(message)s", level = logging.INFO)
@@ -24,7 +32,8 @@ def load_config(cfgfile) :
         if (cfgfile.endswith(".yml") or cfgfile.endswith(".yaml")) :
             
             logger.info(f"Loading yaml config: {cfgfile}")
-            d_loadcfg = yaml.load(content, Loader = yaml.FullLoader)
+            #d_loadcfg = yaml.load(content, Loader = yaml.FullLoader)
+            d_loadcfg = yaml.load(content)
         
         elif (cfgfile.endswith(".json")) :
             
@@ -38,20 +47,15 @@ def load_config(cfgfile) :
     
     return d_loadcfg
 
-def parse_string_regex(
-    s,
-    regexp,
-    ) :
+def parse_string_regex(s, regexp) :
     
     rgx = re.compile(regexp)
+    #print(s, regexp)
     result = [m.groupdict() for m in rgx.finditer(s)][0]
     
     return result
 
-def parse_stau_samplestring(
-    s,
-    regexp,
-    ) :
+def parse_stau_samplestring(s, regexp) :
     
     #rgx = re.compile("stau(\d+)_lsp(\d+)_ctau(\w+)")
     rgx = re.compile(regexp)
@@ -253,3 +257,128 @@ def get_hist(
                 hist_result.SetBinContent(ibin+1, set_max)
     
     return hist_result
+
+
+def pdf_to_png(infilename, outfilename = None) :
+    
+    infname, _ = os.path.splitext(infilename)
+    
+    if (outfilename) :
+        
+        outfilename, _ = os.path.splitext(outfilename)
+    
+    else :
+        
+        outfilename = infname
+    
+    # .png is automatically added to the output file name
+    retval = os.system(f"pdftoppm -cropbox -r 600 -png -singlefile {infilename} {outfilename}")
+    
+    return retval
+
+
+def plot_fitdiagnostics_correlation(
+    rootfilename,
+    outfilename,
+    histname,
+    cov_to_corr,
+    title = "",
+    l_binlabel_fmt = [],
+    drawopt = "colz"
+    ) :
+    
+    """
+    Include bin label format commands as strings, in l_binlabel_fmt. For e.g.:
+    "{label}.replace('_', '-')"
+    This string will be evaluated
+    Must use the key {label} in the the string
+    """
+    
+    #rootfilename = "fitDiagnostics.root"
+    rootfile = ROOT.TFile.Open(rootfilename);
+    
+    inhist = rootfile.Get(histname).Clone()
+    hist_correlation = inhist.Clone()
+    hist_correlation.SetTitle(title)
+    
+    nbinsx = inhist.GetNbinsX()
+    nbinsy = inhist.GetNbinsY()
+    
+    for ibinx in range(1, nbinsx+1) :
+        
+        for ibiny in range(1, nbinsy+1) :
+            
+            val = inhist.GetBinContent(ibinx, ibiny)
+            
+            if (cov_to_corr) :
+                
+                val /= numpy.sqrt(inhist.GetBinContent(ibinx, ibinx) * inhist.GetBinContent(ibiny, ibiny))
+            
+            hist_correlation.SetBinContent(ibinx, ibiny, val)
+    
+    ROOT.gStyle.SetOptStat(0)
+    ROOT.gStyle.SetPaintTextFormat("0.2f")
+    
+    npix_per_bin = 100
+    canvas = ROOT.TCanvas("canvas", "canvas", 1000+(npix_per_bin*nbinsx), 500+(npix_per_bin*nbinsy))
+    
+    canvas.SetLeftMargin(0.15)
+    canvas.SetRightMargin(0.15)
+    canvas.SetBottomMargin(0.2)
+    
+    hist_correlation.SetMarkerSize(0.6*hist_correlation.GetMarkerSize())
+    
+    hist_correlation.Draw(drawopt)
+    
+    hist_correlation.GetXaxis().SetTitle("")
+    hist_correlation.GetYaxis().SetTitle("")
+    
+    # font = 10*font + precision
+    # precision=3 allows setting font size in pixels
+    hist_correlation.GetXaxis().SetLabelFont(63)
+    hist_correlation.GetYaxis().SetLabelFont(63)
+    
+    #hist_correlation.GetXaxis().SetLabelSize(0.4*hist_correlation.GetXaxis().GetLabelSize())
+    #hist_correlation.GetYaxis().SetLabelSize(0.4*hist_correlation.GetYaxis().GetLabelSize())
+    
+    # Set label size in pixels
+    hist_correlation.GetXaxis().SetLabelSize(npix_per_bin/2)
+    hist_correlation.GetYaxis().SetLabelSize(npix_per_bin/2)
+    
+    hist_correlation.GetXaxis().SetLabelOffset(0.4*hist_correlation.GetXaxis().GetLabelOffset())
+    hist_correlation.GetYaxis().SetLabelOffset(0.3*hist_correlation.GetYaxis().GetLabelOffset())
+    
+    hist_correlation.GetXaxis().LabelsOption("v")
+    
+    for ibinx in range(1, inhist.GetNbinsX()+1) :
+        
+        binlabel_x = hist_correlation.GetXaxis().GetBinLabel(ibinx)
+        binlabel_y = hist_correlation.GetYaxis().GetBinLabel(ibinx)
+        
+        for fmt in l_binlabel_fmt :
+            
+            binlabel_x = eval(fmt.format(**{"label": "binlabel_x"}))
+            binlabel_y = eval(fmt.format(**{"label": "binlabel_y"}))
+        
+        hist_correlation.GetXaxis().SetBinLabel(ibinx, binlabel_x)
+        hist_correlation.GetYaxis().SetBinLabel(ibinx, binlabel_y)
+    
+    #hist_correlation.GetXaxis().SetNdivisions(nbinsx, 0, 0, False)
+    #hist_correlation.GetYaxis().SetNdivisions(nbinsy, 0, 0, False)
+    
+    canvas.Update()
+    palette = hist_correlation.GetListOfFunctions().FindObject("palette")
+    #print("X1", palette.GetX1NDC(), "X2", palette.GetX2NDC(), "Y1", palette.GetY1NDC(), "Y2", palette.GetY2NDC())
+    palette.SetX1NDC(0.855)
+    palette.SetX2NDC(0.900)
+    palette.SetY1NDC(0.200)
+    palette.SetY2NDC(0.899)
+    
+    #canvas.SetGridx(1)
+    #canvas.SetGridy(1)
+    
+    canvas.Update()
+    
+    canvas.SaveAs(outfilename)
+    
+    rootfile.Close()

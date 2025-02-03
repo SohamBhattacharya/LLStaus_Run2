@@ -1,4 +1,5 @@
 import dataclasses
+from venv import logger
 import numpy
 import os
 import sys
@@ -338,16 +339,20 @@ def root_plot1D(
         canvas.cd(2).SetLogx(logx_ratio)
         canvas.cd(2).SetLogy(logy_ratio)
     
+    outdir = os.path.dirname(outfile)
     
-    if ("/" in outfile) :
+    if (outdir) :
         
-        outdir = outfile
-        outdir = outdir[0: outdir.rfind("/")]
-        
-        os.system("mkdir -p %s" %(outdir))
+        os.system(f"mkdir -p {outdir}")
+    
+    outfile_noext, _ = os.path.splitext(outfile)
     
     # ROOT.gStyle.SetImageScaling(2.)
     canvas.SaveAs(outfile)
+    canvas.Close()
+    
+    logger.info(f"Converting: {[outfile]} --> [{outfile_noext}.png]")
+    os.system(f"pdftoppm -png -r 600 -cropbox -singlefile {outfile} {outfile_noext}")
     
     return 0
 
@@ -628,16 +633,20 @@ def root_plot1D_legacy(
         canvas.cd(2).SetGridx(gridx)
         canvas.cd(2).SetGridy(gridy)
     
+    outdir = os.path.dirname(outfile)
     
-    if ("/" in outfile) :
+    if (outdir) :
         
-        outdir = outfile
-        outdir = outdir[0: outdir.rfind("/")]
-        
-        os.system("mkdir -p %s" %(outdir))
+        os.system(f"mkdir -p {outdir}")
     
+    outfile_noext, _ = os.path.splitext(outfile)
+    
+    # ROOT.gStyle.SetImageScaling(2.)
     canvas.SaveAs(outfile)
     canvas.Close()
+    
+    logger.info(f"Converting: {[outfile]} --> [{outfile_noext}.png]")
+    os.system(f"pdftoppm -png -r 600 -cropbox -singlefile {outfile} {outfile_noext}")
     
     return 0
 
@@ -828,14 +837,19 @@ def root_plot2D(
         CMS_lumi.relPosX = 0.045
         CMS_lumi.CMS_lumi(pad = canvas.cd(2), iPeriod = 0, iPosX = 0, CMSextraText = CMSextraText + "  (S/(S+B))", lumiText = lumiText)
     
+    outdir = os.path.dirname(outfile)
     
-    if ("/" in outfile) :
+    if (outdir) :
         
-        outdir = outfile
-        outdir = outdir[0: outdir.rfind("/")]
-        
-        os.system("mkdir -p %s" %(outdir))
+        os.system(f"mkdir -p {outdir}")
     
+    outfile_noext, _ = os.path.splitext(outfile)
+    
+    # ROOT.gStyle.SetImageScaling(2.)
     canvas.SaveAs(outfile)
+    canvas.Close()
+    
+    logger.info(f"Converting: {[outfile]} --> [{outfile_noext}.png]")
+    os.system(f"pdftoppm -png -r 600 -cropbox -singlefile {outfile} {outfile_noext}")
     
     return 0

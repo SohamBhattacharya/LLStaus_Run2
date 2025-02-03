@@ -11,8 +11,9 @@ ERAS=(
     "2016_preVFP.2016_postVFP.2017.2018"
 )
 
-INDIR=/home/soham/mnt/desy_dust/sobhatta/work/LongLivedStaus/LLStaus_Run2/Limits/results/limits_blinded_signal_v6/llstau_maximally-mixed
-OUTDIR=results/limits_blinded_signal_v6/llstau_maximally-mixed
+LIMITSDIR=limits_signal_v9_blinded
+INDIR=/home/soham/mnt/desy_dust/sobhatta/work/LongLivedStaus/LLStaus_Run2/Limits/results/${LIMITSDIR}/llstau_maximally-mixed
+OUTDIR=results/${LIMITSDIR}/llstau_maximally-mixed
 
 for era in ${ERAS[@]}; do
     ./yaml_to_table.py --type yields --config configs/tables/limits/config_yields_table.yaml \

@@ -9,8 +9,13 @@
 *.code-workspace
 .vscode*
 
-# We probaly do not want to push plots
-*plots*
+# pepper
+pepper/
+
+# No outputs
+plots/
+output/
+results/
 *.pdf
 *.png
 

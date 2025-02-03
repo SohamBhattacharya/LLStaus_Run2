@@ -15,9 +15,9 @@
 #  SMS-TStauStau_MStau-200_ctau-100mm_mLSP-1:
 #    label: "${[m_{\PSGt}(200), c\tau_{0}(100)]}$"
 
-obs: # This key is the type of process. Must be one of [obs, bkg, sig]
-  obs: # This key needs to be there in the input yaml
-    label: "Data"
+#obs: # This key is the type of process. Must be one of [obs, bkg, sig]
+#  obs: # This key needs to be there in the input yaml
+#    label: "Data"
 
 bkg:
   misid:

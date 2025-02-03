@@ -1184,16 +1184,16 @@ def main() :
         writer_ret = writer.WriteCards(args.outdir, cb)
         fix_stat_gmN([_key for _key, _val in writer_ret])
     
-    #if ("era" in args.combpars) :
-    #    
-    #    # Per analysis, channel, mass
-    #    writer = ch.CardWriter(
-    #        "$TAG/$ANALYSIS/channels_$CHANNEL/eras_all/$MASS/card_ana_$ANALYSIS_mss_$MASS_chn_$CHANNEL_era_all.txt",
-    #        #"$TAG/$ANALYSIS/channels_$CHANNEL/eras_all/$MASS/card_ana_$ANALYSIS_mss_$MASS_chn_$CHANNEL_$ERA_all_input.root",
-    #        "/tmp/dummy_combineharvester_input.root",
-    #    )
-    #    writer_ret = writer.WriteCards(args.outdir, cb)
-    #    fix_stat_gmN([_key for _key, _val in writer_ret])
+    if ("era" in args.combpars) :
+        
+        # Per analysis, channel, mass
+        writer = ch.CardWriter(
+            "$TAG/$ANALYSIS/channels_$CHANNEL/eras_all/$MASS/card_ana_$ANALYSIS_mss_$MASS_chn_$CHANNEL_era_all.txt",
+            #"$TAG/$ANALYSIS/channels_$CHANNEL/eras_all/$MASS/card_ana_$ANALYSIS_mss_$MASS_chn_$CHANNEL_era_all_input.root",
+            "/tmp/dummy_combineharvester_input.root",
+        )
+        writer_ret = writer.WriteCards(args.outdir, cb)
+        fix_stat_gmN([_key for _key, _val in writer_ret])
     
     if ("channel" in args.combpars and "era" in args.combpars) :
         

@@ -50,6 +50,15 @@ def main() :
         default = "",
     )
     
+    parser.add_argument(
+        "--fitkeys",
+        help = "Will fit (straight line) the SFs for these WP or dxy keys.",
+        type = float,
+        nargs = "+",
+        required = False,
+        default = [],
+    )
+    
     # Parse arguments
     args = parser.parse_args()
     

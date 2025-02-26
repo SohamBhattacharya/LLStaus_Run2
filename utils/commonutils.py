@@ -2,6 +2,7 @@
 
 import json
 import logging
+import hist
 import numpy
 import os
 import re
@@ -196,6 +197,12 @@ def get_hist(
         
         assert(len(scales) == len(samples))
     
+    opened_file = False
+    if isinstance(histfile, str) :
+        
+        histfile = ROOT.TFile.Open(histfile)
+        opened_file = True
+    
     hist_result = None
     
     for isample, sample in enumerate(samples) :
@@ -255,6 +262,10 @@ def get_hist(
             elif ((set_max is not None) and (val > set_max)) :
                 
                 hist_result.SetBinContent(ibin+1, set_max)
+    
+    if opened_file :
+        
+        histfile.Close()
     
     return hist_result
 

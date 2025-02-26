@@ -8,7 +8,7 @@ def exec_cmds(cmds) :
     
     for cmd in cmds :
         
-        retval = os.system(cmd)
+        retval = os.system(f"set -x; {cmd}")
         
         if (retval) :
             

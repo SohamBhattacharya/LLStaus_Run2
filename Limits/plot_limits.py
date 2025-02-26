@@ -2,6 +2,7 @@
 
 import argparse
 import cmsstyle as CMS
+import copy
 import numpy
 import os
 import sortedcontainers
@@ -10,6 +11,11 @@ import ROOT
 ROOT.gROOT.SetBatch(True)
 
 import utils.commonutils as cmut
+
+
+NPX = 500
+NPY = 500
+NZCONTS = 100
 
 
 def get_contours_from_hist(hist, contour_value, nsmooth = 0) :
@@ -64,6 +70,7 @@ def get_exclusion(
     d_limits,
     d_xsecs,
     limit_key,
+    xsec_key,
     name,
     axis_label,
 ) :
@@ -91,7 +98,7 @@ def get_exclusion(
             continue
         
         ul = limits[limit_key] # if limit_key in limits else 0
-        xsec = d_xsecs[mstau]["nom"]
+        xsec = d_xsecs[mstau][xsec_key]
         xsecul = xsec*ul
         print(limit_key, mstau, ctau, ul, xsecul)
         
@@ -104,11 +111,11 @@ def get_exclusion(
     #g2_ul.GetHistogram().GetXaxis().SetRangeUser(0, 1000)
     #g2_xsecul.GetHistogram().GetXaxis().SetRangeUser(0, 1000)
     
-    g2_ul.SetNpx(500)
-    g2_ul.SetNpy(500)
+    g2_ul.SetNpx(NPX)
+    g2_ul.SetNpy(NPY)
     
-    g2_xsecul.SetNpx(500)
-    g2_xsecul.SetNpy(500)
+    g2_xsecul.SetNpx(NPX)
+    g2_xsecul.SetNpy(NPY)
     
     h2_ul_interp = g2_ul.GetHistogram().Clone()
     h2_ul_interp.SetName(f"{h2_ul.GetName()}_interp")
@@ -186,16 +193,24 @@ def main() :
     )
     
     parser.add_argument(
-        "--output",
-        help = "Output root file",
+        "--outdir",
+        help = "Output directory",
         type = str,
         required = True,
+    )
+    
+    parser.add_argument(
+        "--blind",
+        help = "No observed limits; will append \"_blinded\" to the output directory",
+        action = "store_true",
+        default = False,
     )
     
     # Parse arguments
     args = parser.parse_args()
     
-    outdir = os.path.dirname(args.output).strip()
+    #outdir = os.path.dirname(args.output).strip()
+    outdir = f"{args.outdir}_blinded" if args.blind else args.outdir
     
     if (len(outdir)) :
         
@@ -210,13 +225,17 @@ def main() :
     
     d_xsecs = {_row[0]: {
         "nom": _row[1],
-        "unc_d": _row[1],
-        "unc_u": _row[2]
+        "unc_d": _row[2],
+        "unc_u": _row[3],
+        "d": _row[1] + _row[2],
+        "u": _row[1] + _row[3],
     } for _row in arr_xsec_data}
     
     print(d_xsecs)
     
     d_limits = sortedcontainers.SortedDict()
+    d_limits_theory_u = sortedcontainers.SortedDict()
+    d_limits_theory_d = sortedcontainers.SortedDict()
     
     #for ipoint, injson in enumerate(args.jsons[: 20]) :
     for ipoint, injson in enumerate(args.jsons) :
@@ -238,10 +257,19 @@ def main() :
         mstau = float(mstau_str)
         ctau = float(ctau_str[0: -2].replace("p", "."))
         
-        d_limits[(mstau, ctau)] = limits
+        d_limits[(mstau, ctau)] = copy.deepcopy(limits)
+        
+        d_limits_theory_u[(mstau, ctau)] = copy.deepcopy(limits)
+        d_limits_theory_d[(mstau, ctau)] = copy.deepcopy(limits)
+        
+        d_limits_theory_u[(mstau, ctau)]["obs"] = d_limits_theory_u[(mstau, ctau)]["obs"] * (1.0 + d_xsecs[mstau]["unc_u"]/d_xsecs[mstau]["nom"])
+        d_limits_theory_d[(mstau, ctau)]["obs"] = d_limits_theory_d[(mstau, ctau)]["obs"] * (1.0 + d_xsecs[mstau]["unc_d"]/d_xsecs[mstau]["nom"])
+        
+        #print("XXX", d_limits[(mstau, ctau)]["obs"], d_limits_theory_u[(mstau, ctau)]["obs"], d_limits_theory_d[(mstau, ctau)]["obs"])
     
     
-    outfile = ROOT.TFile.Open(args.output, "RECREATE")
+    outfilename_limits = f"{outdir}/limits.root"
+    outfile = ROOT.TFile.Open(outfilename_limits, "RECREATE")
     
     # Contours
     results = sortedcontainers.SortedDict()
@@ -250,7 +278,26 @@ def main() :
         d_limits = d_limits,
         d_xsecs = d_xsecs,
         limit_key = "obs",
+        xsec_key = "nom",
         name = "obs",
+        axis_label = "Observed UL",
+    )
+    
+    results["obs_p1"] = get_exclusion(
+        d_limits = d_limits_theory_d,
+        d_xsecs = d_xsecs,
+        limit_key = "obs",
+        xsec_key = "d",
+        name = "obs_p1",
+        axis_label = "Observed UL",
+    )
+    
+    results["obs_m1"] = get_exclusion(
+        d_limits = d_limits_theory_u,
+        d_xsecs = d_xsecs,
+        limit_key = "obs",
+        xsec_key = "u",
+        name = "obs_m1",
         axis_label = "Observed UL",
     )
     
@@ -258,6 +305,7 @@ def main() :
         d_limits = d_limits,
         d_xsecs = d_xsecs,
         limit_key = "exp0",
+        xsec_key = "nom",
         name = "exp",
         axis_label = "Expected UL at 95% CL",
     )
@@ -266,6 +314,7 @@ def main() :
         d_limits = d_limits,
         d_xsecs = d_xsecs,
         limit_key = "exp+1",
+        xsec_key = "nom",
         name = "exp_p1",
         axis_label = "Expected UL (+1#sigma) at 95% CL",
     )
@@ -274,6 +323,7 @@ def main() :
         d_limits = d_limits,
         d_xsecs = d_xsecs,
         limit_key = "exp-1",
+        xsec_key = "nom",
         name = "exp_m1",
         axis_label = "Expected UL (-1#sigma) at 95% CL",
     )
@@ -322,7 +372,7 @@ def main() :
         if ctau_key not in d_xsecul_per_ctau :
             
             d_xsecul_per_ctau[ctau_key] = {
-                "g1_xsec_theory": ROOT.TGraph(),
+                "g1_xsec_theory": ROOT.TGraphAsymmErrors(),
                 "g1_xsecul_obs": ROOT.TGraph(),
                 "g1_xsecul_exp": ROOT.TGraph(),
                 "g1_xsecul_exp_pm1": ROOT.TGraphAsymmErrors(),
@@ -335,9 +385,19 @@ def main() :
                 val.SetTitle(f"{key}_{ctau_str}")
         
         xsec = d_xsecs[mstau]["nom"]
+        xsec_u = abs(d_xsecs[mstau]["unc_u"])
+        xsec_d = abs(d_xsecs[mstau]["unc_d"])
         ipoint = d_xsecul_per_ctau[ctau_key]["g1_xsecul_exp"].GetN()
         
+        cmut.logger.info(f"Filling xsec graph with: mstau({mstau}), xsec({xsec}+{xsec_u}-{xsec_d})")
+        
         d_xsecul_per_ctau[ctau_key]["g1_xsec_theory"].SetPoint(ipoint, mstau, xsec)
+        d_xsecul_per_ctau[ctau_key]["g1_xsec_theory"].SetPointError(
+            ipoint,
+            0.0, 0.0,
+            xsec_d, xsec_u
+        )
+        
         d_xsecul_per_ctau[ctau_key]["g1_xsecul_obs"].SetPoint(ipoint, mstau, limits["obs"]*xsec)
         d_xsecul_per_ctau[ctau_key]["g1_xsecul_exp"].SetPoint(ipoint, mstau, limits["exp0"]*xsec)
         
@@ -345,18 +405,20 @@ def main() :
         d_xsecul_per_ctau[ctau_key]["g1_xsecul_exp_pm1"].SetPointError(
             ipoint,
             0.0, 0.0,
-            abs(limits["exp-1"]-limits["exp0"])*xsec, abs(limits["exp+1"]-limits["exp0"])*xsec
+            abs(limits["exp-1"]-limits["exp0"])*xsec,
+            abs(limits["exp+1"]-limits["exp0"])*xsec
         )
         
         d_xsecul_per_ctau[ctau_key]["g1_xsecul_exp_pm2"].SetPoint(ipoint, mstau, limits["exp0"]*xsec)
         d_xsecul_per_ctau[ctau_key]["g1_xsecul_exp_pm2"].SetPointError(
             ipoint,
             0.0, 0.0,
-            abs(limits["exp-2"]-limits["exp0"])*xsec, abs(limits["exp+2"]-limits["exp0"])*xsec
+            abs(limits["exp-2"]-limits["exp0"])*xsec,
+            abs(limits["exp+2"]-limits["exp0"])*xsec
         )
     
     
-    print(f"Writing to: {args.output}")
+    print(f"Writing to: {outfilename_limits}")
     outfile.cd()
     
     for result_key, result in results.items() :
@@ -374,6 +436,8 @@ def main() :
             print(f"Writing [{result_key}] [{key}]")
             val.Write()
     
+    
+    # 2D exclusions
     canvas_name = "limits-vs-ctau0-mstau"
     
     CMS.setCMSStyle()
@@ -382,27 +446,7 @@ def main() :
     CMS.SetEnergy("")
     CMS.SetCMSPalette()
     CMS.ResetAdditionalInfo()
-    
-    #NRGBs = 5
-    #NCont = 255
-    #l_stops = [0.00, 0.15, 0.27, 0.55, 1.00]
-    #l_red   = [0.50, 0.50, 1.00, 1.00, 1.00]
-    #l_green = [0.50, 1.00, 1.00, 0.60, 0.50]
-    #l_blue  = [1.00, 1.00, 0.50, 0.40, 0.50]
-    #
-    #ROOT.TColor.CreateGradientColorTable(
-    #    NRGBs,
-    #    numpy.array(l_stops),
-    #    numpy.array(l_red),
-    #    numpy.array(l_green),
-    #    numpy.array(l_blue),
-    #    NCont
-    #)
-    #
-    #ROOT.gStyle.SetNumberContours(NCont)
-    
-    #ROOT.gStyle.SetPadTickX(0)
-    #ROOT.gStyle.SetPadTickY(0)
+    CMS.getCMSStyle().SetNumberContours(NZCONTS)
     
     ymin = 1
     ymax = max([
@@ -419,7 +463,8 @@ def main() :
         x_min = 90, x_max = 600,
         y_min = ymin, y_max = ymax,
         nameXaxis = "m_{#tilde{#tau}} [GeV]",
-        nameYaxis = "c#tau_{0}(#tilde{#tau}) [mm]",
+        #nameYaxis = "c#tau_{0}(#tilde{#tau}) [mm]",
+        nameYaxis = "c#tau_{0} [mm]",
         #square = CMS.kSquare,
         square = False,
         iPos = 0,
@@ -435,7 +480,7 @@ def main() :
     CMS.CMS_lumi(canvas, iPosX = 0)
     CMS.UpdatePad(canvas)
     
-    h2_colz = results["exp"]["h2_xsecul_interp"]
+    h2_colz = results["exp"]["h2_xsecul_interp"] if args.blind else results["obs"]["h2_xsecul_interp"]
     
     zmin = 10**-1
     #zmin = h2_colz.GetMinimum()
@@ -446,6 +491,7 @@ def main() :
     #zmax = 10**(round(numpy.log10(zmax))+1)
     
     h2_colz.GetZaxis().SetRangeUser(zmin, zmax)
+    h2_colz.GetZaxis().CenterTitle()
     h2_colz.GetZaxis().SetTitle("95% CL upper limit on cross section [fb]")
     h2_colz.GetZaxis().SetTitleSize(0.05)
     h2_colz.GetZaxis().SetTitleOffset(1.2)
@@ -459,7 +505,21 @@ def main() :
     #legend.SetMargin(0.25)
     legend.SetTextAlign(22)
     
-    CMS.cmsDraw(results["exp"]["h2_xsecul_interp"], "colz")
+    CMS.cmsDraw(h2_colz, "colz")
+    
+    if not args.blind :
+        
+        legend.AddEntry(0, "", "")
+        legend.AddEntry(0, "", "")
+        
+        CMS.cmsDraw(results["obs"]["contour"], "sameL", lstyle = ROOT.kSolid, lcolor = ROOT.kBlack, lwidth = 3)
+        legend.AddEntry(results["obs"]["contour"], "Observed", "L")
+        
+        CMS.cmsDraw(results["obs_p1"]["contour"], "sameL", lstyle = ROOT.kDashed, lcolor = ROOT.kBlack, lwidth = 3)
+        CMS.cmsDraw(results["obs_m1"]["contour"], "sameL", lstyle = ROOT.kDashed, lcolor = ROOT.kBlack, lwidth = 3)
+        
+        legend.AddEntry(results["obs_p1"]["contour"], "Observed #pm 1#sigma_{theory}    ", "L")
+    
     CMS.cmsDraw(results["exp"]["contour"], "sameL", lstyle = ROOT.kSolid, lcolor = ROOT.kRed+1, lwidth = 3)
     legend.AddEntry(results["exp"]["contour"], "Expected", "L")
     
@@ -507,7 +567,8 @@ def main() :
     
     canvas_outfile = f"{outdir}/{canvas_name}"
     CMS.SaveCanvas(canvas, f"{canvas_outfile}.pdf")
-    os.system(f"pdftoppm -cropbox -r 600 -png -singlefile {canvas_outfile}.pdf {canvas_outfile}")
+    #os.system(f"pdftoppm -cropbox -r 600 -png -singlefile {canvas_outfile}.pdf {canvas_outfile}")
+    cmut.pdf_to_png(f"{canvas_outfile}.pdf")
     
     
     for (ctau, ctau_str), d_xsecul in d_xsecul_per_ctau.items() :
@@ -532,12 +593,14 @@ def main() :
         xmax = 750
         
         #ymin = min([_ele.GetHistogram().GetMinimum() for _ele in d_xsecul.values()])
-        ymin = g1_xsec_theory.GetHistogram().GetMinimum()
+        #ymin = g1_xsec_theory.GetHistogram().GetMinimum()
+        ymin = min(numpy.array(g1_xsec_theory.GetY()))
         ymin = 10**(round(numpy.log10(ymin))-1)
         #ymin = 10**-2
         
         #ymax = max([_ele.GetHistogram().GetMaximum() for _ele in d_xsecul.values()])
-        ymax = g1_xsec_theory.GetHistogram().GetMaximum()
+        #ymax = g1_xsec_theory.GetHistogram().GetMaximum()
+        ymax = max(numpy.array(g1_xsec_theory.GetY()))
         ymax = 10**(round(numpy.log10(ymax))+2)
         
         canvas_name = f"limits-vs-mstau_{ctau_str}"
@@ -565,16 +628,24 @@ def main() :
         CMS.cmsDraw(g1_xsecul_exp_pm2, "3L", fcolor = ROOT.TColor.GetColor("#85D1FBff"))
         CMS.cmsDraw(g1_xsecul_exp_pm1, "same3L", fcolor = ROOT.TColor.GetColor("#FFDF7Fff"))
         CMS.cmsDraw(g1_xsecul_exp, "sameL", lstyle = ROOT.kDashed, lcolor = ROOT.kBlack, lwidth = 3)
-        CMS.cmsDraw(g1_xsec_theory, "sameL", lstyle = ROOT.kDotted, lcolor = ROOT.kRed, lwidth = 3)
+        
+        if not args.blind :
+            CMS.cmsDraw(g1_xsecul_obs, "sameL", lstyle = ROOT.kSolid, lcolor = ROOT.kBlack, lwidth = 3)
+        
+        CMS.cmsDraw(g1_xsec_theory, "same3L", lcolor = ROOT.kRed, lwidth = 2, fcolor = ROOT.kRed, alpha = 0.33)
         #CMS.cmsDraw(g1_xsecul_obs, "LP")
         
         g1_xsecul_exp_pm1.SetLineWidth(0)
         g1_xsecul_exp_pm2.SetLineWidth(0)
         
-        legend = CMS.cmsLeg(0.5, 0.60, 0.95, 0.90, textSize = 0.04, columns = 1)
+        legend = CMS.cmsLeg(0.45, 0.60, 0.95, 0.90, textSize = 0.04, columns = 1)
         #leg.AddEntry(g1_xsecul_obs, "Observed", "LP")
-        legend.AddEntry(g1_xsec_theory, "Theory (NLO+NLL)", "L")
+        legend.AddEntry(g1_xsec_theory, "Theory (NLO+NLL)", "LF")
         legend.AddEntry(0, "#kern[-0.3]{#bf{95% CL upper limits}}", "")
+        
+        if not args.blind :
+            legend.AddEntry(g1_xsecul_obs, "Observed", "L")
+        
         legend.AddEntry(g1_xsecul_exp, "Expected", "L")
         legend.AddEntry(g1_xsecul_exp_pm1, "Expected #pm 1#sigma_{experiment}", "F")
         legend.AddEntry(g1_xsecul_exp_pm2, "Expected #pm 2#sigma_{experiment}", "F")
@@ -585,7 +656,8 @@ def main() :
             "pp#rightarrow#tilde{#tau}#bar{#tilde{#tau}} , "
             "#tilde{#tau}#rightarrow#tau#tilde{G} , "
             "m_{#tilde{G}} = 1 GeV , "
-            "c#tau_{0}(#tilde{#tau}) = " + ctau_str[0:-2].replace("p", ".") + " mm"
+            #"c#tau_{0}(#tilde{#tau}) = " + ctau_str[0:-2].replace("p", ".") + " mm"
+            "c#tau_{0} = " + ctau_str[0:-2].replace("p", ".") + " mm"
         )
         
         if args.extratext :
@@ -605,7 +677,8 @@ def main() :
         
         # ROOT fucks up when saving as png
         # Convert from the pdf instead
-        os.system(f"pdftoppm -cropbox -r 600 -png -singlefile {canvas_outfile}.pdf {canvas_outfile}")
+        #os.system(f"pdftoppm -cropbox -r 600 -png -singlefile {canvas_outfile}.pdf {canvas_outfile}")
+        cmut.pdf_to_png(f"{canvas_outfile}.pdf")
     
     return 0
 

@@ -243,6 +243,7 @@ def main () :
                             hist_proc.SetTitle(label)
                             hist_proc.SetOption("hist")
                             hist_proc.SetFillColor(color)
+                            hist_proc.SetFillStyle(1001)
                             hist_proc.SetLineColor(color)
                             hist_proc.SetMarkerColor(color)
                             hist_proc.SetLineWidth(0)
@@ -308,7 +309,6 @@ def main () :
                             ratio_mode = "data",
                             #no_xerror = True,
                             logx = False, logy = True,
-                            title = "",
                             xtitle = "", ytitle = "Events",
                             xtitle_ratio = "", ytitle_ratio = "Data/Total pred.",
                             yrange_ratio = (0, 2),

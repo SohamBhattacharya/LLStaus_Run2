@@ -9,8 +9,11 @@ def main() :
     #sigfile = "configs/limits/sig_list_test.txt"
     #outfile = "configs/limits/sig_procs_test.yaml"
     
-    sigfile = "configs/limits/sig_list.txt"
-    outfile = "configs/limits/sig_procs.yaml"
+    #sigfile = "configs/limits/sig_list.txt"
+    #outfile = "configs/limits/sig_procs.yaml"
+    
+    sigfile = "configs/distributions/sig_list_for-distributions.txt"
+    outfile = "configs/distributions/sig_procs_for-distributions.yaml"
     
     l_sig = numpy.loadtxt(sigfile, dtype = str)
     #print(l_sig)

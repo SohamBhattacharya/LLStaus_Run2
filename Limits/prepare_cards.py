@@ -130,6 +130,8 @@ def set_syst_errs(
     bin_names,
     systname,
     iseracorr,
+    operation_u = None,
+    operation_d = None,
 ) :
     
     for bin_id, bin_name in zip(bin_ids, bin_names) :
@@ -141,6 +143,14 @@ def set_syst_errs(
         
         #err_u_rel = numpy.clip(1.0+(err_u/val), 0.001, 2.0) if val else 2.0
         #err_d_rel = numpy.clip(1.0+(err_d/val), 0.001, 2.0) if val else 0.001
+        
+        d_fmt = {
+            "u" : err_u,
+            "d" : err_d,
+        }
+        
+        err_u = eval(operation_u.format(**d_fmt)) if operation_u else err_u
+        err_d = eval(operation_d.format(**d_fmt)) if operation_d else err_d
         
         err_u_rel = numpy.clip(1.0+(err_u/val), 0.001, 2.0) if val else 1.001
         err_d_rel = numpy.clip(1.0+(err_d/val), 0.001, 2.0) if val else 0.999
@@ -184,9 +194,16 @@ def get_and_set_syst_errs(
             
             if (isinstance(systinfo[systvar], str)) :
                 
+                usefile = inhistfile
+                histname = systinfo[systvar]
+                
+                if (":" in systinfo[systvar]) :
+                    
+                    usefile, histname = systinfo[systvar].split(":")
+                
                 hist_proc_syst = cmut.get_hist(
-                    histfile = inhistfile,
-                    histname = systinfo[systvar],
+                    histfile = usefile,
+                    histname = histname,
                     samples = samples,
                     scales = scales,
                     rebin = rebin,
@@ -194,6 +211,7 @@ def get_and_set_syst_errs(
                 )
             
             elif (isinstance(systinfo[systvar], dict)) :
+                
                 print(systname, systinfo[systvar], procname)
                 
                 histname = None
@@ -213,8 +231,14 @@ def get_and_set_syst_errs(
                     )
                     raise Exception("Systematics not found")
                 
+                usefile = inhistfile
+                
+                if (":" in histname) :
+                    
+                    usefile, histname = histname.split(":")
+                
                 hist_proc_syst = cmut.get_hist(
-                    histfile = inhistfile,
+                    histfile = usefile,
                     histname = histname,
                     samples = samples,
                     scales = scales,
@@ -234,7 +258,7 @@ def get_and_set_syst_errs(
                     f"Could not decipher systematics {systname}: {systvar}: {systinfo[systvar]}. "
                     "Must be one of [str(histname), dict of {procname: str(histname)}, float]."
                 )
-                raise Exception("Invalid systematics format")
+                raise Exception
             
             #hist_proc_syst.Print("range")
             d_hist_proc_syst[systname][systvar] = hist_proc_syst
@@ -249,6 +273,8 @@ def get_and_set_syst_errs(
             bin_names = bin_names,
             systname = systname,
             iseracorr = systinfo["iseracorr"],
+            operation_u = systinfo.get("operation_u", None),
+            operation_d = systinfo.get("operation_d", None),
         )
 
 
@@ -324,9 +350,18 @@ def main() :
     
     parser.add_argument(
         "--chcombos",
-        help = "Custom channel combinations to create cards for; comma separated lists: ch1,ch2 ch3,ch5",
+        help = "Custom channel combinations to create cards for; comma separated lists: ch1,ch2  ch3,ch5",
         type = str,
-        nargs = "*",
+        nargs = "+",
+        required = False,
+        default = [],
+    )
+    
+    parser.add_argument(
+        "--eracombos",
+        help = "Custom era combinations to create cards for; comma separated lists: era1,era2  era1,era3",
+        type = str,
+        nargs = "+",
         required = False,
         default = [],
     )
@@ -335,7 +370,7 @@ def main() :
         "--combpars",
         help = "Create cards combining these parameters",
         type = str,
-        nargs = "*",
+        nargs = "+",
         required = False,
         default = [],
         choices = ["channel", "era"]
@@ -371,6 +406,13 @@ def main() :
         required = False
     )
     
+    parser.add_argument(
+        "--nocards",
+        help = "Will not create datacards",
+        action = "store_true",
+        default = False,
+    )
+    
     # Parse arguments
     args = parser.parse_args()
     #d_args = vars(args)
@@ -404,6 +446,8 @@ def main() :
     
     # Key structure: dict[analysis][channel][era][process][systcombo]
     d_systcombo_names = {}
+    
+    l_bin_edges = []
     
     for cfg in args.configs :
         
@@ -530,6 +574,8 @@ def main() :
             inhistfile_sig = ROOT.TFile.Open(d_config["sig"]["histfile"])
             cutflows_sig = cmut.load_config(d_config["sig"]["cutflowsfile"])
             
+            scale_allprocs_sig = eval(d_config["sig"].get("scaleby_allprocs", "1.0"))
+            
             for procname, procinfo in d_config["sig"]["procs"].items() :
                 
                 samples = procinfo["samples"]
@@ -556,7 +602,7 @@ def main() :
                 
                 for sample in samples :
                     
-                    scale = eval(procinfo["scaleby"])
+                    scale = eval(procinfo["scaleby"]) * scale_allprocs_sig
                     
                     if (ismc) :
                         
@@ -588,6 +634,10 @@ def main() :
                     rebin = rebin,
                     set_min = 0,
                 )
+                
+                if not l_bin_edges :
+                    
+                    l_bin_edges = [hist_proc_nom.GetBinLowEdge(_bin) for _bin in bin_ids] + [hist_proc_nom.GetXaxis().GetBinUpEdge(bin_ids[-1])]
                 
                 #hist_proc_nom.Print("range")
                 
@@ -669,6 +719,8 @@ def main() :
             inhistfile_sig.Close()
         
         
+        scale_allprocs_bkg = eval(d_config["bkg"].get("scaleby_allprocs", "1.0"))
+        
         for procname, procinfo in d_config["bkg"]["procs"].items() :
             
             ismc = procinfo["ismc"]
@@ -683,7 +735,7 @@ def main() :
             
             for sample in samples :
                 
-                scale = eval(procinfo["scaleby"])
+                scale = eval(procinfo["scaleby"]) * scale_allprocs_bkg
                 
                 if (ismc) :
                     
@@ -708,6 +760,10 @@ def main() :
             )
             
             #hist_proc_nom.Print("range")
+            
+            if not l_bin_edges :
+                
+                l_bin_edges = [hist_proc_nom.GetBinLowEdge(_bin) for _bin in bin_ids] + [hist_proc_nom.GetBinUpEdge(bin_ids[-1])]
             
             alpha = procinfo.get(
                 "alpha",
@@ -1140,15 +1196,19 @@ def main() :
                             "unc_syst": cb_sig_syst.GetUncertainty(),
                         }
                     
+                    d_yields["bin_edges"] = l_bin_edges
                     
-                    outyamlname = f"{args.outdir}/{analysis}/yields_channels_{channel}_eras_{eras_str}.yaml"
+                    outdir = f"{args.outdir}/{analysis}/yields_and_systematics"
+                    os.system(f"mkdir -p {outdir}")
+                    
+                    outyamlname = f"{outdir}/yields_channels_{channel}_eras_{eras_str}.yaml"
                     with open(outyamlname, "w", encoding = "utf-8") as fopen:
                         
                         yaml.dump(d_yields, fopen)
                     
                     cmut.logger.info(f"Written yields [{outyamlname}]")
                     
-                    outyamlname = f"{args.outdir}/{analysis}/systematics_channels_{channel}_eras_{eras_str}.yaml"
+                    outyamlname = f"{outdir}/systematics_channels_{channel}_eras_{eras_str}.yaml"
                     with open(outyamlname, "w", encoding = "utf-8") as fopen:
                         
                         yaml.dump(d_systematics, fopen)
@@ -1156,69 +1216,93 @@ def main() :
                     cmut.logger.info(f"Written systematics [{outyamlname}]")
     
     
-    # The CardWriter complains otherwise
-    cb.SetFlag("filters-use-regex", False)
-    
-    # *_input.root does not contain anything
-    # Set it to a dummy file
-    
-    # Per analysis, channel, era, mass
-    writer = ch.CardWriter(
-        #"$TAG/$ANALYSIS/$MASS/channels_$CHANNEL/eras_$ERA/$ANALYSIS_mass_$MASS_chn_$CHANNEL_$ERA.txt",
-        #"$TAG/$ANALYSIS/$MASS/channels_$CHANNEL/eras_$ERA/$ANALYSIS_mass_$MASS_chn_$CHANNEL_$ERA_input.root",
-        "$TAG/$ANALYSIS/channels_$CHANNEL/eras_$ERA/$MASS/card_ana_$ANALYSIS_mss_$MASS_chn_$CHANNEL_era_$ERA.txt",
-        #"$TAG/$ANALYSIS/channels_$CHANNEL/eras_$ERA/$MASS/card_ana_$ANALYSIS_mss_$MASS_chn_$CHANNEL_$ERA_era_input.root",
-        "/tmp/dummy_combineharvester_input.root",
-    )
-    writer_ret = writer.WriteCards(args.outdir, cb)
-    fix_stat_gmN([_key for _key, _val in writer_ret])
-    
-    if ("channel" in args.combpars) :
+    if not args.nocards :
         
-        # Per analysis, era, mass
+        # The CardWriter complains otherwise
+        cb.SetFlag("filters-use-regex", False)
+        
+        # *_input.root does not contain anything
+        # Set it to a dummy file
+        
+        # Per analysis, channel, era, mass
         writer = ch.CardWriter(
-            "$TAG/$ANALYSIS/channels_all/eras_$ERA/$MASS/card_ana_$ANALYSIS_mss_$MASS_chn_all_era_$ERA.txt",
-            #"$TAG/$ANALYSIS/channels_all/eras_$ERA/$MASS/card_ana_$ANALYSIS_mss_$MASS_chn_all_$ERA_era_input.root",
+            #"$TAG/$ANALYSIS/$MASS/channels_$CHANNEL/eras_$ERA/$ANALYSIS_mass_$MASS_chn_$CHANNEL_$ERA.txt",
+            #"$TAG/$ANALYSIS/$MASS/channels_$CHANNEL/eras_$ERA/$ANALYSIS_mass_$MASS_chn_$CHANNEL_$ERA_input.root",
+            "$TAG/$ANALYSIS/channels_$CHANNEL/eras_$ERA/$MASS/card_ana_$ANALYSIS_mss_$MASS_chn_$CHANNEL_era_$ERA.txt",
+            #"$TAG/$ANALYSIS/channels_$CHANNEL/eras_$ERA/$MASS/card_ana_$ANALYSIS_mss_$MASS_chn_$CHANNEL_$ERA_era_input.root",
             "/tmp/dummy_combineharvester_input.root",
         )
         writer_ret = writer.WriteCards(args.outdir, cb)
         fix_stat_gmN([_key for _key, _val in writer_ret])
-    
-    if ("era" in args.combpars) :
         
-        # Per analysis, channel, mass
-        writer = ch.CardWriter(
-            "$TAG/$ANALYSIS/channels_$CHANNEL/eras_all/$MASS/card_ana_$ANALYSIS_mss_$MASS_chn_$CHANNEL_era_all.txt",
-            #"$TAG/$ANALYSIS/channels_$CHANNEL/eras_all/$MASS/card_ana_$ANALYSIS_mss_$MASS_chn_$CHANNEL_era_all_input.root",
-            "/tmp/dummy_combineharvester_input.root",
-        )
-        writer_ret = writer.WriteCards(args.outdir, cb)
-        fix_stat_gmN([_key for _key, _val in writer_ret])
-    
-    if ("channel" in args.combpars and "era" in args.combpars) :
+        if ("channel" in args.combpars) :
+            
+            # Per analysis, era, mass
+            writer = ch.CardWriter(
+                "$TAG/$ANALYSIS/channels_all/eras_$ERA/$MASS/card_ana_$ANALYSIS_mss_$MASS_chn_all_era_$ERA.txt",
+                #"$TAG/$ANALYSIS/channels_all/eras_$ERA/$MASS/card_ana_$ANALYSIS_mss_$MASS_chn_all_$ERA_era_input.root",
+                "/tmp/dummy_combineharvester_input.root",
+            )
+            writer_ret = writer.WriteCards(args.outdir, cb)
+            fix_stat_gmN([_key for _key, _val in writer_ret])
         
-        # Per analysis, mass
-        writer = ch.CardWriter(
-            "$TAG/$ANALYSIS/channels_all/eras_all/$MASS/card_ana_$ANALYSIS_mss_$MASS_chn_all_era_all.txt",
-            #"$TAG/$ANALYSIS/channels_all/eras_all/$MASS/card_ana_$ANALYSIS_mss_$MASS_chn_all_era_all_input.root",
-            "/tmp/dummy_combineharvester_input.root",
-        )
-        writer_ret = writer.WriteCards(args.outdir, cb)
-        fix_stat_gmN([_key for _key, _val in writer_ret])
-    
-    for ch_combo in args.chcombos :
+        if ("era" in args.combpars) :
+            
+            # Per analysis, channel, mass
+            writer = ch.CardWriter(
+                "$TAG/$ANALYSIS/channels_$CHANNEL/eras_all/$MASS/card_ana_$ANALYSIS_mss_$MASS_chn_$CHANNEL_era_all.txt",
+                #"$TAG/$ANALYSIS/channels_$CHANNEL/eras_all/$MASS/card_ana_$ANALYSIS_mss_$MASS_chn_$CHANNEL_era_all_input.root",
+                "/tmp/dummy_combineharvester_input.root",
+            )
+            writer_ret = writer.WriteCards(args.outdir, cb)
+            fix_stat_gmN([_key for _key, _val in writer_ret])
         
-        channels = ch_combo.strip().split(",")
-        channels_tag = "_".join(channels)
+        if ("channel" in args.combpars and "era" in args.combpars) :
+            
+            # Per analysis, mass
+            writer = ch.CardWriter(
+                "$TAG/$ANALYSIS/channels_all/eras_all/$MASS/card_ana_$ANALYSIS_mss_$MASS_chn_all_era_all.txt",
+                #"$TAG/$ANALYSIS/channels_all/eras_all/$MASS/card_ana_$ANALYSIS_mss_$MASS_chn_all_era_all_input.root",
+                "/tmp/dummy_combineharvester_input.root",
+            )
+            writer_ret = writer.WriteCards(args.outdir, cb)
+            fix_stat_gmN([_key for _key, _val in writer_ret])
         
-        writer = ch.CardWriter(
-            f"$TAG/$ANALYSIS/channels_{channels_tag}/eras_all/$MASS/card_ana_$ANALYSIS_mss_$MASS_chn_{channels_tag}.txt",
-            #f"$TAG/$ANALYSIS/channels_{channels_tag}/eras_all/$MASS/card_ana_$ANALYSIS_mss_$MASS_chn_{channels_tag}_input.root",
-            "/tmp/dummy_combineharvester_input.root",
-        )
+        for ch_combo in args.chcombos :
+            
+            channels = ch_combo.strip().split(",")
+            channels_tag = ".".join(channels)
+            
+            if not set(channels).issubset(l_channels) :
+                
+                cmut.logger.error(f"Invalid era in --chcombos: {args.chcombos}")
+                raise Exception
+            
+            writer = ch.CardWriter(
+                f"$TAG/$ANALYSIS/channels_{channels_tag}/eras_all/$MASS/card_ana_$ANALYSIS_mss_$MASS_chn_{channels_tag}_era_all.txt",
+                "/tmp/dummy_combineharvester_input.root",
+            )
+            
+            writer_ret = writer.WriteCards(args.outdir, cb.cp().channel(channels))
+            fix_stat_gmN([_key for _key, _val in writer_ret])
         
-        writer_ret = writer.WriteCards(args.outdir, cb.cp().channel(channels))
-        fix_stat_gmN([_key for _key, _val in writer_ret])
+        for era_combo in args.eracombos :
+            
+            eras = era_combo.strip().split(",")
+            eras_tag = ".".join(eras)
+            
+            if not set(eras).issubset(l_eras) :
+                
+                cmut.logger.error(f"Invalid era in --eracombos: {args.eracombos}")
+                raise Exception
+            
+            writer = ch.CardWriter(
+                f"$TAG/$ANALYSIS/channels_all/eras_{eras_tag}/$MASS/card_ana_$ANALYSIS_mss_$MASS_chn_all_era_{eras_tag}.txt",
+                "/tmp/dummy_combineharvester_input.root",
+            )
+            
+            writer_ret = writer.WriteCards(args.outdir, cb.cp().era(eras))
+            fix_stat_gmN([_key for _key, _val in writer_ret])
 
 
 if (__name__ == "__main__") :

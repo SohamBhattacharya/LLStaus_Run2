@@ -12,7 +12,7 @@ def exec_cmds(cmds) :
     for cmd in cmds :
         
         print(cmd)
-        retval = os.system(cmd)
+        retval = os.system(f"set -x; {cmd}")
         
         if (retval) :
             
@@ -31,12 +31,31 @@ def main() :
         required = True,
     )
     
-    #parser.add_argument(
-    #    "--outdir",
-    #    help = "Output directory",
-    #    type = str,
-    #    required = True,
-    #)
+    parser.add_argument(
+        "--suffix",
+        help = "Will append \"_suffix\" to the combine output directories (only implemented for limits, fit diagnostics, and NLL scan)",
+        type = str,
+        required = False,
+    )
+    
+    parser.add_argument(
+        "--combineargs",
+        help = (
+            "Will pass this string as an argument to combine (only implemented for limits, fit diagnostics, and NLL scan); "
+            "can contain multiple combine arguments in quotes: \"--arg1 --arg2 xyz\""
+        ),
+        type = str,
+        required = False,
+        default = ""
+    )
+    
+    parser.add_argument(
+        "--nparallel",
+        help = "Number of parallel processes to run",
+        type = int,
+        required = False,
+        default = 20
+    )
     
     parser.add_argument(
         "--wspace",
@@ -51,14 +70,14 @@ def main() :
     )
     
     parser.add_argument(
-        "--fitdiag",
-        help = "Run fit diagnostics",
+        "--colllimits",
+        help = "Collect limit results",
         action = "store_true",
     )
     
     parser.add_argument(
-        "--colllimits",
-        help = "Collect limit results",
+        "--fitdiag",
+        help = "Run fit diagnostics",
         action = "store_true",
     )
     
@@ -98,12 +117,16 @@ def main() :
     # Parse arguments
     args = parser.parse_args()
     
-    nparallel = 20
-    
+    suffix = f"_{args.suffix}" if args.suffix else ""
     signal_suffix = f"_expectSignal{args.signal}" if len(args.signal) else ""
     signal_args = f"-t -1 --expectSignal {args.signal}" if len(args.signal) else ""
     
-    indir = os.path.dirname(args.indir)
+    wkdir_limits = f"limits{suffix}"
+    wkdir_fitdiag = f"fit-diagnostics{suffix}{signal_suffix}"
+    wkdir_scan = f"scan{suffix}{signal_suffix}"
+    wkdir_plotcorr = f"{args.indir}/{wkdir_fitdiag}" if args.fitdiag else args.indir
+    
+    #indir = os.path.dirname(args.indir)
     
     cmds = []
     
@@ -116,17 +139,17 @@ def main() :
             "nice -n 10 combineTool.py"
             " -M T2W"
             f" -i {args.indir}/card_*.txt"
+            " --channel-masks"
             " -m 90"
             " -o workspace.root"
             " --PO verbose=2"
-            f" --parallel {nparallel}"
+            f" --parallel {args.nparallel}"
         )
         
         cmds.append(cmd)
     
     if (args.limits) :
         
-        wkdir_limits = "limits"
         cmd = f"for dir in $(find {args.indir} -mindepth 0 -maxdepth 0 -type d); do mkdir -pv $dir/{wkdir_limits}; cp -v $dir/workspace.root $dir/{wkdir_limits}/; done"
         cmds.append(cmd)
         
@@ -135,7 +158,8 @@ def main() :
             " -M AsymptoticLimits"
             f" -d {args.indir}/{wkdir_limits}/workspace.root"
             " --there"
-            f" --parallel {nparallel}"
+            f" --parallel {args.nparallel}"
+            f" {args.combineargs}"
         )
         
         cmds.append(cmd)
@@ -150,12 +174,10 @@ def main() :
         #    f" -o {indir}/limits/limits.json"
         #)
         
-        wkdir_limits = "limits"
-        
         cmd = (
             f"for dir in $(find {args.indir} -mindepth 0 -maxdepth 0 -type d); do \n"
             f"  nice -n 10 combineTool.py -M CollectLimits $dir/{wkdir_limits}/higgsCombine.Test.AsymptoticLimits.mH120.root -o $dir/{wkdir_limits}/limits.json & \n"
-            f"  while [[ $(jobs -rp | wc -l) -ge {nparallel} ]]; do \n"
+            f"  while [[ $(jobs -rp | wc -l) -ge {args.nparallel} ]]; do \n"
             "       sleep 1 \n"
             "   done \n"
             " done \n"
@@ -176,7 +198,6 @@ def main() :
     
     if (args.fitdiag) :
         
-        wkdir_fitdiag = f"fit-diagnostics{signal_suffix}"
         cmd = f"for dir in $(find {args.indir} -mindepth 0 -maxdepth 0 -type d); do mkdir -pv $dir/{wkdir_fitdiag}; cp -v $dir/workspace.root $dir/{wkdir_fitdiag}/; done"
         cmds.append(cmd)
         
@@ -198,14 +219,14 @@ def main() :
             " --plots"
             " --there"
             #" -n \".limits\""
-            f" --parallel {nparallel}"
+            f" --parallel {args.nparallel}"
+            f" {args.combineargs}"
         )
         
         cmds.append(cmd)
     
     if (args.scan) :
         
-        wkdir_scan = f"scan{signal_suffix}"
         cmd = f"for dir in $(find {args.indir} -mindepth 0 -maxdepth 0 -type d); do mkdir -pv $dir/{wkdir_scan}; cp -v $dir/workspace.root $dir/{wkdir_scan}/; done"
         cmds.append(cmd)
         
@@ -228,7 +249,8 @@ def main() :
             f" {signal_args}"
             " --there"
             #" -n \".scan\""
-            f" --parallel {nparallel}"
+            f" --parallel {args.nparallel}"
+            f" {args.combineargs}"
         )
         
         cmds.append(cmd)
@@ -249,15 +271,7 @@ def main() :
     
     if (args.plotcorr) :
         
-        wkdir = f"{args.indir}/{wkdir_fitdiag}" if "wkdir_fitdiag" in locals() else args.indir
-        
-        l_fnames = glob.glob(f"{wkdir}/fitDiagnostics.Test.root")
-        
-        l_histnames = [
-            "shapes_prefit/overall_total_covar",
-            "shapes_fit_b/overall_total_covar",
-            "shapes_fit_s/overall_total_covar",
-        ]
+        l_fnames = glob.glob(f"{wkdir_plotcorr}/fitDiagnostics.Test.root")
         
         d_info = {
             "shapes_prefit/overall_total_covar": {

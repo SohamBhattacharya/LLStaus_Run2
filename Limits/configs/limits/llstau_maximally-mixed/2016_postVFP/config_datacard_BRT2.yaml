@@ -23,6 +23,7 @@ sig:
   # For e.g. if "a.b.c", will read the dictionary entry dict[a][b][c]
   neventkey: "all.BeforeCuts"
   neventkey_lifetime_reweighting: "all.sig_lifetime_reweighting"
+  scaleby_allprocs: "0.9*0.9"
   
   # Nominal histogram path
   # Will look for the histogram <dirname>/<nominal> 
@@ -190,6 +191,18 @@ systematics:
       "*": "sys_up/hist"
     d:
       "*": "sys_down/hist"
+  
+  "fpred_alt":
+    iseracorr: false
+    procs:
+      sig: []
+      bkg: ["misid"]
+    operation_u: "abs({u})"
+    operation_d: "-abs({d})"
+    u:
+      "*": "/data/dust/user/sobhatta/work/LongLivedStaus/shedprog_2017-studies/LLStaus_Run2/Analysis/output/2016post/output_signal/signal_v9/hists/Cut_018_ht_soft_forward_cut_binning_schema_yield_bin0to2.root:nominal/hist"
+    d:
+      "*": "/data/dust/user/sobhatta/work/LongLivedStaus/shedprog_2017-studies/LLStaus_Run2/Analysis/output/2016post/output_signal/signal_v9/hists/Cut_018_ht_soft_forward_cut_binning_schema_yield_bin0to2.root:nominal/hist"
 
 
 rebin: null

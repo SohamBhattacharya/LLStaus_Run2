@@ -1,0 +1,396 @@
+analysis: "DisTauSF"
+channel: "mutau_fail"
+era: "2016_preVFP"
+lumi: 19.5
+
+obs:
+  scaleby: "1"
+  samples:
+    - "SingleMuon"
+  histfile: "/data/dust/user/mykytaua/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_6/2016pre/output_zmutau/zmutau_v3/hists/Cut_020_final_state_fake_rate_mass_hist.root"
+  nominal: "nominal/not{wp}/{dxy}/iso/OS/gen-tau/hist"
+
+sig: 
+  procs:
+    "ZMT_{nametag}":
+      ismc: true
+      issusy: false
+      xsnorm: false
+      scaleby: "1"
+      samples:
+        - "DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8"
+        - "DY1JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8"
+        - "DY2JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8"
+        - "DY3JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8"
+        - "DY4JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8"
+      alpha: 2 # xsec(DYJetsToLL)*lumi/nevents(DY*JetsToLL)*BR(Z->tau tau)
+  
+  histfile: "/data/dust/user/mykytaua/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_6/2016pre/output_zmutau/zmutau_v3/hists/Cut_020_final_state_fake_rate_mass_hist.root"
+  nominal: "nominal/not{wp}/{dxy}/iso/OS/gen-tau/hist"
+  xsecfile: "/data/dust/user/sobhatta/work/LongLivedStaus/LLStaus_Run2/Analysis/configs/crosssections.json"
+  cutflowsfile: "/data/dust/user/mykytaua/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_6/2016pre/output_zmutau/zmutau_v3/cutflows.json"
+  neventkey: "all.BeforeCuts"
+
+bkg:
+  xsecfile: "/data/dust/user/sobhatta/work/LongLivedStaus/LLStaus_Run2/Analysis/configs/crosssections.json"
+  cutflowsfile: "/data/dust/user/mykytaua/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_6/2016pre/output_zmutau/zmutau_v3/cutflows.json"
+  neventkey: "all.BeforeCuts"
+  
+  procs:
+    
+    "QCD":
+      ismc: false
+      xsnorm: false
+      scaleby: "1"
+      samples:
+        - "QCD-pred"
+      histfile: "/data/dust/user/mykytaua/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_6/2016pre/output_zmutau/zmutau_v3/hists_qcd_fit/Cut_020_final_state_fake_rate_mass_hist.root"
+      nominal: "nominal/not{wp}/{dxy}/iso/OS/gen-all/hist"
+      alpha: 1.04
+    
+    "ZLL":
+      ismc: true
+      xsnorm: false
+      scaleby: "1"
+      samples:
+        - "DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8"
+        - "DY1JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8"
+        - "DY2JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8"
+        - "DY3JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8"
+        - "DY4JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8"
+      histfile: "/data/dust/user/mykytaua/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_6/2016pre/output_zmutau/zmutau_v3/hists/Cut_020_final_state_fake_rate_mass_hist.root"
+      nominal: "nominal/not{wp}/{dxy}/iso/OS/gen-other/hist"
+      alpha: 1.4 # xsec(DYJetsToLL)*lumi/nevents(DY*JetsToLL)*BR(Z->tau tau)
+    
+    "WLNu":
+      ismc: true
+      xsnorm: false
+      scaleby: "1"
+      samples:
+        - "WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8"
+        - "W1JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8"
+        - "W2JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8"
+        - "W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8"
+        - "W4JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8"
+      histfile: "/data/dust/user/mykytaua/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_6/2016pre/output_zmutau/zmutau_v3/hists/Cut_020_final_state_fake_rate_mass_hist.root"
+      nominal: "nominal/not{wp}/{dxy}/iso/OS/gen-all/hist"
+      alpha: null
+      #alpha: 6 # xsec(WJetsToLNu)*lumi/nevents(W*JetsToLL)*BR(W->mu nu)
+    
+    #"ST":
+    #  ismc: true
+    #  xsnorm: true
+    #  scaleby: "1"
+    #  samples:
+    #    - "ST_t-channel_top_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8"
+    #    - "ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8"
+    #    - "ST_tW_top_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8"
+    #    - "ST_tW_antitop_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8"
+    #  histfile: "/data/dust/user/mykytaua/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_6/2016pre/output_zmutau/zmutau_v3/hists/Cut_020_final_state_fake_rate_mass_hist.root"
+    #  nominal: "nominal/not{wp}/{dxy}/iso/OS/gen-all/hist"
+    #
+    #"TT":
+    #  ismc: true
+    #  xsnorm: true
+    #  scaleby: "1"
+    #  samples:
+    #    - "TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8"
+    #    - "TTToHadronic_TuneCP5_13TeV-powheg-pythia8"
+    #    - "TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8"
+    #  histfile: "/data/dust/user/mykytaua/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_6/2016pre/output_zmutau/zmutau_v3/hists/Cut_020_final_state_fake_rate_mass_hist.root"
+    #  nominal: "nominal/not{wp}/{dxy}/iso/OS/gen-all/hist"
+    #
+    #"TTX":
+    #  ismc: true
+    #  xsnorm: true
+    #  scaleby: "1"
+    #  samples:
+    #    - "TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8"
+    #    - "TTWJetsToQQ_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8"
+    #    - "TTZToLLNuNu_M-10_TuneCP5_13TeV-amcatnlo-pythia8"
+    #    - "TTZToQQ_TuneCP5_13TeV-amcatnlo-pythia8"
+    #    - "ttHToNonbb_M125_TuneCP5_13TeV-powheg-pythia8"
+    #  histfile: "/data/dust/user/mykytaua/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_6/2016pre/output_zmutau/zmutau_v3/hists/Cut_020_final_state_fake_rate_mass_hist.root"
+    #  nominal: "nominal/not{wp}/{dxy}/iso/OS/gen-all/hist"
+    
+    "Top":
+      ismc: true
+      xsnorm: true
+      scaleby: "1"
+      samples:
+        - "ST_t-channel_top_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8"
+        - "ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8"
+        - "ST_tW_top_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8"
+        - "ST_tW_antitop_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8"
+        - "TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8"
+        - "TTToHadronic_TuneCP5_13TeV-powheg-pythia8"
+        - "TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8"
+        - "TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8"
+        - "TTWJetsToQQ_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8"
+        - "TTZToLLNuNu_M-10_TuneCP5_13TeV-amcatnlo-pythia8"
+        - "TTZToQQ_TuneCP5_13TeV-amcatnlo-pythia8"
+        - "ttHToNonbb_M125_TuneCP5_13TeV-powheg-pythia8"
+      histfile: "/data/dust/user/mykytaua/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_6/2016pre/output_zmutau/zmutau_v3/hists/Cut_020_final_state_fake_rate_mass_hist.root"
+      nominal: "nominal/not{wp}/{dxy}/iso/OS/gen-all/hist"
+    
+    "Other":
+      ismc: true
+      xsnorm: true
+      scaleby: "1"
+      samples:
+        #- "VVTo2L2Nu_MLL-1toInf_TuneCP5_13TeV-amcatnloFXFX-pythia8"
+        #- "WGToLNuG_TuneCP5_13TeV-madgraphMLM-pythia8"
+        #- "WWTo1L1Nu2Q_4f_TuneCP5_13TeV-amcatnloFXFX-pythia8"
+        #- "WWW_4F_TuneCP5_13TeV-amcatnlo-pythia8"
+        #- "WWZ_4F_TuneCP5_13TeV-amcatnlo-pythia8"
+        #- "WZTo1L1Nu2Q_4f_TuneCP5_13TeV-amcatnloFXFX-pythia8"
+        #- "WZTo1L3Nu_4f_TuneCP5_13TeV-amcatnloFXFX-pythia8"
+        #- "WZTo2Q2L_mllmin4p0_TuneCP5_13TeV-amcatnloFXFX-pythia8"
+        #- "WZTo3LNu_TuneCP5_13TeV-amcatnloFXFX-pythia8"
+        #- "ZZTo2Q2L_mllmin4p0_TuneCP5_13TeV-amcatnloFXFX-pythia8"
+        #- "ZZTo4L_TuneCP5_13TeV_powheg_pythia8"
+        - "WZ_TuneCP5_13TeV-pythia8"
+        - "ZZ_TuneCP5_13TeV-pythia8"
+        - "WW_TuneCP5_13TeV-pythia8"
+        - "VHToNonbb_M125_TuneCP5_13TeV-amcatnloFXFX_madspin_pythia8"
+        #- "GluGluToContinToZZTo2e2tau_TuneCP5_13TeV-mcfm701-pythia8"
+        #- "GluGluToContinToZZTo2mu2tau_TuneCP5_13TeV-mcfm701-pythia8"
+        #- "GluGluToContinToZZTo4tau_TuneCP5_13TeV-mcfm701-pythia8"
+        #- "ZJetsToNuNu_HT-100To200_TuneCP5_13TeV-madgraphMLM-pythia8"
+        #- "ZJetsToNuNu_HT-200To400_TuneCP5_13TeV-madgraphMLM-pythia8"
+        #- "ZJetsToNuNu_HT-400To600_TuneCP5_13TeV-madgraphMLM-pythia8"
+        #- "ZJetsToNuNu_HT-600To800_TuneCP5_13TeV-madgraphMLM-pythia8"
+        #- "WJetsToQQ_HT-200to400_TuneCP5_13TeV-madgraphMLM-pythia8"
+        #- "WJetsToQQ_HT-400to600_TuneCP5_13TeV-madgraphMLM-pythia8"
+        #- "WJetsToQQ_HT-600to800_TuneCP5_13TeV-madgraphMLM-pythia8"
+        #- "WJetsToQQ_HT-800toInf_TuneCP5_13TeV-madgraphMLM-pythia8"
+      histfile: "/data/dust/user/mykytaua/softLLSTAU/LLStaus_Run2/Analysis/output_iteration_6/2016pre/output_zmutau/zmutau_v3/hists/Cut_020_final_state_fake_rate_mass_hist.root"
+      nominal: "nominal/not{wp}/{dxy}/iso/OS/gen-all/hist"
+
+
+systcombos:
+  "lumi": 
+    procs:
+      sig: ["ZMT_{nametag}"]
+      bkg: ["ZLL", "WLNu", "Top", "Other"]
+    names: ["lumi_corr161718", "lumi_uncorr"]
+
+
+systematics:
+  "lumi_corr161718":
+    procs:
+      sig: ["ZMT_{nametag}"]
+      bkg: ["ZLL", "WLNu", "Top", "Other"]
+    iseracorr: true
+    u: 1.009
+    d: 0.991
+    
+  "lumi_uncorr":
+    procs:
+      sig: ["ZMT_{nametag}"]
+      bkg: ["ZLL", "WLNu", "Top", "Other"]
+    iseracorr: false
+    u: 1.01
+    d: 0.99
+  
+  "pileup":
+    procs:
+      sig: ["ZMT_{nametag}"]
+      bkg: ["ZLL", "WLNu", "Top", "Other"]
+    iseracorr: false
+    u:
+      "ZMT_{nametag}": "pileup_up/not{wp}/{dxy}/iso/OS/gen-tau/hist"
+      "ZLL": "pileup_up/not{wp}/{dxy}/iso/OS/gen-other/hist"
+      "*"  : "pileup_up/not{wp}/{dxy}/iso/OS/gen-all/hist"
+    d:
+      "ZMT_{nametag}": "pileup_down/not{wp}/{dxy}/iso/OS/gen-tau/hist"
+      "ZLL": "pileup_down/not{wp}/{dxy}/iso/OS/gen-other/hist"
+      "*"  : "pileup_down/not{wp}/{dxy}/iso/OS/gen-all/hist"
+  
+  #"l1_prefiring":
+  #  procs:
+  #    sig: ["ZMT_{nametag}"]
+  #    bkg: ["ZLL", "WLNu", "Top", "Other"]
+  #  iseracorr: true
+  #  u:
+  #    "ZMT_{nametag}": "L1prefiring_up/not{wp}/{dxy}/iso/OS/gen-tau/hist"
+  #    "ZLL": "L1prefiring_up/not{wp}/{dxy}/iso/OS/gen-other/hist"
+  #    "*"  : "L1prefiring_up/not{wp}/{dxy}/iso/OS/gen-all/hist"
+  #  d:
+  #    "ZMT_{nametag}": "L1prefiring_up/not{wp}/{dxy}/iso/OS/gen-tau/hist"
+  #    "ZLL": "L1prefiring_up/not{wp}/{dxy}/iso/OS/gen-other/hist"
+  #    "*"  : "L1prefiring_up/not{wp}/{dxy}/iso/OS/gen-all/hist"
+  
+  "muon_trigger":
+    procs:
+      sig: ["ZMT_{nametag}"]
+      bkg: ["ZLL", "WLNu", "Top", "Other"]
+    iseracorr: false
+    u:
+      "ZMT_{nametag}": "muon_sf_trigger0_up/not{wp}/{dxy}/iso/OS/gen-tau/hist"
+      "ZLL": "muon_sf_trigger0_up/not{wp}/{dxy}/iso/OS/gen-other/hist"
+      "*"  : "muon_sf_trigger0_up/not{wp}/{dxy}/iso/OS/gen-all/hist"
+    d:
+      "ZMT_{nametag}": "muon_sf_trigger0_down/not{wp}/{dxy}/iso/OS/gen-tau/hist"
+      "ZLL": "muon_sf_trigger0_down/not{wp}/{dxy}/iso/OS/gen-other/hist"
+      "*"  : "muon_sf_trigger0_down/not{wp}/{dxy}/iso/OS/gen-all/hist"
+  
+  "muon_id":
+    procs:
+      sig: ["ZMT_{nametag}"]
+      bkg: ["ZLL", "WLNu", "Top", "Other"]
+    iseracorr: false
+    u:
+      "ZMT_{nametag}": "muon_sf0_up/not{wp}/{dxy}/iso/OS/gen-tau/hist"
+      "ZLL": "muon_sf0_up/not{wp}/{dxy}/iso/OS/gen-other/hist"
+      "*"  : "muon_sf0_up/not{wp}/{dxy}/iso/OS/gen-all/hist"
+    d:
+      "ZMT_{nametag}": "muon_sf0_down/not{wp}/{dxy}/iso/OS/gen-tau/hist"
+      "ZLL": "muon_sf0_down/not{wp}/{dxy}/iso/OS/gen-other/hist"
+      "*"  : "muon_sf0_down/not{wp}/{dxy}/iso/OS/gen-all/hist"
+  
+  "muon_iso":
+    procs:
+      sig: ["ZMT_{nametag}"]
+      bkg: ["ZLL", "WLNu", "Top", "Other"]
+    iseracorr: false
+    u:
+      "ZMT_{nametag}": "muon_sf1_up/not{wp}/{dxy}/iso/OS/gen-tau/hist"
+      "ZLL": "muon_sf1_up/not{wp}/{dxy}/iso/OS/gen-other/hist"
+      "*"  : "muon_sf1_up/not{wp}/{dxy}/iso/OS/gen-all/hist"
+    d:
+      "ZMT_{nametag}": "muon_sf1_down/not{wp}/{dxy}/iso/OS/gen-tau/hist"
+      "ZLL": "muon_sf1_down/not{wp}/{dxy}/iso/OS/gen-other/hist"
+      "*"  : "muon_sf1_down/not{wp}/{dxy}/iso/OS/gen-all/hist"
+  
+  "tau_id":
+    procs:
+      sig: ["ZMT_{nametag}"]
+      bkg: []
+    iseracorr: false
+    u:
+      "ZMT_{nametag}": "tau_id_sf_up/not{wp}/{dxy}/iso/OS/gen-tau/hist"
+    d:
+      "ZMT_{nametag}": "tau_id_sf_down/not{wp}/{dxy}/iso/OS/gen-tau/hist"
+  
+  "jes":
+    procs:
+      sig: ["ZMT_{nametag}"]
+      bkg: ["ZLL", "WLNu", "Top", "Other"]
+    iseracorr: false
+    u:
+      "ZMT_{nametag}": "Junc_up/not{wp}/{dxy}/iso/OS/gen-tau/hist"
+      "ZLL": "Junc_up/not{wp}/{dxy}/iso/OS/gen-other/hist"
+      "*"  : "Junc_up/not{wp}/{dxy}/iso/OS/gen-all/hist"
+    d:
+      "ZMT_{nametag}": "Junc_down/not{wp}/{dxy}/iso/OS/gen-tau/hist"
+      "ZLL": "Junc_down/not{wp}/{dxy}/iso/OS/gen-other/hist"
+      "*"  : "Junc_down/not{wp}/{dxy}/iso/OS/gen-all/hist"
+  
+  "jer":
+    procs:
+      sig: ["ZMT_{nametag}"]
+      bkg: ["ZLL", "WLNu", "Top", "Other"]
+    iseracorr: false
+    u:
+      "ZMT_{nametag}": "Jer_up/not{wp}/{dxy}/iso/OS/gen-tau/hist"
+      "ZLL": "Jer_up/not{wp}/{dxy}/iso/OS/gen-other/hist"
+      "*"  : "Jer_up/not{wp}/{dxy}/iso/OS/gen-all/hist"
+    d:
+      "ZMT_{nametag}": "Jer_down/not{wp}/{dxy}/iso/OS/gen-tau/hist"
+      "ZLL": "Jer_down/not{wp}/{dxy}/iso/OS/gen-other/hist"
+      "*"  : "Jer_down/not{wp}/{dxy}/iso/OS/gen-all/hist"
+  
+  "uncl_met":
+    procs:
+      sig: ["ZMT_{nametag}"]
+      bkg: ["ZLL", "WLNu", "Top", "Other"]
+    iseracorr: false
+    u:
+      "ZMT_{nametag}": "UncMET_up/not{wp}/{dxy}/iso/OS/gen-tau/hist"
+      "ZLL": "UncMET_up/not{wp}/{dxy}/iso/OS/gen-other/hist"
+      "*"  : "UncMET_up/not{wp}/{dxy}/iso/OS/gen-all/hist"
+    d:
+      "ZMT_{nametag}": "UncMET_down/not{wp}/{dxy}/iso/OS/gen-tau/hist"
+      "ZLL": "UncMET_down/not{wp}/{dxy}/iso/OS/gen-other/hist"
+      "*"  : "UncMET_down/not{wp}/{dxy}/iso/OS/gen-all/hist"
+  
+  "zpt":
+    procs:
+      sig: ["ZMT_{nametag}"]
+      bkg: ["ZLL"]
+    iseracorr: true
+    u:
+      "ZMT_{nametag}": "dy_zpt_weights_up/not{wp}/{dxy}/iso/OS/gen-tau/hist"
+      "ZLL": "dy_zpt_weights_up/not{wp}/{dxy}/iso/OS/gen-other/hist"
+    d:
+      "ZMT_{nametag}": "dy_zpt_weights_down/not{wp}/{dxy}/iso/OS/gen-tau/hist"
+      "ZLL": "dy_zpt_weights_down/not{wp}/{dxy}/iso/OS/gen-other/hist"
+  
+  "qcd_pred":
+    procs:
+      sig: []
+      bkg: ["QCD"]
+    iseracorr: false
+    u: 1.2
+    d: 0.8
+  
+  "wjets_norm":
+    procs:
+      sig: []
+      bkg: ["WLNu"]
+    iseracorr: true
+    u: 1.1
+    d: 0.9
+  
+  "st_norm":
+    procs:
+      sig: []
+      bkg: ["ST"]
+    iseracorr: true
+    u: 1.1
+    d: 0.9
+  
+  "tt_norm":
+    procs:
+      sig: []
+      bkg: ["TT"]
+    iseracorr: true
+    u: 1.1
+    d: 0.9
+  
+  "ttx_norm":
+    procs:
+      sig: []
+      bkg: ["TTX"]
+    iseracorr: true
+    u: 1.1
+    d: 0.9
+  
+  "other_norm":
+    procs:
+      sig: []
+      bkg: ["Other"]
+    iseracorr: true
+    u: 1.1
+    d: 0.9
+  
+  #"dy_norm":
+  #  procs:
+  #    sig: ["ZMT_{nametag}"]
+  #    bkg: ["ZLL"]
+  #  iseracorr: true
+  #  u: 1.1
+  #  d: 0.9
+
+rateparams:
+  "dy_rp_norm":
+    procs:
+      sig: ["ZMT_{nametag}"]
+      bkg: ["ZLL"]
+    iseracorr: false
+    init: 1.0
+
+rebin: {rebin}
+binstart: {binstart}
+nbins: {nbins}

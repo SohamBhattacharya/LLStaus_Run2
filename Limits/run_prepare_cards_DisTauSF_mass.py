@@ -4,6 +4,8 @@ import argparse
 import getpass
 import os
 import time
+
+from traitlets import default
 import utils.commonutils as cmut
 
 def main() :
@@ -16,7 +18,13 @@ def main() :
         help = "Era",
         type = str,
         required = True,
-        choices = ["2016_preVFP", "2016_postVFP", "2017", "2018"]
+        choices = [
+            "2016_preVFP",
+            "2016_postVFP",
+            "2016_preVFP.2016_postVFP",
+            "2017",
+            "2018"
+        ]
     )
     
     parser.add_argument(
@@ -24,6 +32,7 @@ def main() :
         help = "Will append \"_outsuffix\" to the output directory",
         type = str,
         required = False,
+        default = ""
     )
     
     # Parse arguments
@@ -34,35 +43,54 @@ def main() :
         ##"wp-p00": "all",
         
         "wp-p70": "p7000",
-        #"wp-p80": "p8000",
-        #"wp-p90": "p9000",
-        #"wp-p95": "p9500",
-        #"wp-p97": "p9700",
-        #"wp-p98": "p9800",
-        #"wp-p99": "p9900",
+        "wp-p80": "p8000",
+        "wp-p90": "p9000",
+        "wp-p95": "p9500",
+        "wp-p97": "p9700",
+        "wp-p98": "p9800",
+        "wp-p99": "p9900",
     }
     
     d_dxy = {
         "dxy-gt-0p00"    : "all",
         "dxy-gt-0p01"    : "dxy01",
-        #"dxy-gt-0p02"    : "dxy02",
-        #"dxy-gt-0p03"    : "dxy03",
-        #"dxy-gt-0p05"    : "dxy05",
-        #"dxy-gt-0p07"    : "dxy07",
+        "dxy-gt-0p02"    : "dxy02",
+        "dxy-gt-0p03"    : "dxy03",
+        "dxy-gt-0p05"    : "dxy05",
+        "dxy-gt-0p07"    : "dxy07",
         "dxy-gt-0p09"    : "dxy09",
     }
     
     d_config_files = {}
     
+    d_config_files["2016_preVFP"] = [
+        "configs/DisTauSF/mutau_mass/2016_preVFP/config_datacard_mutau_pass_mass.yaml",
+        "configs/DisTauSF/mutau_mass/2016_preVFP/config_datacard_mutau_fail_mass.yaml",
+    ]
+    
+    d_config_files["2016_postVFP"] = [
+        "configs/DisTauSF/mutau_mass/2016_postVFP/config_datacard_mutau_pass_mass.yaml",
+        "configs/DisTauSF/mutau_mass/2016_postVFP/config_datacard_mutau_fail_mass.yaml",
+    ]
+    
+    d_config_files["2016_preVFP.2016_postVFP"] = d_config_files["2016_preVFP"] + d_config_files["2016_postVFP"]
+    
     d_config_files["2017"] = [
         "configs/DisTauSF/mutau_mass/2017/config_datacard_mutau_pass_mass.yaml",
         "configs/DisTauSF/mutau_mass/2017/config_datacard_mutau_fail_mass.yaml",
+        
+        #"configs/DisTauSF/mutau_mass/2017/config_datacard_mutau_pass_mass_w-distau-WPL.yaml",
+        #"configs/DisTauSF/mutau_mass/2017/config_datacard_mutau_fail_mass_w-distau-WPL.yaml",
     ]
     
     d_config_files["2018"] = [
-        "configs/DisTauSF/mutau_mass/2018/config_datacard_mutau_pass_mass.yaml",
-        "configs/DisTauSF/mutau_mass/2018/config_datacard_mutau_fail_mass.yaml",
+        #"configs/DisTauSF/mutau_mass/2018/config_datacard_mutau_pass_mass.yaml",
+        #"configs/DisTauSF/mutau_mass/2018/config_datacard_mutau_fail_mass.yaml",
+        
         #"configs/DisTauSF/mumu/2018/config_datacard_mumu.yaml",
+        
+        "configs/DisTauSF/mutau_mass/2018/DeepTau-Loose/config_datacard_mutau_pass_mass_DeepTau-Loose.yaml",
+        "configs/DisTauSF/mutau_mass/2018/DeepTau-Loose/config_datacard_mutau_fail_mass_DeepTau-Loose.yaml",
     ]
     
     l_config_files = d_config_files[args.era]
@@ -93,7 +121,8 @@ def main() :
     #outdir = f"tmp/test_DisTauSF_mass_nbins{nbins}-{'-'.join([str(_ele) for _ele in rebin])}"
     outdir = f"results/DisTauSF/DisTauSF_mass_nbins{nbins}-{'-'.join([str(_ele) for _ele in rebin])}"
     
-    outdir = f"{outdir}_{args.outsuffix}" if len(args.outsuffix) else outdir
+    outdir = f"{outdir}_{args.outsuffix}" if args.outsuffix else outdir
+    os.system(f"mkdir -p {outdir}")
     
     for key_wp, val_wp in d_wp.items() :
         
@@ -134,14 +163,20 @@ def main() :
                     fout.write(file_content)
                     config_files_wp.append(fout_name)
             
+            #if (args.era != "2016_preVFP.2016_postVFP") :
+            #    print(args.era)
+            #    exit(1)
+            
             cmd = (
-                "python3 prepare_cards.py"
+                "set -x; python3 prepare_cards.py"
                 f" --configs {' '.join(config_files_wp)}"
                 f" --outdir {outdir}"
-                " --combpars channel"
+                f" --combpars channel"
                 #" --yields_uncs"
                 #f" --chcombos mutau_pass,mutau_fail"
             )
+            
+            cmd += f" --eracombos {args.era.replace('.', ',')}" * int(args.era == "2016_preVFP.2016_postVFP")
             
             cmd_retval = os.system(cmd)
             

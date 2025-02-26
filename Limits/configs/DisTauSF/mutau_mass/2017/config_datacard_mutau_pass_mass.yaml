@@ -215,6 +215,20 @@ systematics:
       "ZLL": "pileup_down/{wp}/{dxy}/iso/OS/gen-other/hist"
       "*"  : "pileup_down/{wp}/{dxy}/iso/OS/gen-all/hist"
   
+  #"l1_prefiring":
+  #  procs:
+  #    sig: ["ZMT_{nametag}"]
+  #    bkg: ["ZLL", "WLNu", "Top", "Other"]
+  #  iseracorr: true
+  #  u:
+  #    "ZMT_{nametag}": "L1prefiring_up/not{wp}/{dxy}/iso/OS/gen-tau/hist"
+  #    "ZLL": "L1prefiring_up/not{wp}/{dxy}/iso/OS/gen-other/hist"
+  #    "*"  : "L1prefiring_up/not{wp}/{dxy}/iso/OS/gen-all/hist"
+  #  d:
+  #    "ZMT_{nametag}": "L1prefiring_up/not{wp}/{dxy}/iso/OS/gen-tau/hist"
+  #    "ZLL": "L1prefiring_up/not{wp}/{dxy}/iso/OS/gen-other/hist"
+  #    "*"  : "L1prefiring_up/not{wp}/{dxy}/iso/OS/gen-all/hist"
+  
   "muon_trig":
     procs:
       sig: ["ZMT_{nametag}"]
@@ -369,21 +383,21 @@ systematics:
     u: 1.1
     d: 0.9
   
-  "dy_norm":
+  #"dy_norm":
+  #  procs:
+  #    sig: ["ZMT_{nametag}"]
+  #    bkg: ["ZLL"]
+  #  iseracorr: true
+  #  u: 1.1
+  #  d: 0.9
+
+rateparams:
+  "dy_rp_norm":
     procs:
       sig: ["ZMT_{nametag}"]
       bkg: ["ZLL"]
-    iseracorr: true
-    u: 1.1
-    d: 0.9
-
-#rateparams:
-#  "dy_rp_norm":
-#    procs:
-#      sig: ["ZMT_{nametag}"]
-#      bkg: ["ZLL"]
-#    iseracorr: false
-#    init: 1.0
+    iseracorr: false
+    init: 1.0
 
 rebin: {rebin}
 binstart: {binstart}

@@ -29,7 +29,7 @@ def get_cms_colors(idx, hex = False) :
     colors = ["#3f90da", "#ffa90e", "#bd1f01", "#94a4a2", "#832db6", "#a96b59", "#e76300", "#b9ac70", "#717581", "#92dadd"]
     
     
-    return color[idx] if hex else ROOT.TColor.GetColor(colors[idx])
+    return colors[idx] if hex else ROOT.TColor.GetColor(colors[idx])
 
 def get_canvas(ratio = False) :
     
@@ -320,8 +320,8 @@ def root_plot1D(
         stack_ratio.GetXaxis().CenterLabels(centerlabelx)
         stack_ratio.GetYaxis().CenterLabels(centerlabely)
         
-        stack_ratio.GetXaxis().SetLabelSize(0.1)
-        stack_ratio.GetYaxis().SetLabelSize(0.1)
+        stack_ratio.GetXaxis().SetLabelSize(0.12)
+        stack_ratio.GetYaxis().SetLabelSize(0.12)
         
         stack_ratio.GetXaxis().SetTitle(xtitle_ratio)
         stack_ratio.GetXaxis().SetTitleSize(0.13)
@@ -357,20 +357,32 @@ def root_plot1D(
     return 0
 
 
+def get_draw_opt(obj) :
+    
+    drawopt = obj.GetHistogram().GetOption() if hasattr(obj, "GetHistogram") else obj.GetOption()
+    drawopt = drawopt.replace("hist", "L")
+    drawopt = f"{drawopt}F" if obj.GetFillStyle() else drawopt
+    
+    return drawopt
+
+
 def root_plot1D_legacy(
     l_hist,
     outfile,
     xrange,
     yrange,
-    ratio_num_den_pairs = [],
     l_hist_overlay = [],
     l_graph_overlay = [],
-    gr_overlay_drawopt = "PE1",
+    ratio_num_den_pairs = [],
+    l_ratio_hist_overlay = [],
+    l_ratio_graph_overlay = [],
+    l_legend_order = [],
+    #gr_overlay_drawopt = "PE1",
     ratio_mode = "mc",
     no_xerror = False,
     logx = False,
     logy = False,
-    title = "",
+    #title = "",
     xtitle = "",
     ytitle = "",
     xtitle_ratio = "",
@@ -398,18 +410,21 @@ def root_plot1D_legacy(
     lumiText = "(13 TeV)"
 ) :
     
-    canvas = get_canvas(ratio = len(ratio_num_den_pairs))
+    draw_ratio = bool(ratio_num_den_pairs+l_ratio_hist_overlay+l_ratio_graph_overlay)
+    canvas = get_canvas(ratio = draw_ratio)
     
     if (no_xerror) :
         
         ROOT.gStyle.SetErrorX(not no_xerror)
+    
+    ROOT.gStyle.SetOptFit(0)
     
     canvas.cd(1)
     
     legendHeight = legendheightscale * 0.065 * (len(l_hist) + 1.5*(len(legendtitle)>0))
     legendWidth = legendwidthscale * 0.4
     
-    padTop = 1 - canvas.GetTopMargin() - 1*ROOT.gStyle.GetTickLength("y")
+    padTop = 1 - canvas.GetTopMargin() - 0.6*ROOT.gStyle.GetTickLength("y")
     padRight = 1 - canvas.GetRightMargin() - 0.6*ROOT.gStyle.GetTickLength("x")
     padBottom = canvas.GetBottomMargin() + 0.6*ROOT.gStyle.GetTickLength("y")
     padLeft = canvas.GetLeftMargin() + 0.6*ROOT.gStyle.GetTickLength("x")
@@ -453,9 +468,10 @@ def root_plot1D_legacy(
         #stack.Add(hist, "hist")
         stack.Add(hist, hist.GetOption())
         
-        if (len(hist.GetTitle())) :
+        if (len(hist.GetTitle()) and not l_legend_order) :
             
-            legend.AddEntry(hist, hist.GetTitle())#, "LP")
+            #legend.AddEntry(hist, hist.GetTitle())#, "LP")
+            legend.AddEntry(hist, hist.GetTitle(), get_draw_opt(hist))
     
     # Add a dummy histogram so that the X-axis range can be beyond the histogram range
     h1_xRange = ROOT.TH1F("h1_xRange", "h1_xRange", 1, xrange[0], xrange[1])
@@ -481,9 +497,10 @@ def root_plot1D_legacy(
             #print(hist.GetMarkerStyle())
             stack_overlay.Add(hist, hist.GetOption())
             
-            if (len(hist.GetTitle())) :
+            if (len(hist.GetTitle()) and not l_legend_order) :
                 
-                legend.AddEntry(hist, hist.GetTitle())#, hist.GetOption())#, "LPE")
+                #legend.AddEntry(hist, hist.GetTitle())#, hist.GetOption())#, "LPE")
+                legend.AddEntry(hist, hist.GetTitle(), get_draw_opt(hist))
         
         stack_overlay.Draw("nostack same")
         
@@ -518,9 +535,33 @@ def root_plot1D_legacy(
     stack.GetYaxis().CenterLabels(centerlabely)
     
     for gr in l_graph_overlay :
+        
+        if (gr.GetTitle() and not l_legend_order) :
             
-            legend.AddEntry(gr, gr.GetTitle())
-            gr.Draw(gr_overlay_drawopt)
+            legend.AddEntry(gr, gr.GetTitle(), get_draw_opt(gr))
+        #gr.Draw(gr_overlay_drawopt)
+        gr.Draw(gr.GetHistogram().GetOption())
+    
+    for obj in l_legend_order :
+        
+        if (obj and obj.GetTitle()) :
+            
+            l_leg_entry_args = [obj, obj.GetTitle()]
+            
+            #if (hasattr(obj, "GetHistogram")) :
+            #    
+            #    l_leg_entry_args.append(obj.GetHistogram().GetOption())
+            
+            obj_drawopt = obj.GetHistogram().GetOption() if hasattr(obj, "GetHistogram") else obj.GetOption()
+            obj_drawopt = obj_drawopt.replace("hist", "L")
+            obj_drawopt = f"{obj_drawopt}F" if obj.GetFillStyle() else obj_drawopt
+            
+            legend.AddEntry(obj, obj.GetTitle(), get_draw_opt(obj))
+        
+        elif not obj :
+            
+            # Add empty entry if 0 provided
+            legend.AddEntry(obj, "", "")
     
     legend.Draw()
     
@@ -536,7 +577,7 @@ def root_plot1D_legacy(
     CMS_lumi.CMS_lumi(pad = canvas.cd(1), iPeriod = 0, iPosX = 0, CMSextraText = CMSextraText, lumiText = lumiText)
     
     
-    if (len(ratio_num_den_pairs)) :
+    if (draw_ratio) :
         
         canvas.cd(2)
         
@@ -596,6 +637,10 @@ def root_plot1D_legacy(
             stack_ratio.Add(h1_ratio, ratiodrawopt)
         
         
+        for hist in l_ratio_hist_overlay :
+            
+            stack_ratio.Add(hist, hist.GetOption())
+        
         stack_ratio.Draw("nostack")
         
         stack_ratio.GetXaxis().SetRangeUser(xrange[0], xrange[1])
@@ -613,8 +658,8 @@ def root_plot1D_legacy(
         stack_ratio.GetXaxis().CenterLabels(centerlabelx)
         stack_ratio.GetYaxis().CenterLabels(centerlabely)
         
-        stack_ratio.GetXaxis().SetLabelSize(0.1)
-        stack_ratio.GetYaxis().SetLabelSize(0.1)
+        stack_ratio.GetXaxis().SetLabelSize(0.12)
+        stack_ratio.GetYaxis().SetLabelSize(0.12)
         
         stack_ratio.GetXaxis().SetTitle(xtitle_ratio)
         stack_ratio.GetXaxis().SetTitleSize(0.13)
@@ -629,6 +674,10 @@ def root_plot1D_legacy(
         for gr in l_gr_ratio_err :
             
             gr.Draw("E2")
+        
+        for gr in l_ratio_graph_overlay :
+            
+            gr.Draw(gr.GetHistogram().GetOption())
         
         canvas.cd(2).SetGridx(gridx)
         canvas.cd(2).SetGridy(gridy)

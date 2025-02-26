@@ -1,52 +1,46 @@
-#procs:
-#  
-#  obs:
-#    label: "Data"
-#  
-#  misid:
-#    label: "Misid. jets"
-#  
-#  SMS-TStauStau_MStau-100_ctau-50mm_mLSP-1:
-#      label: "${[m_{\PSGt}(100),\ c\tau_{0}(50)]}$"
-#  SMS-TStauStau_MStau-100_ctau-100mm_mLSP-1:
-#    label: "${[m_{\PSGt}(100),\ c\tau_{0}(100)]}$"
-#  SMS-TStauStau_MStau-200_ctau-50mm_mLSP-1:
-#    label: "${[m_{\PSGt}(200),\ c\tau_{0}(50)]}$"
-#  SMS-TStauStau_MStau-200_ctau-100mm_mLSP-1:
-#    label: "${[m_{\PSGt}(200), c\tau_{0}(100)]}$"
-
-#obs: # This key is the type of process. Must be one of [obs, bkg, sig]
-#  obs: # This key needs to be there in the input yaml
-#    label: "Data"
+obs: # This key is the type of process. Must be one of [obs, bkg, sig]
+  obs: # This key needs to be there in the input yaml
+    label: "Data"
 
 bkg:
   misid:
     label: "Misid. jets"
     color: "#92dadd"
+  
+  # Will be used for getting the total bkg and uncertainty for plotting
+  # Will not be added to the table if there is only one bkg source
+  total_bkg:
+    label: "Total bkg."
+    color: "#000000"
 
 sig:
   SMS-TStauStau_MStau-100_ctau-50mm_mLSP-1:
       label: "${[m_{\\PSGt}(100),\\ c\\tau_{0}(50)]}$"
+      rootlabel: "m_{#tilde{#tau}}=100 GeV, c#tau_{0}=50 mm"
       color: "#bd1f01"
       linestyle: 7
   
   SMS-TStauStau_MStau-100_ctau-100mm_mLSP-1:
     label: "${[m_{\\PSGt}(100),\\ c\\tau_{0}(100)]}$"
+    rootlabel: "m_{#tilde{#tau}}=100 GeV, c#tau_{0}=100 mm"
     color: "#bd1f01"
-    linestyle: 10
+    linestyle: 3
   
   SMS-TStauStau_MStau-200_ctau-50mm_mLSP-1:
     label: "${[m_{\\PSGt}(200),\\ c\\tau_{0}(50)]}$"
+    rootlabel: "m_{#tilde{#tau}}=200 GeV, c#tau_{0}=50 mm"
     color: "#832db6"
     linestyle: 7
   
   SMS-TStauStau_MStau-200_ctau-100mm_mLSP-1:
     label: "${[m_{\\PSGt}(200), c\\tau_{0}(100)]}$"
+    rootlabel: "m_{#tilde{#tau}}=200 GeV, c#tau_{0}=100 mm"
     color: "#832db6"
-    linestyle: 10
+    linestyle: 3
 
-bin_header: "SR bins"
+plot_bkgs: ["misid"]
 
+bin_header: "BRT1 bins"
 plot_bins: [3, 4, 5, 6, 7, 8, 9, 10]
 
 bins:
@@ -68,3 +62,6 @@ bins:
     label: 8
   total:
     label: "Total"
+
+centerlabelx: true
+logy: true

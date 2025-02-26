@@ -368,22 +368,22 @@ systematics:
     iseracorr: true
     u: 1.1
     d: 0.9
-  
-  "dy_norm":
+  #
+  #"dy_norm":
+  #  procs:
+  #    sig: ["ZMT_{nametag}"]
+  #    bkg: ["ZLL"]
+  #  iseracorr: true
+  #  u: 1.1
+  #  d: 0.9
+
+rateparams:
+  "dy_rp_norm":
     procs:
       sig: ["ZMT_{nametag}"]
       bkg: ["ZLL"]
-    iseracorr: true
-    u: 1.1
-    d: 0.9
-
-#rateparams:
-#  "dy_rp_norm":
-#    procs:
-#      sig: ["ZMT_{nametag}"]
-#      bkg: ["ZLL"]
-#    iseracorr: false
-#    init: 1.0
+    iseracorr: false
+    init: 1.0
 
 rebin: {rebin}
 binstart: {binstart}

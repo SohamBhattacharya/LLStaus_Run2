@@ -129,11 +129,12 @@ def main() :
     xmax = 0.5
     hist_dummy = ROOT.TH1F("hist_dummy", "", 10, xmin, xmax)
     
-    for idxy, dxy_key in enumerate(l_dxys) :
+    # For each wp
+    for iwp, wp_key in enumerate(l_wps) :
         
         l_graph = []
         
-        for iwp, wp_key in enumerate(l_wps) :
+        for idxy, dxy_key in enumerate(l_dxys) :
             
             gr = d_graph[(wp_key, dxy_key)]
             
@@ -144,24 +145,25 @@ def main() :
             #        print("Removing point {ipoint}")
             #        gr.RemovePoint(ipoint)
             
-            color = utils.get_cms_colors(iwp)
+            color = utils.get_cms_colors(idxy)
             gr.SetLineColor(color)
             gr.SetMarkerColor(color)
-            gr.SetMarkerSize(2)
-            gr.SetMarkerStyle(20)
+            gr.SetMarkerSize(0)
+            #gr.SetMarkerSize(2)
+            #gr.SetMarkerStyle(20)
             gr.SetLineWidth(2)
             gr.SetLineStyle(7)
-            gr.SetDrawOption("LP")
+            #gr.SetDrawOption("L")
+            gr.GetHistogram().SetOption("L")
             gr.SetFillStyle(0)
             
             l_graph.append(gr)
         
-        plotfile = f"{outdir}/deltaNLL_{dxy_key}.pdf"
+        plotfile = f"{outdir}/deltaNLL_{wp_key}.pdf"
         
         utils.root_plot1D_legacy(
             l_hist = [hist_dummy],
             l_graph_overlay = l_graph,
-            gr_overlay_drawopt = "L",
             outfile = plotfile,
             xrange = (xmin, xmax),
             yrange = (-1, 10),
@@ -184,8 +186,64 @@ def main() :
             CMSextraText = "Private Work",
             lumiText = f"{args.era} (13 TeV)"
         )
+    
+    # For each dxy
+    for idxy, dxy_key in enumerate(l_dxys) :
         
-        #os.system(f"pdftoppm -png -r 600 -cropbox -singlefile {plotfile} {plotfile}")
+        l_graph = []
+        
+        for iwp, wp_key in enumerate(l_wps) :
+            
+            gr = d_graph[(wp_key, dxy_key)]
+            
+            #for ipoint in range(0, gr.GetN()) :
+            #    
+            #    if (gr.GetPointY(ipoint) > 6) :
+            #        
+            #        print("Removing point {ipoint}")
+            #        gr.RemovePoint(ipoint)
+            
+            color = utils.get_cms_colors(iwp)
+            gr.SetLineColor(color)
+            gr.SetMarkerColor(color)
+            gr.SetMarkerSize(0)
+            #gr.SetMarkerSize(2)
+            #gr.SetMarkerStyle(20)
+            gr.SetLineWidth(2)
+            gr.SetLineStyle(7)
+            #gr.SetDrawOption("L")
+            gr.GetHistogram().SetOption("L")
+            gr.SetFillStyle(0)
+            
+            l_graph.append(gr)
+        
+        plotfile = f"{outdir}/deltaNLL_{dxy_key}.pdf"
+        
+        utils.root_plot1D_legacy(
+            l_hist = [hist_dummy],
+            l_graph_overlay = l_graph,
+            outfile = plotfile,
+            xrange = (xmin, xmax),
+            yrange = (-1, 10),
+            #no_xerror = True,
+            logx = False, logy = False,
+            xtitle = "SF - #hat{SF}", ytitle = "-2#DeltaLL",
+            centertitlex = True, centertitley = True,
+            centerlabelx = False, centerlabely = False,
+            gridx = True, gridy = True,
+            ndivisionsx = (10, 5, 0),
+            ndivisionsy = (11, 5, 0),
+            stackdrawopt = "",
+            legendpos = "UL",
+            legendncol = 2,
+            legendfillstyle = 1001,
+            legendtextsize = 0.03,
+            legendtitle = args.title,
+            legendheightscale = 1.5, legendwidthscale = 1.9,
+            #CMSextraText = "Preliminary",
+            CMSextraText = "Private Work",
+            lumiText = f"{args.era} (13 TeV)"
+        )
     
     
     return 0

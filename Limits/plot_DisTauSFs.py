@@ -53,7 +53,8 @@ def main() :
     parser.add_argument(
         "--fitkeys",
         help = "Will fit (straight line) the SFs for these WP or dxy keys.",
-        type = float,
+        #type = float,
+        type = str,
         nargs = "+",
         required = False,
         default = [],
@@ -176,8 +177,22 @@ def main() :
     h2_interp.Write()
     #h2_fromgr2_sf.Write()
     
+    min_dxy = 0.0
+    max_dxy = 0.1
+    
     for igr, (key, gr) in enumerate(d_gr_wps.items()) :
         
+        color = utils.get_cms_colors(igr)
+        
+        if key in args.fitkeys :
+            
+            fn_name = "pol0"
+            gr.Fit(fn_name, "SE EX0 R", "L", min_dxy, max_dxy)
+            fn_fitted = gr.GetListOfFunctions().FindObject(fn_name)
+            fn_fitted.SetLineColor(color)
+            fn_fitted.SetLineStyle(7)
+        
+        # Shift x values for visualizing -- so that points do not overlap
         for ipoint in range(0, gr.GetN()) :
             
             gr.SetPointX(
@@ -185,13 +200,13 @@ def main() :
                 gr.GetPointX(ipoint)+(0.01/len(d_gr_wps)*igr)
             )
         
-        color = utils.get_cms_colors(igr)
         gr.SetLineColor(color)
         gr.SetMarkerColor(color)
         gr.SetMarkerSize(2)
         gr.SetMarkerStyle(20)
         gr.SetLineWidth(2)
         gr.SetDrawOption("PE1")
+        gr.GetHistogram().SetOption("PE1")
         gr.SetFillStyle(0)
         #gr.SetFillColor(0)
         
@@ -199,6 +214,17 @@ def main() :
     
     for igr, (key, gr) in enumerate(d_gr_dxys.items()) :
         
+        color = utils.get_cms_colors(igr)
+        
+        if key in args.fitkeys :
+            
+            fn_name = "pol0"
+            gr.Fit(fn_name, "SE EX0 R", "L", min_dxy, max_dxy)
+            fn_fitted = gr.GetListOfFunctions().FindObject(fn_name)
+            fn_fitted.SetLineColor(color)
+            fn_fitted.SetLineStyle(7)
+        
+        # Shift x values for visualizing -- so that points do not overlap
         for ipoint in range(0, gr.GetN()) :
             
             gr.SetPointX(
@@ -206,21 +232,20 @@ def main() :
                 gr.GetPointX(ipoint)+(0.01/len(d_gr_wps)*igr)
             )
         
-        color = utils.get_cms_colors(igr)
         gr.SetLineColor(color)
         gr.SetMarkerColor(color)
         gr.SetMarkerSize(2)
         gr.SetMarkerStyle(20)
         gr.SetLineWidth(2)
         gr.SetDrawOption("PE1")
+        gr.GetHistogram().SetOption("PE1")
         gr.SetFillStyle(0)
         
         gr.Write()
     
     outfile.Close()
     
-    min_dxy = 0.0
-    max_dxy = 0.1
+    
     hist_vs_dxy = ROOT.TH1F("hist_vs_dxy", "", 5, min_dxy, max_dxy)
     plotfile = f"{outdir}/DisTauSF_vs_dxy.pdf"
     

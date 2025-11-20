@@ -194,11 +194,16 @@ class MyProcessor(coffea.processor.ProcessorABC) :
         
         jets = events.Jet[
             (events.Jet.pt > 30)
-            & (abs(events.Jet.eta) < 2.4)
+            & (abs(events.Jet.eta) < 2.1)
             & (events.Jet.jetId >= 6)
         ]
         
-        (dr, (_, _jets)) = jets.metric_table(events.GenVisTauh, metric = coffea.nanoevents.methods.vector.LorentzVector.delta_r, return_combinations = True)
+        # Wrong -- this returns GenVisTauh, not jets
+        #(dr, (_, _jets)) = jets.metric_table(events.GenVisTauh, metric = coffea.nanoevents.methods.vector.LorentzVector.delta_r, return_combinations = True)
+        #jets = _jets[(dr < 0.4)]
+        #jets = jets[~awkward.is_none(jets, axis = 1)]
+        
+        (dr, (_, _jets)) = events.GenVisTauh.metric_table(jets, metric = coffea.nanoevents.methods.vector.LorentzVector.delta_r, return_combinations = True)
         jets = _jets[(dr < 0.4)]
         jets = jets[~awkward.is_none(jets, axis = 1)]
         

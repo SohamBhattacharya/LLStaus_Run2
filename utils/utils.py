@@ -378,7 +378,8 @@ def root_plot1D_legacy(
     l_ratio_graph_overlay = [],
     l_legend_order = [],
     #gr_overlay_drawopt = "PE1",
-    ratio_mode = "mc",
+    l_text_overlay = [],
+    ratio_mode = "default",
     no_xerror = False,
     logx = False,
     logy = False,
@@ -406,6 +407,7 @@ def root_plot1D_legacy(
     legendtitle = "",
     legendheightscale = 1.0,
     legendwidthscale = 1.0,
+    legendpadleft_extra = 0.0,
     CMSextraText = "Simulation Preliminary",
     lumiText = "(13 TeV)"
 ) :
@@ -415,19 +417,20 @@ def root_plot1D_legacy(
     
     if (no_xerror) :
         
-        ROOT.gStyle.SetErrorX(not no_xerror)
+        ROOT.gStyle.SetErrorX(float(not no_xerror))
     
     ROOT.gStyle.SetOptFit(0)
     
     canvas.cd(1)
     
-    legendHeight = legendheightscale * 0.065 * (len(l_hist) + 1.5*(len(legendtitle)>0))
+    #legendHeight = legendheightscale * 0.065 * (len(l_hist) + len(l_hist_overlay) + len(l_graph_overlay) + 1.5*(len(legendtitle)>0))
+    legendHeight = legendheightscale * 0.05 * (len(l_hist) + len(l_hist_overlay) + len(l_graph_overlay) + 1.5*(len(legendtitle)>0))
     legendWidth = legendwidthscale * 0.4
     
-    padTop = 1 - canvas.GetTopMargin() - 0.6*ROOT.gStyle.GetTickLength("y")
-    padRight = 1 - canvas.GetRightMargin() - 0.6*ROOT.gStyle.GetTickLength("x")
-    padBottom = canvas.GetBottomMargin() + 0.6*ROOT.gStyle.GetTickLength("y")
-    padLeft = canvas.GetLeftMargin() + 0.6*ROOT.gStyle.GetTickLength("x")
+    padTop = 1 - canvas.GetTopMargin() - 0.6*ROOT.gStyle.GetTickLength("x")
+    padRight = 1 - canvas.GetRightMargin() - 0.6*ROOT.gStyle.GetTickLength("y")
+    padBottom = canvas.GetBottomMargin() + 0.6*ROOT.gStyle.GetTickLength("x")
+    padLeft = canvas.GetLeftMargin() + 0.6*ROOT.gStyle.GetTickLength("y") + legendpadleft_extra
     
     if(legendpos == "UR") :
         
@@ -457,6 +460,7 @@ def root_plot1D_legacy(
     legend.SetBorderSize(0)
     legend.SetHeader(legendtitle)
     legend.SetTextSize(legendtextsize)
+    legend.SetTextFont(42)
     
     stack = ROOT.THStack()
     
@@ -474,12 +478,13 @@ def root_plot1D_legacy(
             legend.AddEntry(hist, hist.GetTitle(), get_draw_opt(hist))
     
     # Add a dummy histogram so that the X-axis range can be beyond the histogram range
-    h1_xRange = ROOT.TH1F("h1_xRange", "h1_xRange", 1, xrange[0], xrange[1])
+    #h1_xRange = ROOT.TH1F("h1_xRange", "h1_xRange", 1, xrange[0], xrange[1])
     #stack.Add(h1_xRange)
     
     stack.Draw(stackdrawopt)
     
     stack.GetXaxis().SetRangeUser(xrange[0], xrange[1])
+    stack.GetYaxis().SetRangeUser(yrange[0], yrange[1])
     stack.SetMinimum(yrange[0])
     stack.SetMaximum(yrange[1])
     
@@ -505,6 +510,7 @@ def root_plot1D_legacy(
         stack_overlay.Draw("nostack same")
         
         stack_overlay.GetXaxis().SetRangeUser(xrange[0], xrange[1])
+        stack_overlay.GetYaxis().SetRangeUser(yrange[0], yrange[1])
         stack_overlay.SetMinimum(yrange[0])
         stack_overlay.SetMaximum(yrange[1])
     
@@ -521,10 +527,12 @@ def root_plot1D_legacy(
     #stack.GetXaxis().SetTitleOffset(ROOT.gStyle.GetTitleOffset("X") * 1.1)
     
     stack.GetYaxis().SetTitle(ytitle)
-    stack.GetYaxis().SetTitleSize(0.055)
+    #stack.GetYaxis().SetTitleSize(0.055)
+    stack.GetYaxis().SetTitleSize(0.065)
     #print(stack.GetYaxis().GetTitleSize())
     #stack.GetYaxis().SetTitleSize(ROOT.gStyle.GetTitleSize("Y") * yTitleSizeScale)
-    stack.GetYaxis().SetTitleOffset(1)
+    #stack.GetYaxis().SetTitleOffset(1)
+    stack.GetYaxis().SetTitleOffset(0.8 if draw_ratio else 0.9)
     
     #stack.SetTitle(title)
 
@@ -541,6 +549,11 @@ def root_plot1D_legacy(
             legend.AddEntry(gr, gr.GetTitle(), get_draw_opt(gr))
         #gr.Draw(gr_overlay_drawopt)
         gr.Draw(gr.GetHistogram().GetOption())
+    
+    for txt in l_text_overlay :
+        #print(txt)
+        #txt.Print()
+        txt.Draw()
     
     for obj in l_legend_order :
         
@@ -568,8 +581,14 @@ def root_plot1D_legacy(
     canvas.cd(1).SetLogx(logx)
     canvas.cd(1).SetLogy(logy)
     
+    #print(stack.GetMinimum(), stack.GetMaximum())
+    #exit()
+    
     canvas.cd(1).SetGridx(gridx)
     canvas.cd(1).SetGridy(gridy)
+    
+    #stack.GetYaxis().SetRangeUser(yrange[0], yrange[1])
+    #stack_overlay.GetYaxis().SetRangeUser(yrange[0], yrange[1])
     
     CMS_lumi.lumiTextSize = 0.9
     CMS_lumi.cmsTextSize = 0.9
@@ -587,19 +606,22 @@ def root_plot1D_legacy(
         #stack_ratio.Add(h1_xRange_ratio)
         
         l_gr_ratio_err = []
+        l_h1_ratio = []
         
         for h1_num, h1_den in ratio_num_den_pairs :
             
-            h1_ratio = h1_num.Clone()
+            h1_ratio = h1_num.Clone(f"{h1_num.GetName()}_ratio_tmp")
+            h1_ratio.SetDirectory(0)
             h1_ratio.GetXaxis().SetRangeUser(xrange[0], xrange[1])
             
             h1_ratio.Divide(h1_den)
+            #h1_ratio.Print("all")
             
-            if (ratio_mode == "default") :
-                
-                pass
+            l_h1_ratio.append(h1_ratio)
             
-            elif (ratio_mode == "data") :
+            draw_err = "NOERR" not in h1_num.GetOption()
+            
+            if (ratio_mode != "default" and ratio_mode == "data" and draw_err) :
                 
                 gr_ratio_err = ROOT.TGraphAsymmErrors(h1_ratio.GetNbinsX())
                 
@@ -623,8 +645,8 @@ def root_plot1D_legacy(
                     gr_ratio_err.SetPointEXhigh(ibin, h1_ratio.GetBinWidth(ibin+1) / 2.0)
                     gr_ratio_err.SetPointEXlow(ibin, h1_ratio.GetBinWidth(ibin+1) / 2.0)
                     
-                    gr_ratio_err.SetFillColorAlpha(1, 1.0)
-                    gr_ratio_err.SetFillStyle(3354)
+                    gr_ratio_err.SetFillColorAlpha(1, 0.5)
+                    gr_ratio_err.SetFillStyle(3254)
                     gr_ratio_err.SetMarkerSize(0)
                     gr_ratio_err.SetLineWidth(0)
                 
@@ -639,6 +661,7 @@ def root_plot1D_legacy(
         
         for hist in l_ratio_hist_overlay :
             
+            #hist.Print("all")
             stack_ratio.Add(hist, hist.GetOption())
         
         stack_ratio.Draw("nostack")
@@ -661,14 +684,18 @@ def root_plot1D_legacy(
         stack_ratio.GetXaxis().SetLabelSize(0.12)
         stack_ratio.GetYaxis().SetLabelSize(0.12)
         
+        stack_ratio.GetXaxis().SetLabelOffset(2*stack_ratio.GetXaxis().GetLabelOffset())
+        
         stack_ratio.GetXaxis().SetTitle(xtitle_ratio)
         stack_ratio.GetXaxis().SetTitleSize(0.13)
-        stack_ratio.GetXaxis().SetTitleOffset(0.91)
+        stack_ratio.GetXaxis().SetTitleOffset(0.95)
         stack_ratio.GetXaxis().CenterTitle(centertitlex)
         
         stack_ratio.GetYaxis().SetTitle(ytitle_ratio)
-        stack_ratio.GetYaxis().SetTitleSize(0.115)
-        stack_ratio.GetYaxis().SetTitleOffset(0.45)
+        #stack_ratio.GetYaxis().SetTitleSize(0.115)
+        stack_ratio.GetYaxis().SetTitleSize(0.13)
+        #stack_ratio.GetYaxis().SetTitleOffset(0.45)
+        stack_ratio.GetYaxis().SetTitleOffset(0.375)
         stack_ratio.GetYaxis().CenterTitle(centertitley)
         
         for gr in l_gr_ratio_err :

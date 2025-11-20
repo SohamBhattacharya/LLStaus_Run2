@@ -1,0 +1,71 @@
+obs: # This key is the type of process. Must be one of [obs, bkg, sig]
+  misid_2f0: # This key needs to be there in the input yaml
+    label: "Misid. jets (BRT2f0)"
+
+bkg:
+  misid_2f1:
+    label: "Misid. jets (BRT2f1)"
+    color: "#92dadd"
+  
+  # Will be used for getting the total bkg and uncertainty for plotting
+  # Will not be added to the table if there is only one bkg source
+  total_bkg:
+    #key: misid_2f1
+    label: "Total bkg."
+    color: "#000000"
+
+sig:
+  SMS-TStauStau_MStau-100_ctau-50mm_mLSP-1:
+    label: "${[m_{\\PSGt}(100),\\ c\\tau_{0}(50)]}$"
+    rootlabel: "m_{#tilde{#tau}}=100 GeV, c#tau_{0}=50 mm"
+    color: "#bd1f01"
+    linestyle: 7
+  
+  SMS-TStauStau_MStau-100_ctau-100mm_mLSP-1:
+    label: "${[m_{\\PSGt}(100),\\ c\\tau_{0}(100)]}$"
+    rootlabel: "m_{#tilde{#tau}}=100 GeV, c#tau_{0}=100 mm"
+    color: "#bd1f01"
+    linestyle: 3
+  
+  SMS-TStauStau_MStau-200_ctau-50mm_mLSP-1:
+    label: "${[m_{\\PSGt}(200),\\ c\\tau_{0}(50)]}$"
+    rootlabel: "m_{#tilde{#tau}}=200 GeV, c#tau_{0}=50 mm"
+    color: "#832db6"
+    linestyle: 7
+  
+  SMS-TStauStau_MStau-200_ctau-100mm_mLSP-1:
+    label: "${[m_{\\PSGt}(200), c\\tau_{0}(100)]}$"
+    rootlabel: "m_{#tilde{#tau}}=200 GeV, c#tau_{0}=100 mm"
+    color: "#832db6"
+    linestyle: 3
+
+total_bkg_key: misid_2f1
+obs_key: misid_2f0
+plot_bkgs: ["misid_2f1"]
+
+bin_header: "SR bins"
+plot_bins: [3, 4, 5, 6, 7, 8, 9, 10]
+
+bins:
+  3:
+    label: 1
+  4:
+    label: 2
+  5:
+    label: 3
+  6:
+    label: 4
+  7:
+    label: 5
+  8:
+    label: 6
+  9:
+    label: 7
+  10:
+    label: 8
+  total:
+    label: "Total"
+
+ytitle_ratio: "BRT2f0/BRT2f1"
+centerlabelx: true
+logy: true

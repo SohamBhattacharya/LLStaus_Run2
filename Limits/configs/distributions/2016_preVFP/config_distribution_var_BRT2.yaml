@@ -1,23 +1,23 @@
 
 analysis: "llstau_maximally-mixed"
 
-channel: "{varname}"
-era: "2017"
-lumi: 41.48
+channel: "BRT2_{varname}"
+era: "2016_preVFP"
+lumi: 19.5
 
 obs:
   scaleby: "1"
   samples:
     - "DATA_MET"
-  histfile: "/data/dust/user/sobhatta/work/LongLivedStaus/shedprog_2017-studies/LLStaus_Run2/Analysis/output/2017/output_signal/signal_v9/hists/Cut_018_ht_soft_forward_cut_{varname}_pass.root"
+  histfile: "/data/dust/user/sobhatta/work/LongLivedStaus/shedprog_2017-studies/LLStaus_Run2/Analysis/output/2016pre/output_signal/signal_v12/hists/Cut_018_ht_soft_forward_cut_{varname}_pass.root"
   nominal: "nominal/bin2/hist"
 
 
 sig:
   loadconfig: "configs/distributions/sig_procs_for-distributions.yaml"
   xsecfile: "/data/dust/user/sobhatta/work/LongLivedStaus/LLStaus_Run2/Analysis/configs/crosssections_stau_maximally-mixed_hepi-fast.csv"
-  histfile: "/data/dust/user/sobhatta/work/LongLivedStaus/shedprog_2017-studies/LLStaus_Run2/Analysis/output/2017/output_signal/signal_v9/hists/Cut_018_ht_soft_forward_cut_{varname}_pass.root"
-  cutflowsfile: "/data/dust/user/sobhatta/work/LongLivedStaus/shedprog_2017-studies/LLStaus_Run2/Analysis/output/2017/output_signal/signal_v9/cutflows.json"
+  histfile: "/data/dust/user/sobhatta/work/LongLivedStaus/shedprog_2017-studies/LLStaus_Run2/Analysis/output/2016pre/output_signal/signal_v12/hists/Cut_018_ht_soft_forward_cut_{varname}_pass.root"
+  cutflowsfile: "/data/dust/user/sobhatta/work/LongLivedStaus/shedprog_2017-studies/LLStaus_Run2/Analysis/output/2016pre/output_signal/signal_v12/cutflows.json"
   # Count to use (from cutflowsfile) in the denominator when normalizing
   # Nested keys separated by "."
   # For e.g. if "a.b.c", will read the dictionary entry dict[a][b][c]
@@ -34,15 +34,15 @@ bkg:
   procs:
     "misid":
       ismc: false
-      scaleby: "1"
+      scaleby: "0.7"
       samples:
         - "DATA_MET"
-      histfile: "/data/dust/user/sobhatta/work/LongLivedStaus/shedprog_2017-studies/LLStaus_Run2/Analysis/output/2017/output_signal/signal_v9/hists/Cut_018_ht_soft_forward_cut_{varname}_yield_bin1to2.root"
+      histfile: "/data/dust/user/sobhatta/work/LongLivedStaus/shedprog_2017-studies/LLStaus_Run2/Analysis/output/2016pre/output_signal/signal_v12/hists/Cut_018_ht_soft_forward_cut_{varname}_yield_bin1to2.root"
       nominal: "nominal/hist"
-      alpha: 0.060
+      alpha: 0.089
   
   xsecfile: "/data/dust/user/sobhatta/work/LongLivedStaus/LLStaus_Run2/Analysis/configs/crosssections.json"
-  cutflowsfile: "/data/dust/user/sobhatta/work/LongLivedStaus/shedprog_2017-studies/LLStaus_Run2/Analysis/output/2017/output_signal/signal_v9/cutflows.json"
+  cutflowsfile: "/data/dust/user/sobhatta/work/LongLivedStaus/shedprog_2017-studies/LLStaus_Run2/Analysis/output/2016pre/output_signal/signal_v12/cutflows.json"
   neventkey: "all.BeforeCuts"
 
 
@@ -51,20 +51,12 @@ systcombos:
     procs:
       sig: ["sig"]
       bkg: []
-    names: ["lumi_corr161718", "lumi_corr1718", "lumi_uncorr"]
+    names: ["lumi_corr161718", "lumi_uncorr"]
 
 
 systematics:
   
   "lumi_corr161718":
-    procs:
-      sig: ["sig"]
-      bkg: []
-    iseracorr: true
-    u: 1.009
-    d: 0.991
-  
-  "lumi_corr1718":
     procs:
       sig: ["sig"]
       bkg: []
@@ -77,8 +69,8 @@ systematics:
       sig: ["sig"]
       bkg: []
     iseracorr: false
-    u: 1.02
-    d: 0.98
+    u: 1.01
+    d: 0.99
   
   "met_trigger":
     procs:
@@ -199,6 +191,26 @@ systematics:
       "*": "sys_up/hist"
     d:
       "*": "sys_down/hist"
+  
+  "fpred_brt1_corr":
+    iseracorr: false
+    procs:
+      sig: []
+      bkg: ["misid"]
+    u: 1.43
+    d: 0.57
+  
+  "fpred_alt":
+    iseracorr: false
+    procs:
+      sig: []
+      bkg: ["misid"]
+    operation_u: "abs({{u}})"
+    operation_d: "-abs({{d}})"
+    u:
+      "*": "/data/dust/user/sobhatta/work/LongLivedStaus/shedprog_2017-studies/LLStaus_Run2/Analysis/output/2016pre/output_signal/signal_v12/hists/Cut_018_ht_soft_forward_cut_{varname}_yield_bin0to2.root:nominal/hist"
+    d:
+      "*": "/data/dust/user/sobhatta/work/LongLivedStaus/shedprog_2017-studies/LLStaus_Run2/Analysis/output/2016pre/output_signal/signal_v12/hists/Cut_018_ht_soft_forward_cut_{varname}_yield_bin0to2.root:nominal/hist"
 
 
 rebin: {rebin}

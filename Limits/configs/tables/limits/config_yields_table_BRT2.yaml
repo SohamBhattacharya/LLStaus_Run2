@@ -4,7 +4,7 @@ obs: # This key is the type of process. Must be one of [obs, bkg, sig]
 
 bkg:
   misid:
-    label: "Misid. jets"
+    label: "Background"
     color: "#92dadd"
   
   # Will be used for getting the total bkg and uncertainty for plotting
@@ -14,33 +14,61 @@ bkg:
     color: "#000000"
 
 sig:
+  #SMS-TStauStau_MStau-100_ctau-10mm_mLSP-1:
+  #  label: "${[m_{\\PSGt}(100),\\ c\\tau_{0}(10)]}$"
+  #  rootlabel: "m_{#tilde{#tau}}=100 GeV, c#tau_{0}=10 mm"
+  #  color: "#bd1f01"
+  #  linestyle: 7
+  
   SMS-TStauStau_MStau-100_ctau-50mm_mLSP-1:
-    label: "${[m_{\\PSGt}(100),\\ c\\tau_{0}(50)]}$"
+    label: "\\vtop{\\hbox{$m_{\\PSGt}(100)$}\\hbox{$c\\tau_{0}(50)$}}"
     rootlabel: "m_{#tilde{#tau}}=100 GeV, c#tau_{0}=50 mm"
     color: "#bd1f01"
     linestyle: 7
   
+  #SMS-TStauStau_MStau-100_ctau-300mm_mLSP-1_from_ctau-1000mm:
+  #  label: "${[m_{\\PSGt}(100),\\ c\\tau_{0}(300)]}$"
+  #  rootlabel: "m_{#tilde{#tau}}=100 GeV, c#tau_{0}=300 mm"
+  #  color: "#bd1f01"
+  #  linestyle: 7
+  
   SMS-TStauStau_MStau-100_ctau-100mm_mLSP-1:
-    label: "${[m_{\\PSGt}(100),\\ c\\tau_{0}(100)]}$"
+    label: "\\vtop{\\hbox{$m_{\\PSGt}(100)$}\\hbox{$c\\tau_{0}(100)$}}"
     rootlabel: "m_{#tilde{#tau}}=100 GeV, c#tau_{0}=100 mm"
     color: "#bd1f01"
     linestyle: 3
   
+  
+  #SMS-TStauStau_MStau-200_ctau-10mm_mLSP-1:
+  #  label: "${[m_{\\PSGt}(200),\\ c\\tau_{0}(10)]}$"
+  #  rootlabel: "m_{#tilde{#tau}}=200 GeV, c#tau_{0}=10 mm"
+  #  color: "#832db6"
+  #  linestyle: 7
+  
   SMS-TStauStau_MStau-200_ctau-50mm_mLSP-1:
-    label: "${[m_{\\PSGt}(200),\\ c\\tau_{0}(50)]}$"
+    label: "\\vtop{\\hbox{$m_{\\PSGt}(200)$}\\hbox{$c\\tau_{0}(50)$}}"
     rootlabel: "m_{#tilde{#tau}}=200 GeV, c#tau_{0}=50 mm"
     color: "#832db6"
     linestyle: 7
   
+  #SMS-TStauStau_MStau-200_ctau-300mm_mLSP-1_from_ctau-1000mm:
+  #  label: "${[m_{\\PSGt}(200),\\ c\\tau_{0}(300)]}$"
+  #  rootlabel: "m_{#tilde{#tau}}=200 GeV, c#tau_{0}=300 mm"
+  #  color: "#832db6"
+  #  linestyle: 7
+  
   SMS-TStauStau_MStau-200_ctau-100mm_mLSP-1:
-    label: "${[m_{\\PSGt}(200), c\\tau_{0}(100)]}$"
+    label: "\\vtop{\\hbox{$m_{\\PSGt}(200)$}\\hbox{$c\\tau_{0}(100)$}}"
     rootlabel: "m_{#tilde{#tau}}=200 GeV, c#tau_{0}=100 mm"
     color: "#832db6"
     linestyle: 3
 
 plot_bkgs: ["misid"]
 
-bin_header: "SR bins"
+bin_header: "\\vtop{\\hbox{SR}\\hbox{bins}}"
+bin_header_root: "SR bins"
+
+#plot_bins: [3, 4]
 plot_bins: [3, 4, 5, 6, 7, 8, 9, 10]
 
 bins:
@@ -65,3 +93,7 @@ bins:
 
 centerlabelx: true
 logy: true
+yrange_ratio: [0, 5]
+ndivisionsy_ratio: [5, 5, 0]
+group_sigs: true
+legendtitle: "Prefit"

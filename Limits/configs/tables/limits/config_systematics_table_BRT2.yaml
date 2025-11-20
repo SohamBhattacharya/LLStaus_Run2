@@ -5,16 +5,16 @@
 procs:
   
   misid:
-    label: "Misid. jets"
+    label: "Background"
   
   SMS-TStauStau_MStau-100_ctau-50mm_mLSP-1:
-      label: "${[m_{\\PSGt}(100),\\ c\\tau_{0}(50)]}$"
+    label: "\\vtop{\\hbox{$m_{\\PSGt}(100)$}\\hbox{$c\\tau_{0}(50)$}}"
   SMS-TStauStau_MStau-100_ctau-100mm_mLSP-1:
-    label: "${[m_{\\PSGt}(100),\\ c\\tau_{0}(100)]}$"
+    label: "\\vtop{\\hbox{$m_{\\PSGt}(100)$}\\hbox{$c\\tau_{0}(100)$}}"
   SMS-TStauStau_MStau-200_ctau-50mm_mLSP-1:
-    label: "${[m_{\\PSGt}(200),\\ c\\tau_{0}(50)]}$"
+    label: "\\vtop{\\hbox{$m_{\\PSGt}(200)$}\\hbox{$c\\tau_{0}(50)$}}"
   SMS-TStauStau_MStau-200_ctau-100mm_mLSP-1:
-    label: "${[m_{\\PSGt}(200), c\\tau_{0}(100)]}$"
+    label: "\\vtop{\\hbox{$m_{\\PSGt}(200)$}\\hbox{$c\\tau_{0}(100)$}}"
 
 syst_header: "Uncertainty source"
 
@@ -27,23 +27,23 @@ systematics:
     label: "$\\mu_{\\text{F}}$ scale"
   
   pdf:
-    label: "pdf"
+    label: "\\vtop{\\hbox{Parton distribution}\\hbox{function}}"
   
   met_trigger:
     label: "$\\ptmiss$ trigger"
   
   distauid:
-    label: "\\distau ID"
+    label: "\\distau identification"
   
   jer:
-    label: "JER"
+    label: "Jet energy resolution"
   
   jes:
-    label: "JES"
+    label: "Jet energy scale"
   
   uncl_met:
-    label: "$\\ptmiss$ unclustered energy"
-  
+    label: "\\vtop{\\hbox{$\\ptmiss$ unclustered}\\hbox{energy}}"
+
   #lumi_corr:
   #  label: "Luminosity (corr)"
   #
@@ -53,18 +53,21 @@ systematics:
   lumi:
     label: "Luminosity"
   
-  l1_prefiring:
-    label: "L1 prefiring"
+  #l1_prefiring:
+  #  label: "L1 prefiring"
   
   pileup:
     label: "Pileup"
   
   fr_region:
-    label: "Misid. prob. estimation region"
+    label: "\\vtop{\\hbox{Misid. probability}\\hbox{estimation region}}"
   
   fr_stat:
-    label: "Misid. prob. statistics"
-  
+    label: "\\vtop{\\hbox{Misid. probability}\\hbox{statistics}}"
+
   fpred_alt:
-    label: "Alternate misid. bkg. prediction"
+    label: "\\vtop{\\hbox{Alternative bkg.}\\hbox{prediction}}"
+
+  fpred_brt1_corr:
+    label: "\\vtop{\\hbox{Bkg. correction}\\hbox{from BRT1}}"
 

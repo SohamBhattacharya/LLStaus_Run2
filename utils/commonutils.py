@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 
+import ctypes
 import json
 import logging
+from hepunits import cm
 import hist
 import numpy
 import os
@@ -19,6 +21,18 @@ ROOT.gROOT.SetBatch(True)
 
 logging.basicConfig(format = "[%(levelname)s] [%(asctime)s] %(message)s", level = logging.INFO)
 logger = logging.getLogger("mylogger")
+
+
+def exec_cmds(cmds) :
+    
+    for cmd in cmds :
+        
+        #print(cmd)
+        retval = os.system(f"set -x; {cmd}")
+        
+        if (retval) :
+            
+            exit(retval)
 
 
 # Factorize to a utils file later
@@ -393,3 +407,120 @@ def plot_fitdiagnostics_correlation(
     canvas.SaveAs(outfilename)
     
     rootfile.Close()
+
+
+def get_binning(start, end, step, include_end = True) :
+    
+    bins = numpy.arange(start, end, step)
+    
+    if (include_end) :
+        
+        if (bins[-1] != end) :
+            
+            bins = numpy.append(bins, [end])
+        
+        else :
+            
+            bins = bins[0: -1]
+    
+    else :
+        
+        if (bins[-1] == end) :
+            
+            bins = bins[0: -1]
+    
+    return bins
+
+
+def natural_sort(l):
+    
+    convert = lambda text: int(text) if text.isdigit() else text.lower()
+    alphanum_key = lambda key: [convert(c) for c in re.split('([0-9]+)', key)]
+    return sorted(l, key = alphanum_key)
+
+
+def get_decimal_places(s):
+    
+    return len(s.split(".")[1]) if "." in s else 0
+
+
+def cms_rounding(val, unc_stat, unc_syst, N=2):
+    
+    min_number = min(float(val), float(unc_stat), float(unc_syst))
+    threshold = 5*10**(-N)
+    
+    if N > 0 and min_number > threshold :
+        
+        return cms_rounding(val, unc_stat, unc_syst, N-1)
+    
+    val_str = f"{val:.{N}f}"
+    unc_stat_str = f"{unc_stat:.{N}f}"
+    unc_syst_str = f"{unc_syst:.{N}f}"
+    
+    return val_str, unc_stat_str, unc_syst_str
+
+
+def root_TGraph_to_TH1(graph, binning = None, evalBins = False, setError = True) :
+    
+    if binning :
+        hist = ROOT.TH1F(graph.GetName(), graph.GetTitle(), len(binning)-1, binning)
+    else :
+        hist = graph.GetHistogram().Clone()
+    
+    hist.SetDirectory(0)
+    
+    nPoint = graph.GetN()
+    
+    arr_x = numpy.array(graph.GetX(), dtype = numpy.float64)
+    min_x = numpy.min(arr_x)
+    max_x = numpy.max(arr_x)
+    
+    if (evalBins) :
+        
+        nBins = hist.GetNbinsX()
+        
+        for iBin in range(1, nBins+1) :
+            
+            pointValX = hist.GetBinCenter(iBin)
+            
+            if pointValX < min_x or pointValX > max_x :
+                continue
+            
+            pointValY = graph.Eval(pointValX)
+            
+            if numpy.isfinite(pointValY) :
+                
+                hist.SetBinContent(iBin, pointValY)
+            
+            else :
+                
+                print(f"Invalid point value for bin {iBin} (x = {pointValX}): {pointValY}")
+    
+    else :
+        for iPoint in range(0, nPoint) :
+            
+            if (hasattr(ROOT, "Double")) :
+                
+                pointValX = ROOT.Double(0)
+                pointValY = ROOT.Double(0)
+            
+            else :
+                
+                pointValX = ctypes.c_double(0)
+                pointValY = ctypes.c_double(0)
+            
+            graph.GetPoint(iPoint, pointValX, pointValY)
+            #print(iPoint, pointValX, pointValY)
+            
+            pointErrX = graph.GetErrorX(iPoint)
+            pointErrY = graph.GetErrorY(iPoint)
+            
+            binNum = hist.FindBin(pointValX)
+
+            hist.SetBinContent(binNum, pointValY)
+
+            if (setError) :
+
+                hist.SetBinError(binNum, pointErrY)
+    
+    return hist

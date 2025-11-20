@@ -1,0 +1,51 @@
+obs: # This key is the type of process. Must be one of [obs, bkg, sig]
+  obs: # This key needs to be there in the input yaml
+    label: "Data"
+
+bkg:
+  misid:
+    label: "Background"
+    color: "#92dadd"
+  
+  # Will be used for getting the total bkg and uncertainty for plotting
+  # Will not be added to the table if there is only one bkg source
+  total_bkg:
+    label: "Total bkg."
+    color: "#000000"
+
+sig:
+  SMS-TStauStau_MStau-100_ctau-50mm_mLSP-1:
+    label: "${[m_{\\PSGt}(100),\\ c\\tau_{0}(50)]}$"
+    rootlabel: "m_{#tilde{#tau}}=100 GeV, c#tau_{0}=50 mm"
+    color: "#bd1f01"
+    linestyle: 7
+  
+  SMS-TStauStau_MStau-100_ctau-100mm_mLSP-1:
+    label: "${[m_{\\PSGt}(100),\\ c\\tau_{0}(100)]}$"
+    rootlabel: "m_{#tilde{#tau}}=100 GeV, c#tau_{0}=100 mm"
+    color: "#bd1f01"
+    linestyle: 3
+  
+  SMS-TStauStau_MStau-200_ctau-50mm_mLSP-1:
+    label: "${[m_{\\PSGt}(200),\\ c\\tau_{0}(50)]}$"
+    rootlabel: "m_{#tilde{#tau}}=200 GeV, c#tau_{0}=50 mm"
+    color: "#832db6"
+    linestyle: 7
+  
+  SMS-TStauStau_MStau-200_ctau-100mm_mLSP-1:
+    label: "${[m_{\\PSGt}(200), c\\tau_{0}(100)]}$"
+    rootlabel: "m_{#tilde{#tau}}=200 GeV, c#tau_{0}=100 mm"
+    color: "#832db6"
+    linestyle: 3
+
+plot_bkgs: ["misid"]
+
+bin_header: "$m_{T2} [GeV]$"
+
+centerlabelx: false
+logy: true
+yrange_ratio: [0, 3]
+ndivisionsy_ratio: [3, 5, 0]
+nvivisionsx: null
+norm_binwidth: true
+group_sigs: true

@@ -54,6 +54,8 @@ for card in ${CARDS[@]}; do
     replace "/bin2/" "/bin1/" $outfile
     replace "bin1to2" "bin0to1" $outfile
     replace "sig_procs.yaml" "sig_procs_for-BRT1.yaml" $outfile
+    
+    yq --in-place -y 'del(."systematics"."fpred_alt")' $outfile
 done
 
 echo "Success!"

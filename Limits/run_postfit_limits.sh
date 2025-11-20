@@ -15,7 +15,15 @@ task(){
     -w workspace.root \
     --output postfit_s.root \
     --sampling \
-    -f fitDiagnostics.limits.root:fit_s \
+    -f fitDiagnostics.Test.root:fit_s \
+    --postfit \
+    --covariance
+    
+    PostFitShapesFromWorkspace \
+    -w workspace.root \
+    --output postfit_b.root \
+    --sampling \
+    -f fitDiagnostics.Test.root:fit_b \
     --postfit \
     --covariance
     

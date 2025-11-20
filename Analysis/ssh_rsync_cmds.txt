@@ -1,0 +1,3 @@
+ssh -nNf -M -Y -o ServerAliveInterval=60 -o TCPKeepAlive=yes -o ControlPath=~/.ssh/control:%C sobhatta@naf-cms24.desy.de
+
+rsync -asP -e "ssh -o ControlMaster=no -o ControlPath=~/.ssh/control:%C" *.py sobhatta@naf-cms24.desy.de:/data/dust/user/sobhatta/work/LongLivedStaus/LLStaus_Run2/Analysis/

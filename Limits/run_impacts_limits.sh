@@ -32,10 +32,13 @@ WSPACE="workspace.root"
 task(){
     indir=$1
     wd="${indir}/impacts"
+    #args=""
+    args="--rMin 0"
+    #args="--rMin -10"
     
     if [ -n "${SIGNAL}" ]; then
         wd="${wd}_expectSignal${SIGNAL}"
-        args="--expectSignal ${SIGNAL} -t -1"
+        args="--expectSignal ${SIGNAL} -t -1 --rMin -100"
     fi
     
     mkdir -p $wd
@@ -47,13 +50,12 @@ task(){
     nice -n 10 combineTool.py \
     -M Impacts \
     -d $WSPACE \
-    -m 90 \
+    -m 120 \
     --doInitialFit \
     --robustFit 1 \
     --setRobustFitAlgo Minuit2 \
-    --maxFailedSteps 20 \
+    --maxFailedSteps 100 \
     --forceRecreateNLL \
-    --rMin -100 \
     --parallel 15 \
     $args
 
@@ -62,13 +64,12 @@ task(){
     nice -n 10 combineTool.py \
     -M Impacts \
     -d $WSPACE \
-    -m 90 \
+    -m 120 \
     --doFits \
     --robustFit 1 \
     --setRobustFitAlgo Minuit2 \
-    --maxFailedSteps 20 \
+    --maxFailedSteps 100 \
     --forceRecreateNLL \
-    --rMin -100 \
     --parallel 15 \
     $args
 
@@ -77,7 +78,7 @@ task(){
     nice -n 10 combineTool.py \
     -M Impacts \
     -d $WSPACE \
-    -m 90 \
+    -m 120 \
     -o impacts.json \
     --parallel 15
 

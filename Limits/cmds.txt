@@ -1,0 +1,5 @@
+../../Documentation/start_naf_ssh_master.sh sobhatta 1 23
+
+naf --machine 23 "-o ControlMaster=no -o ControlPath=~/.ssh/control:%r@%h:%p"
+
+rsync -asP -e "ssh -o ControlMaster=no -o ControlPath=~/.ssh/control:%C" configs *.py *.sh sobhatta@naf-cms23.desy.de:/data/dust/user/sobhatta/work/LongLivedStaus/LLStaus_Run2/Limits/

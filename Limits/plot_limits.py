@@ -13,8 +13,8 @@ ROOT.gROOT.SetBatch(True)
 import utils.commonutils as cmut
 
 
-NPX = 500
-NPY = 500
+NPX = 300
+NPY = 300
 NZCONTS = 100
 
 
@@ -189,7 +189,8 @@ def main() :
         help = "Will set the CMS extra text; can be empty string \"\"",
         type = str,
         required = False,
-        default = "Preliminary",
+        #default = "Preliminary",
+        default = "",
     )
     
     parser.add_argument(
@@ -243,6 +244,9 @@ def main() :
         limits = cmut.load_config(injson)["120.0"]
         #print(limits)
         
+        # Choose only finite values
+        limits = {_key: _val for _key, _val in limits.items() if numpy.isfinite(_val)}
+        
         sig_info = cmut.parse_stau_samplestring(
             s = injson,
             regexp = "SMS-TStauStau_MStau-(?P<mstau>\w+)_ctau-(?P<ctau>\w+)_mLSP-(?P<mlsp>\d+)",
@@ -262,8 +266,10 @@ def main() :
         d_limits_theory_u[(mstau, ctau)] = copy.deepcopy(limits)
         d_limits_theory_d[(mstau, ctau)] = copy.deepcopy(limits)
         
-        d_limits_theory_u[(mstau, ctau)]["obs"] = d_limits_theory_u[(mstau, ctau)]["obs"] * (1.0 + d_xsecs[mstau]["unc_u"]/d_xsecs[mstau]["nom"])
-        d_limits_theory_d[(mstau, ctau)]["obs"] = d_limits_theory_d[(mstau, ctau)]["obs"] * (1.0 + d_xsecs[mstau]["unc_d"]/d_xsecs[mstau]["nom"])
+        if ("obs" in limits) :
+            
+            d_limits_theory_u[(mstau, ctau)]["obs"] = d_limits_theory_u[(mstau, ctau)]["obs"] * (1.0 + d_xsecs[mstau]["unc_u"]/d_xsecs[mstau]["nom"])
+            d_limits_theory_d[(mstau, ctau)]["obs"] = d_limits_theory_d[(mstau, ctau)]["obs"] * (1.0 + d_xsecs[mstau]["unc_d"]/d_xsecs[mstau]["nom"])
         
         #print("XXX", d_limits[(mstau, ctau)]["obs"], d_limits_theory_u[(mstau, ctau)]["obs"], d_limits_theory_d[(mstau, ctau)]["obs"])
     
@@ -328,24 +334,26 @@ def main() :
         axis_label = "Expected UL (-1#sigma) at 95% CL",
     )
     
-    #results["exp_p2"] = get_exclusion(
-    #    d_limits = d_limits,
-    #    d_xsecs = d_xsecs,
-    #    limit_key = "exp+2",
-    #    name = "exp_p2",
-    #    axis_label = "Expected UL (+2#sigma) at 95% CL",
-    #)
-    #
-    #results["exp_m2"] = get_exclusion(
-    #    d_limits = d_limits,
-    #    d_xsecs = d_xsecs,
-    #    limit_key = "exp-2",
-    #    name = "exp_m2",
-    #    axis_label = "Expected UL (-2#sigma) at 95% CL",
-    #)
+    results["exp_p2"] = get_exclusion(
+        d_limits = d_limits,
+        d_xsecs = d_xsecs,
+        limit_key = "exp+2",
+        xsec_key = "nom",
+        name = "exp_p2",
+        axis_label = "Expected UL (+2#sigma) at 95% CL",
+    )
+    
+    results["exp_m2"] = get_exclusion(
+        d_limits = d_limits,
+        d_xsecs = d_xsecs,
+        limit_key = "exp-2",
+        xsec_key = "nom",
+        name = "exp_m2",
+        axis_label = "Expected UL (-2#sigma) at 95% CL",
+    )
     
     
-    # 1D exclusions
+    # 1D limits
     d_xsecul_per_ctau = sortedcontainers.SortedDict()
     
     for (mstau, ctau), limits in d_limits.items() :
@@ -356,27 +364,41 @@ def main() :
         ctau_key = (ctau, ctau_str)
         print(mstau_str, ctau_str)
         
-        l_limit_keys = ["obs", "exp0", "exp+1", "exp-1", "exp+2", "exp-2"]
-        skip = False
-        
-        for limit_key in l_limit_keys :
-            if limit_key not in limits :
-                
-                print(f"Warning: could not find limit {limit_key} for mstau={mstau}, ctau={ctau}. Skipping this signal point.")
-                skip = True
-                break
-        
-        if skip :
-            continue
+        #l_limit_keys = ["obs", "exp0", "exp+1", "exp-1", "exp+2", "exp-2"]
+        #skip = False
+        #
+        #for limit_key in l_limit_keys :
+        #    if limit_key not in limits :
+        #        
+        #        print(f"Warning: could not find limit {limit_key} for mstau={mstau}, ctau={ctau}. Skipping this signal point.")
+        #        skip = True
+        #        break
+        #
+        #if skip :
+        #    continue
         
         if ctau_key not in d_xsecul_per_ctau :
             
             d_xsecul_per_ctau[ctau_key] = {
                 "g1_xsec_theory": ROOT.TGraphAsymmErrors(),
+                
                 "g1_xsecul_obs": ROOT.TGraph(),
                 "g1_xsecul_exp": ROOT.TGraph(),
+                "g1_xsecul_exp_p1": ROOT.TGraph(),
+                "g1_xsecul_exp_m1": ROOT.TGraph(),
+                "g1_xsecul_exp_p2": ROOT.TGraph(),
+                "g1_xsecul_exp_m2": ROOT.TGraph(),
                 "g1_xsecul_exp_pm1": ROOT.TGraphAsymmErrors(),
                 "g1_xsecul_exp_pm2": ROOT.TGraphAsymmErrors(),
+                
+                "g1_rul_obs": ROOT.TGraph(),
+                "g1_rul_exp": ROOT.TGraph(),
+                "g1_rul_exp_p1": ROOT.TGraph(),
+                "g1_rul_exp_m1": ROOT.TGraph(),
+                "g1_rul_exp_p2": ROOT.TGraph(),
+                "g1_rul_exp_m2": ROOT.TGraph(),
+                "g1_rul_exp_pm1": ROOT.TGraphAsymmErrors(),
+                "g1_rul_exp_pm2": ROOT.TGraphAsymmErrors(),
             }
             
             for key, val in d_xsecul_per_ctau[ctau_key].items() :
@@ -387,10 +409,11 @@ def main() :
         xsec = d_xsecs[mstau]["nom"]
         xsec_u = abs(d_xsecs[mstau]["unc_u"])
         xsec_d = abs(d_xsecs[mstau]["unc_d"])
-        ipoint = d_xsecul_per_ctau[ctau_key]["g1_xsecul_exp"].GetN()
+        #ipoint = d_xsecul_per_ctau[ctau_key]["g1_xsecul_exp"].GetN()
         
         cmut.logger.info(f"Filling xsec graph with: mstau({mstau}), xsec({xsec}+{xsec_u}-{xsec_d})")
         
+        ipoint = d_xsecul_per_ctau[ctau_key]["g1_xsec_theory"].GetN()
         d_xsecul_per_ctau[ctau_key]["g1_xsec_theory"].SetPoint(ipoint, mstau, xsec)
         d_xsecul_per_ctau[ctau_key]["g1_xsec_theory"].SetPointError(
             ipoint,
@@ -398,26 +421,69 @@ def main() :
             xsec_d, xsec_u
         )
         
-        d_xsecul_per_ctau[ctau_key]["g1_xsecul_obs"].SetPoint(ipoint, mstau, limits["obs"]*xsec)
-        d_xsecul_per_ctau[ctau_key]["g1_xsecul_exp"].SetPoint(ipoint, mstau, limits["exp0"]*xsec)
+        if ("obs" in limits) :
+            ipoint = d_xsecul_per_ctau[ctau_key]["g1_xsecul_obs"].GetN()
+            
+            d_xsecul_per_ctau[ctau_key]["g1_xsecul_obs"].SetPoint(ipoint, mstau, limits["obs"]*xsec)
+            d_xsecul_per_ctau[ctau_key]["g1_rul_obs"].SetPoint(ipoint, mstau, limits["obs"])
         
-        d_xsecul_per_ctau[ctau_key]["g1_xsecul_exp_pm1"].SetPoint(ipoint, mstau, limits["exp0"]*xsec)
-        d_xsecul_per_ctau[ctau_key]["g1_xsecul_exp_pm1"].SetPointError(
-            ipoint,
-            0.0, 0.0,
-            abs(limits["exp-1"]-limits["exp0"])*xsec,
-            abs(limits["exp+1"]-limits["exp0"])*xsec
-        )
+        if ("exp0" in limits) :
+            ipoint = d_xsecul_per_ctau[ctau_key]["g1_xsecul_exp"].GetN()
+            
+            d_xsecul_per_ctau[ctau_key]["g1_xsecul_exp"].SetPoint(ipoint, mstau, limits["exp0"]*xsec)
+            d_xsecul_per_ctau[ctau_key]["g1_rul_exp"].SetPoint(ipoint, mstau, limits["exp0"])
+            
+            if ("exp+1" in limits and "exp-1" in limits) :
+                ipoint = d_xsecul_per_ctau[ctau_key]["g1_xsecul_exp_pm1"].GetN()
+                
+                d_xsecul_per_ctau[ctau_key]["g1_xsecul_exp_pm1"].SetPoint(ipoint, mstau, limits["exp0"]*xsec)
+                d_xsecul_per_ctau[ctau_key]["g1_xsecul_exp_pm1"].SetPointError(
+                    ipoint,
+                    0.0, 0.0,
+                    abs(limits["exp-1"]-limits["exp0"])*xsec,
+                    abs(limits["exp+1"]-limits["exp0"])*xsec
+                )
+                
+                d_xsecul_per_ctau[ctau_key]["g1_rul_exp_pm1"].SetPoint(ipoint, mstau, limits["exp0"])
+                d_xsecul_per_ctau[ctau_key]["g1_rul_exp_pm1"].SetPointError(
+                    ipoint,
+                    0.0, 0.0,
+                    abs(limits["exp-1"]-limits["exp0"]),
+                    abs(limits["exp+1"]-limits["exp0"])
+                )
+            
+            if ("exp+2" in limits and "exp-2" in limits) :
+                ipoint = d_xsecul_per_ctau[ctau_key]["g1_xsecul_exp_pm2"].GetN()
+                
+                d_xsecul_per_ctau[ctau_key]["g1_xsecul_exp_pm2"].SetPoint(ipoint, mstau, limits["exp0"]*xsec)
+                d_xsecul_per_ctau[ctau_key]["g1_xsecul_exp_pm2"].SetPointError(
+                    ipoint,
+                    0.0, 0.0,
+                    abs(limits["exp-2"]-limits["exp0"])*xsec,
+                    abs(limits["exp+2"]-limits["exp0"])*xsec
+                )
+                
+                d_xsecul_per_ctau[ctau_key]["g1_rul_exp_pm2"].SetPoint(ipoint, mstau, limits["exp0"])
+                d_xsecul_per_ctau[ctau_key]["g1_rul_exp_pm2"].SetPointError(
+                    ipoint,
+                    0.0, 0.0,
+                    abs(limits["exp-2"]-limits["exp0"]),
+                    abs(limits["exp+2"]-limits["exp0"])
+                )
         
-        d_xsecul_per_ctau[ctau_key]["g1_xsecul_exp_pm2"].SetPoint(ipoint, mstau, limits["exp0"]*xsec)
-        d_xsecul_per_ctau[ctau_key]["g1_xsecul_exp_pm2"].SetPointError(
-            ipoint,
-            0.0, 0.0,
-            abs(limits["exp-2"]-limits["exp0"])*xsec,
-            abs(limits["exp+2"]-limits["exp0"])*xsec
-        )
-    
-    
+        if ("exp+1" in limits) :
+            d_xsecul_per_ctau[ctau_key]["g1_xsecul_exp_p1"].AddPoint(mstau, limits["exp+1"]*xsec)
+            d_xsecul_per_ctau[ctau_key]["g1_rul_exp_p1"].AddPoint(mstau, limits["exp+1"])
+        if ("exp-1" in limits) :
+            d_xsecul_per_ctau[ctau_key]["g1_xsecul_exp_m1"].AddPoint(mstau, limits["exp-1"]*xsec)
+            d_xsecul_per_ctau[ctau_key]["g1_rul_exp_m1"].AddPoint(mstau, limits["exp-1"])
+        if ("exp+2" in limits) :
+            d_xsecul_per_ctau[ctau_key]["g1_xsecul_exp_p2"].AddPoint(mstau, limits["exp+2"]*xsec)
+            d_xsecul_per_ctau[ctau_key]["g1_rul_exp_p2"].AddPoint(mstau, limits["exp+2"])
+        if ("exp-2" in limits) :
+            d_xsecul_per_ctau[ctau_key]["g1_xsecul_exp_m2"].AddPoint(mstau, limits["exp-2"]*xsec)
+            d_xsecul_per_ctau[ctau_key]["g1_rul_exp_m2"].AddPoint(mstau, limits["exp-2"])
+
     print(f"Writing to: {outfilename_limits}")
     outfile.cd()
     
@@ -456,7 +522,8 @@ def main() :
     ])
     #ymax = (round(ymax/100)+4)*100
     #ymax = (round(ymax/100)+4)*1000
-    ymax = 10**(numpy.log10(ymax)+2)
+    #ymax = 10**(numpy.log10(ymax)+2)
+    ymax = 10**5
     
     canvas = CMS.cmsCanvas(
         canvName = canvas_name,
@@ -474,6 +541,9 @@ def main() :
         yTitOffset = 1.05
     )
     
+    #hframe = canvas.FindObject("hframe")
+    hframe = CMS.GetcmsCanvasHist(canvas)
+    
     canvas.SetRightMargin(0.175)
     CMS.SetLumi(137.62, round_lumi = True)
     CMS.SetEnergy(13)
@@ -490,20 +560,24 @@ def main() :
     #zmax = h2_colz.GetMaximum()
     #zmax = 10**(round(numpy.log10(zmax))+1)
     
+    hframe.GetXaxis().CenterTitle(True)
+    hframe.GetYaxis().CenterTitle(True)
+    
     h2_colz.GetZaxis().SetRangeUser(zmin, zmax)
-    h2_colz.GetZaxis().CenterTitle()
+    h2_colz.GetZaxis().CenterTitle(True)
     h2_colz.GetZaxis().SetTitle("95% CL upper limit on cross section [fb]")
     h2_colz.GetZaxis().SetTitleSize(0.05)
     h2_colz.GetZaxis().SetTitleOffset(1.2)
     h2_colz.GetZaxis().SetLabelSize(0.05)
     
-    legend = CMS.cmsLeg(canvas.GetLeftMargin(), 0.65, 1-canvas.GetRightMargin(), 1-canvas.GetTopMargin(), textSize = 0.0425, columns = 2)
+    legend = CMS.cmsLeg(canvas.GetLeftMargin(), 0.61, 1-canvas.GetRightMargin(), 1-canvas.GetTopMargin(), textSize = 0.0425, columns = 2)
     #legend = ROOT.TLegend(canvas.GetLeftMargin(), 0.65, 1-canvas.GetRightMargin(), 1-canvas.GetTopMargin())
     legend.SetFillColor(0)
     legend.SetFillStyle(1001)
     legend.SetBorderSize(1)
     #legend.SetMargin(0.25)
-    legend.SetTextAlign(22)
+    #legend.SetTextAlign(22)
+    legend.SetTextAlign(12)
     
     CMS.cmsDraw(h2_colz, "colz")
     
@@ -518,7 +592,7 @@ def main() :
         CMS.cmsDraw(results["obs_p1"]["contour"], "sameL", lstyle = ROOT.kDashed, lcolor = ROOT.kBlack, lwidth = 3)
         CMS.cmsDraw(results["obs_m1"]["contour"], "sameL", lstyle = ROOT.kDashed, lcolor = ROOT.kBlack, lwidth = 3)
         
-        legend.AddEntry(results["obs_p1"]["contour"], "Observed #pm 1#sigma_{theory}    ", "L")
+        legend.AddEntry(results["obs_p1"]["contour"], "Observed #pm 1#sigma_{theory}", "L")
     
     CMS.cmsDraw(results["exp"]["contour"], "sameL", lstyle = ROOT.kSolid, lcolor = ROOT.kRed+1, lwidth = 3)
     legend.AddEntry(results["exp"]["contour"], "Expected", "L")
@@ -530,7 +604,36 @@ def main() :
         
         legend.AddEntry(results["exp_p1"]["contour"], "Expected #pm 1#sigma_{experiment}", "L")
     
-    CMS.GetcmsCanvasHist(canvas).GetXaxis().SetNdivisions(6, 5, 0)
+    sign_exp_pm2 = ""
+    cont_legend = None
+    
+    if (results["exp_p2"]["contour"]) :
+        
+        sign_exp_pm2 += "#plus"
+        cont_legend = results["exp_p2"]["contour"]
+        CMS.cmsDraw(results["exp_p2"]["contour"], "sameL", lstyle = ROOT.kDotted, lcolor = ROOT.kRed+1, lwidth = 3)
+        
+        #legend.AddEntry(0, "", "")
+        #legend.AddEntry(results["exp_p2"]["contour"], "Expected #pm 2#sigma_{experiment}", "L")
+    
+    if (results["exp_m2"]["contour"]) :
+        
+        sign_exp_pm2 += "#minus"
+        cont_legend = results["exp_m2"]["contour"]
+        CMS.cmsDraw(results["exp_m2"]["contour"], "sameL", lstyle = ROOT.kDotted, lcolor = ROOT.kRed+1, lwidth = 3)
+        
+        #legend.AddEntry(0, "", "")
+        #legend.AddEntry(results["exp_p2"]["contour"], "Expected #pm 2#sigma_{experiment}", "L")
+    
+    if sign_exp_pm2 :
+        
+        sign_exp_pm2 = "#pm" if (sign_exp_pm2 == "#plus#minus") else sign_exp_pm2
+        
+        legend.AddEntry(0, "", "")
+        legend.AddEntry(cont_legend, f"Expected {sign_exp_pm2} 2#sigma_{{experiment}}", "L")
+    
+    
+    hframe.GetXaxis().SetNdivisions(6, 5, 0)
     
     canvas.SetLogy()
     
@@ -557,10 +660,14 @@ def main() :
     )
     
     #canvas.RedrawAxis()
-    legend.Draw()
-    canvas.Update()
+    #legend.Draw()
+    #canvas.Update()
     
     canvas.SetLogz()
+    
+    legend.Draw()
+    
+    CMS.UpdatePad(canvas)
     
     outfile.cd()
     canvas.Write()

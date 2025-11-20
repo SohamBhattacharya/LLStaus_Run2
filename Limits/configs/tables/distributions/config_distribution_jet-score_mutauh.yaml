@@ -1,0 +1,53 @@
+obs: # This key is the type of process. Must be one of [obs, bkg, sig]
+  obs: # This key needs to be there in the input yaml
+    label: "Data"
+
+bkg:
+  ZMT:
+    label: "DY($\\mu\\tau_\\text{h}$) + jets"
+    rootlabel: "DY(#mu#tau_{h}) + jets"
+    color: "#3f90da"
+  
+  ZLL:
+    label: "DY(other) + jets"
+    color: "#ffa90e"
+  
+  WLNu:
+    label: "W + jets"
+    color: "#b9ac70"
+  
+  Top:
+    label: "Top quark "
+    color: "#a96b59"
+  
+  QCD:
+    label: "Multijet"
+    color: "#e76300"
+  
+  Other:
+    label: "Other SM"
+    color: "#94a4a2"
+  
+  # Will be used for getting the total bkg and uncertainty for plotting
+  # Will not be added to the table if there is only one bkg source
+  total_bkg:
+    label: "Total bkg."
+    color: "#000000"
+
+sig: {}
+
+plot_bkgs: ["Other", "Top", "QCD", "WLNu", "ZLL", "ZMT"]
+legend_order_bkgs: ["ZMT", "ZLL", "WLNu", "Top", "QCD", "Other"]
+unc_label_bkg: "Uncertainty"
+
+bin_header: "Displaced $\\tau_{h}$ tagger score"
+bin_header_root: "Displaced#scale[0.4]{ }#tau_{h} tagger score"
+
+centerlabelx: false
+logy: true
+ytitle_ratio: "Data / Pred."
+yrange_ratio: [0, 2]
+ndivisionsy_ratio: [2, 5, 0]
+xrange: [0, 1]
+nvivisionsx: null
+legendheightscale: 0.8

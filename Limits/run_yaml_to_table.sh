@@ -11,15 +11,15 @@ if [ -n "$SUFFIX" ]; then
 fi
 
 REGIONS=(
-#    "BRT1"
+    "BRT1"
     "BRT2"
 )
 
 ERAS=(
-    "2016_preVFP"
-    "2016_postVFP"
-    "2017"
-    "2018"
+    #"2016_preVFP"
+    #"2016_postVFP"
+    #"2017"
+    #"2018"
     "2016_preVFP.2016_postVFP.2017.2018"
 )
 

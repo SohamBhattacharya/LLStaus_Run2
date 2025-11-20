@@ -3,11 +3,21 @@
 set -eEu
 
 #TYPE="llstau_maximally-mixed"
-TYPE="llstau_mass-degenerate"
+#TYPE="llstau_mass-degenerate"
 
-ARGS="$1"
+TYPE="$1"
 SUFFIX="$2"
 CHANNEL="$3"
+ARGS="$4"
+
+if [ "$TYPE" = "mm" ]; then
+    TYPE="llstau_maximally-mixed"
+elif [ "$TYPE" = "md" ]; then
+    TYPE="llstau_mass-degenerate"
+else
+    echo "Invalid TYPE ${TYPE}; must be mm or md"
+    exit 1
+fi
 
 if [ -n "$SUFFIX" ]; then
     SUFFIX="_${SUFFIX}"

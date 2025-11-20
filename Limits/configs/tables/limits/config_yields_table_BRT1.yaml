@@ -4,7 +4,7 @@ obs: # This key is the type of process. Must be one of [obs, bkg, sig]
 
 bkg:
   misid:
-    label: "Misid. jets"
+    label: "Background"
     color: "#92dadd"
   
   # Will be used for getting the total bkg and uncertainty for plotting
@@ -15,32 +15,33 @@ bkg:
 
 sig:
   SMS-TStauStau_MStau-100_ctau-50mm_mLSP-1:
-      label: "${[m_{\\PSGt}(100),\\ c\\tau_{0}(50)]}$"
+      label: "\\vtop{\\hbox{$m_{\\PSGt}(100)$}\\hbox{$c\\tau_{0}(50)$}}"
       rootlabel: "m_{#tilde{#tau}}=100 GeV, c#tau_{0}=50 mm"
       color: "#bd1f01"
       linestyle: 7
   
   SMS-TStauStau_MStau-100_ctau-100mm_mLSP-1:
-    label: "${[m_{\\PSGt}(100),\\ c\\tau_{0}(100)]}$"
+    label: "\\vtop{\\hbox{$m_{\\PSGt}(100)$}\\hbox{$c\\tau_{0}(100)$}}"
     rootlabel: "m_{#tilde{#tau}}=100 GeV, c#tau_{0}=100 mm"
     color: "#bd1f01"
     linestyle: 3
   
   SMS-TStauStau_MStau-200_ctau-50mm_mLSP-1:
-    label: "${[m_{\\PSGt}(200),\\ c\\tau_{0}(50)]}$"
+    label: "\\vtop{\\hbox{$m_{\\PSGt}(200)$}\\hbox{$c\\tau_{0}(50)$}}"
     rootlabel: "m_{#tilde{#tau}}=200 GeV, c#tau_{0}=50 mm"
     color: "#832db6"
     linestyle: 7
   
   SMS-TStauStau_MStau-200_ctau-100mm_mLSP-1:
-    label: "${[m_{\\PSGt}(200), c\\tau_{0}(100)]}$"
+    label: "\\vtop{\\hbox{$m_{\\PSGt}(200)$}\\hbox{$c\\tau_{0}(100)$}}"
     rootlabel: "m_{#tilde{#tau}}=200 GeV, c#tau_{0}=100 mm"
     color: "#832db6"
     linestyle: 3
 
 plot_bkgs: ["misid"]
 
-bin_header: "BRT1 bins"
+bin_header: "\\vtop{\\hbox{BRT1}\\hbox{bins}}"
+bin_header_root: "BRT1 bins"
 plot_bins: [3, 4, 5, 6, 7, 8, 9, 10]
 
 bins:
@@ -65,3 +66,6 @@ bins:
 
 centerlabelx: true
 logy: true
+yrange_ratio: [0, 2]
+ndivisionsy_ratio: [2, 5, 0]
+group_sigs: true

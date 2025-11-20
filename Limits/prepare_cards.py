@@ -15,6 +15,8 @@ import utils.commonutils as cmut
 from utils.commonutils import yaml
 
 
+ZERO_THRESHOLD = 0.001 # Minimum value for a bin to be considered non-zero
+
 STAT_LABEL = "stat"
 STAT_GMN_LABEL = f"{STAT_LABEL}_gmN"
 STAT_GMN_LABEL_REMOVE = f"{STAT_LABEL}_gmN_REMOVE"
@@ -26,6 +28,8 @@ STAT_REGEX_NO_GMN = f"{STAT_LABEL}_(?!gmN).*"
 SYST_REGEX = f"{SYST_LABEL}.*"
 STAT_GMN_LABEL_REMOVE_REGEX = f"{STAT_GMN_LABEL_REMOVE}.*"
 
+ERA_ADDED_STR = "added"
+
 
 def fix_stat_gmN(l_fnames) :
     
@@ -34,7 +38,8 @@ def fix_stat_gmN(l_fnames) :
         cmut.logger.info(f"Fixing gmN stat entries [{fname}]")
         nspaces = len(STAT_GMN_LABEL) - len(STAT_LABEL) - 2 # -2 for the ' 0' after gmN
         str_spaces = " "*nspaces
-        sed_cmd = f"sed -i -E \"s/{STAT_GMN_LABEL}(.+)lnN/{STAT_LABEL}\\1{str_spaces}gmN 0/g\" {fname}"
+        #sed_cmd = f"sed -i -E \"s/{STAT_GMN_LABEL}(.+)lnN/{STAT_LABEL}\\1{str_spaces}gmN 0/g\" {fname}"
+        sed_cmd = f"sed -i -E \"s/{STAT_GMN_LABEL}_([0-9]+.?[0-9]+?)_(.*)lnN/{STAT_LABEL}_\\2{str_spaces}gmN \\1/g\" {fname}"
         #print(sed_cmd)
         retval = os.system(sed_cmd)
         
@@ -45,6 +50,74 @@ def fix_stat_gmN(l_fnames) :
 
 
 def set_stat_errs(
+    ch_obj,
+    target,
+    bin_name,
+    val,
+    err,
+    alpha = None
+) :
+    """
+    alpha is the extrapolation factor: n=alpha*N
+    n is the yield
+    N is the raw count
+    For e.g.: alpha can be the normalization factor xsec*lumi/Ntot
+    """
+    
+    if val >= ZERO_THRESHOLD :
+        
+        err_u_rel = numpy.clip(1.0+(err/val), 0.001, 2.0)
+        err_d_rel = numpy.clip(1.0-(err/val), 0.001, 2.0)
+        
+        #print("stat", bin_id, bin_name, val, err, err_rel)
+        
+        ch_obj.cp().bin([bin_name]).AddSyst(
+            target = target,
+            #name = "stat_$PROCESS_$BIN_chn_$CHANNEL_$ERA",
+            name = f"{STAT_LABEL}_$PROCESS_$BIN",
+            type = "lnN",
+            valmap = ch.SystMap()(
+                (err_d_rel, err_u_rel)
+            )
+        )
+            
+        # Note: ch.SystMap()((err_rel)) produces "incorrect" values when calling GetUncertainty()
+        # Check description of lnN here: http://cms-analysis.github.io/HiggsAnalysis-CombinedLimit/latest/part2/settinguptheanalysis/#a-simple-counting-experiment
+        # If a single-value 1+d is provided, the relative error is evaluated as: ((1+d) - 1/(1+d))/2
+        # Whereas, if 1-d/1+d is provided, the relative error is evaluated as: ((1+d) - (1-d))/2 = d
+    
+    # gmN error if the yield is 0
+    # CombineHarvester cannot handle gmN
+    # Set it as lnN first
+    # Then change these lines in the card
+    else :
+        
+        if alpha :
+            
+            gmN_N = int(round(val / alpha))
+            
+            ch_obj.cp().bin([bin_name]).AddSyst(
+                target = target,
+                name = f"{STAT_GMN_LABEL}_{gmN_N}_$PROCESS_$BIN",
+                type = "lnN",
+                valmap = ch.SystMap()(
+                    (float(alpha))
+                )
+            )
+        
+        else :
+            
+            ch_obj.cp().bin([bin_name]).AddSyst(
+                target = target,
+                name = f"{STAT_LABEL}_$PROCESS_$BIN",
+                type = "lnN",
+                valmap = ch.SystMap()(
+                    (0.001, 2.0)
+                )
+            )
+
+
+def set_stat_errs_from_hist(
     ch_obj,
     target,
     hist,
@@ -65,62 +138,51 @@ def set_stat_errs(
         val = hist.GetBinContent(bin_id)
         val = 0 if (val < 0) else val
         
-        if val :
-            
-            err = hist.GetBinError(bin_id)
-            #err_rel = numpy.clip(1.0+(err/val), 0.001, 2.0)
-            
-            err_u_rel = numpy.clip(1.0+(err/val), 0.001, 2.0)
-            err_d_rel = numpy.clip(1.0-(err/val), 0.001, 2.0)
-            
-            #print("stat", bin_id, bin_name, val, err, err_rel)
-            
-            ch_obj.cp().bin([bin_name]).AddSyst(
-                target = target,
-                #name = "stat_$PROCESS_$BIN_chn_$CHANNEL_$ERA",
-                name = f"{STAT_LABEL}_$PROCESS_$BIN",
-                type = "lnN",
-                valmap = ch.SystMap()(
-                    (err_d_rel, err_u_rel)
-                )
-            )
-             
-            # Note: ch.SystMap()((err_rel)) produces "incorrect" values when calling GetUncertainty()
-            # Check description of lnN here: http://cms-analysis.github.io/HiggsAnalysis-CombinedLimit/latest/part2/settinguptheanalysis/#a-simple-counting-experiment
-            # If a single-value 1+d is provided, the relative error is evaluated as: ((1+d) - 1/(1+d))/2
-            # Whereas, if 1-d/1+d is provided, the relative error is evaluated as: ((1+d) - (1-d))/2 = d
-            
+        err = hist.GetBinError(bin_id)
         
-        # gmN error if the yield is 0
-        # CombineHarvester cannot handle gmN
-        # Set it as lnN first
-        # Then change these lines in the card
-        else :
-            
-            if alpha :
-                
-                ch_obj.cp().bin([bin_name]).AddSyst(
-                    target = target,
-                    name = f"{STAT_GMN_LABEL}_$PROCESS_$BIN",
-                    type = "lnN",
-                    valmap = ch.SystMap()(
-                        (float(alpha))
-                    )
-                )
-            
-            else :
-                
-                ch_obj.cp().bin([bin_name]).AddSyst(
-                    target = target,
-                    name = f"{STAT_LABEL}_$PROCESS_$BIN",
-                    type = "lnN",
-                    valmap = ch.SystMap()(
-                        (0.001, 2.0)
-                    )
-                )
+        set_stat_errs(
+            ch_obj = ch_obj,
+            target = target,
+            bin_name = bin_name,
+            val = val,
+            err = err,
+            alpha = alpha,
+        )
 
 
 def set_syst_errs(
+    ch_obj,
+    target,
+    bin_name,
+    val,
+    err_u,
+    err_d,
+    systname,
+    iseracorr,
+) :
+   
+    # Do not allow val+-err to go too small (below 0.002)
+    err_u_rel = numpy.clip(1.0+(err_u/val), 0.002/val, 2.0) if (val >= 0.002) else 1.001
+    err_d_rel = numpy.clip(1.0+(err_d/val), 0.002/val, 2.0) if (val >= 0.002) else 0.999
+    
+    name_tmp = systname
+    
+    if not name_tmp.startswith(SYST_LABEL) :
+        name_tmp = f"{SYST_LABEL}_{name_tmp}"
+    
+    if (not iseracorr) :
+        name_tmp = f"{name_tmp}_$ERA"
+    
+    ch_obj.cp().bin([bin_name]).AddSyst(
+        target = target,
+        name = name_tmp,
+        type = "lnN",
+        valmap = ch.SystMap()(
+            (err_d_rel, err_u_rel)
+        )
+    )
+
+def set_syst_errs_from_hist(
     ch_obj,
     target,
     hist_nom,
@@ -152,21 +214,36 @@ def set_syst_errs(
         err_u = eval(operation_u.format(**d_fmt)) if operation_u else err_u
         err_d = eval(operation_d.format(**d_fmt)) if operation_d else err_d
         
-        err_u_rel = numpy.clip(1.0+(err_u/val), 0.001, 2.0) if val else 1.001
-        err_d_rel = numpy.clip(1.0+(err_d/val), 0.001, 2.0) if val else 0.999
+        #err_u_rel = numpy.clip(1.0+(err_u/val), 0.001, 2.0) if val else 1.001
+        #err_d_rel = numpy.clip(1.0+(err_d/val), 0.001, 2.0) if val else 0.999
         
-        name_tmp = f"{SYST_LABEL}_{systname}"
+        ## Do not allow val+-err to go too small (below 0.002)
+        #err_u_rel = numpy.clip(1.0+(err_u/val), 0.002/val, 2.0) if (val >= 0.002) else 1.001
+        #err_d_rel = numpy.clip(1.0+(err_d/val), 0.002/val, 2.0) if (val >= 0.002) else 0.999
+        #
+        #name_tmp = f"{SYST_LABEL}_{systname}"
+        #
+        #if (not iseracorr) :
+        #    name_tmp = f"{name_tmp}_$ERA"
+        #
+        #ch_obj.cp().bin([bin_name]).AddSyst(
+        #    target = target,
+        #    name = name_tmp,
+        #    type = "lnN",
+        #    valmap = ch.SystMap()(
+        #        (err_d_rel, err_u_rel)
+        #    )
+        #)
         
-        if (not iseracorr) :
-            name_tmp = f"{name_tmp}_$ERA"
-        
-        ch_obj.cp().bin([bin_name]).AddSyst(
+        set_syst_errs(
+            ch_obj = ch_obj,
             target = target,
-            name = name_tmp,
-            type = "lnN",
-            valmap = ch.SystMap()(
-                (err_d_rel, err_u_rel)
-            )
+            bin_name = bin_name,
+            val = val,
+            err_u = err_u,
+            err_d = err_d,
+            systname = systname,
+            iseracorr = iseracorr
         )
 
 
@@ -263,7 +340,7 @@ def get_and_set_syst_errs(
             #hist_proc_syst.Print("range")
             d_hist_proc_syst[systname][systvar] = hist_proc_syst
         
-        set_syst_errs(
+        set_syst_errs_from_hist(
             ch_obj = ch_obj,
             target = target,
             hist_nom = hist_nom,
@@ -401,14 +478,29 @@ def main() :
     
     parser.add_argument(
         "--yields_uncs_sigs",
-        help = "File containing list of signals to be included in the yields and uncertainties yamls; if not provided, all signals will be included",
+        help = "File containing list of signals to be included in the yield and uncertainty yamls; if not provided, all signals will be included",
         type = str,
         required = False
     )
     
     parser.add_argument(
+        "--sigs",
+        help = "File containing list of signals to be processed; if not provided, all signals will be processed",
+        type = str,
+        required = False,
+        default = None
+    )
+    
+    parser.add_argument(
         "--nocards",
         help = "Will not create datacards",
+        action = "store_true",
+        default = False,
+    )
+    
+    parser.add_argument(
+        "--era_added_cards",
+        help = "Will add (i.e. sum up eras in each bin) the eras together to create an additional set of cards",
         action = "store_true",
         default = False,
     )
@@ -431,6 +523,8 @@ def main() :
     l_analyses = []
     l_channels = []
     l_eras = []
+    
+    l_categories_era_added = []
     
     # Key structure: dict[(analysis, channel, era)]
     d_config_all = {}
@@ -528,9 +622,11 @@ def main() :
         lumi = eval(d_config["lumi"]) if isinstance(d_config["lumi"], str) else d_config["lumi"]
         binstart = d_config["binstart"]
         categories = [(_binnum, f"bin{_binnum}_{channel}_{era}") for _binnum in range(binstart, binstart+nbins)]
+        l_categories_era_added.extend([(_binnum, f"bin{_binnum}_{channel}_{ERA_ADDED_STR}") for _binnum in range(binstart, binstart+nbins)])
         bin_ids = [_cat[0] for _cat in categories]
         bin_names = [_cat[1] for _cat in categories]
         l_sig_processes = []
+        l_sig_processes_yields_uncs = []
         l_bkg_processes = list(d_config["bkg"]["procs"].keys())
         
         d_bin_ids[analysis][channel][era].extend(bin_ids)
@@ -545,6 +641,18 @@ def main() :
                 d_config["sig"].update(cmut.load_config(d_config["sig"]["loadconfig"]))
             
             l_sig_processes = list(d_config["sig"]["procs"].keys())
+            
+            if args.sigs :
+                l_sig_processes_tmp = numpy.loadtxt(args.sigs, dtype = str)
+                l_sig_processes = [_proc for _proc in l_sig_processes if _proc in l_sig_processes_tmp]
+            
+            if args.yields_uncs_sigs :
+                l_sig_processes_yields_uncs = numpy.loadtxt(args.yields_uncs_sigs, dtype = str)
+            
+            # If --nocards is set, then only include the signal processes for which the yield and uncertainty yamls are to be stored
+            if args.nocards and args.yields_uncs_sigs :
+                
+                l_sig_processes = [_proc for _proc in l_sig_processes if _proc in l_sig_processes_yields_uncs]
             
             cb.AddProcesses(
                 mass = l_sig_processes,
@@ -577,6 +685,10 @@ def main() :
             scale_allprocs_sig = eval(d_config["sig"].get("scaleby_allprocs", "1.0"))
             
             for procname, procinfo in d_config["sig"]["procs"].items() :
+                
+                if procname not in l_sig_processes :
+                    
+                    continue
                 
                 samples = procinfo["samples"]
                 issusy = procinfo["issusy"]
@@ -637,7 +749,7 @@ def main() :
                 
                 if not l_bin_edges :
                     
-                    l_bin_edges = [hist_proc_nom.GetBinLowEdge(_bin) for _bin in bin_ids] + [hist_proc_nom.GetXaxis().GetBinUpEdge(bin_ids[-1])]
+                    l_bin_edges = [hist_proc_nom.GetXaxis().GetBinLowEdge(_bin) for _bin in bin_ids] + [hist_proc_nom.GetXaxis().GetBinUpEdge(bin_ids[-1])]
                 
                 #hist_proc_nom.Print("range")
                 
@@ -653,7 +765,7 @@ def main() :
                         0.001 if (not hist_proc_nom.GetBinContent(x.bin_id()) and not alpha) else hist_proc_nom.GetBinContent(x.bin_id())
                 ))
                 
-                set_stat_errs(
+                set_stat_errs_from_hist(
                     ch_obj = cb.cp().mass([procname]).process(["sig"]).era([era]),
                     target = cb,
                     hist = hist_proc_nom,
@@ -726,6 +838,7 @@ def main() :
             ismc = procinfo["ismc"]
             inhistfile = ROOT.TFile.Open(procinfo["histfile"])
             cutflows_bkg = cmut.load_config(d_config["bkg"]["cutflowsfile"])
+            neventkey = d_config["bkg"]["neventkey"]
             samples = procinfo["samples"]
             
             d_bkg_procs[analysis][channel][era].append(procname)
@@ -763,7 +876,7 @@ def main() :
             
             if not l_bin_edges :
                 
-                l_bin_edges = [hist_proc_nom.GetBinLowEdge(_bin) for _bin in bin_ids] + [hist_proc_nom.GetBinUpEdge(bin_ids[-1])]
+                l_bin_edges = [hist_proc_nom.GetXaxis().GetBinLowEdge(_bin) for _bin in bin_ids] + [hist_proc_nom.GetXaxis().GetBinUpEdge(bin_ids[-1])]
             
             alpha = procinfo.get(
                 "alpha",
@@ -778,7 +891,7 @@ def main() :
             ))
             
             print(f"[{procname}] [alpha {alpha}]")
-            set_stat_errs(
+            set_stat_errs_from_hist(
                 ch_obj = cb.cp().process([procname]).era([era]),
                 target = cb,
                 hist = hist_proc_nom,
@@ -887,9 +1000,6 @@ def main() :
         
         if (args.pseudodata == "B") :
             
-            #for bin_id, bin_name in zip(bin_ids, bin_names) :
-            #    print("Bkg", bin_id, bin_name, cb.cp().channel([channel]).process(l_bkg_processes).era([era]).bin_id([bin_id]).GetRate())
-            
             cb.cp().channel([channel]).era([era]).ForEachObs(
                 lambda x : x.set_rate(
                     cb.cp().channel([channel]).process(l_bkg_processes).era([era]).bin_id([x.bin_id()]).GetRate()
@@ -904,43 +1014,6 @@ def main() :
                         cb.cp().channel([channel]).process(l_bkg_processes).era([era]).bin_id([x.bin_id()]).GetRate() +
                         cb.cp().mass([procname]).channel([channel]).process(["sig"]).era([era]).bin_id([x.bin_id()]).GetRate()
                 ))
-        
-        #for bin_id, bin_name in zip(bin_ids, bin_names) :
-        #    
-        #    #print("Obs", bin_id, bin_name, cb.cp().channel([channel]).era([era]).bin_id([bin_id]).GetObservedRate())
-        #    
-        #    #stat_name = f"stat.*bin{bin_id}.*"
-        #    #stat_name = f"stat.*"
-        #    #stat_name = f"stat_(?!gmN).*"
-        #    stat_name = f"{STAT_GMN_LABEL}.*"
-        #    
-        #    syst_name = "syst.*"
-        #    #syst_name = "syst_fr_region"
-        #    #syst_name = "syst_fr_stat.*"
-        #    #syst_name = "syst_fr_stat.*"
-        #    
-        #    #cb_bkg_stat = cb.cp().process(l_bkg_processes).syst_name([stat_name])
-        #    cb_bkg_stat = cb.cp().process(l_bkg_processes).bin_id([bin_id]).syst_name([stat_name])
-        #    cb_bkg_syst = cb.cp().process(l_bkg_processes).bin_id([bin_id]).syst_name([syst_name])
-        #    cb_bkg = cb.cp().process(l_bkg_processes).bin_id([bin_id])
-        #    
-        #    print()
-        #    print("*"*100)
-        #    print(
-        #        ("bkg", bin_id, bin_name),
-        #        ("rate", f"{cb_bkg.GetRate():0.3f}"),
-        #        #("unc", f"{cb_bkg.GetUncertainty():0.3f}", f"{1+cb_bkg.GetUncertainty()/cb_bkg.GetRate():0.3f}"),
-        #        (stat_name, f"{cb_bkg_stat.GetUncertainty():0.3f}", f"{1+cb_bkg_stat.GetUncertainty()/cb_bkg.GetRate():0.3f}"),
-        #        #(syst_name, f"{cb_bkg_syst.GetUncertainty():0.3f}", f"{1+cb_bkg_syst.GetUncertainty()/cb_bkg.GetRate():0.3f}"),
-        #    )
-        #    
-        #    cb_bkg_stat.PrintSysts()
-        #    #cb_bkg.PrintSysts()
-    
-    #l_tmp = []
-    #cb.cp().mass([procname]).process(["sig"]).era([era]).ForEachSyst(lambda x: l_tmp.append((x.value_u(), x.value_d())))
-    #print(l_tmp)
-    #exit()
     
     if args.yields_uncs :
         
@@ -956,7 +1029,7 @@ def main() :
                     
                     l_eras_tmp.append(list(d_bin_ids[analysis][channel].keys()))
                 
-                for eras in l_eras_tmp :
+                for ieras, eras in enumerate(l_eras_tmp) :
                     
                     d_yields = {}
                     d_systematics = {}
@@ -982,8 +1055,9 @@ def main() :
                     
                     if args.yields_uncs_sigs :
                         
-                        l_sig_processes_sel = numpy.loadtxt(args.yields_uncs_sigs, dtype = str)
-                        l_sig_processes = [_proc for _proc in l_sig_processes if _proc in l_sig_processes_sel]
+                        #l_sig_processes_sel = numpy.loadtxt(args.yields_uncs_sigs, dtype = str)
+                        #l_sig_processes = [_proc for _proc in l_sig_processes if _proc in l_sig_processes_sel]
+                        l_sig_processes = [_proc for _proc in l_sig_processes if _proc in l_sig_processes_yields_uncs]
                     
                     if not args.blind :
                         
@@ -1196,7 +1270,9 @@ def main() :
                             "unc_syst": cb_sig_syst.GetUncertainty(),
                         }
                     
-                    d_yields["bin_edges"] = l_bin_edges
+                    d_yields[eras_str]["bin_edges"] = l_bin_edges
+                    d_yields[eras_str]["binstart"] = binstart
+                    d_yields[eras_str]["nbins"] = nbins
                     
                     outdir = f"{args.outdir}/{analysis}/yields_and_systematics"
                     os.system(f"mkdir -p {outdir}")
@@ -1214,6 +1290,137 @@ def main() :
                         yaml.dump(d_systematics, fopen)
                     
                     cmut.logger.info(f"Written systematics [{outyamlname}]")
+                    
+                    # Era added card
+                    if args.era_added_cards and len(l_eras) > 1 :
+                        
+                        l_categories_era_added = slist(set(l_categories_era_added))
+                        
+                        if ieras == len(l_eras_tmp)-1 :
+                            
+                            cb_era_added = ch.CombineHarvester()
+                            cb_era_added.SetFlag("filters-use-regex", True)
+                            
+                            cb_era_added.AddProcesses(
+                                mass = l_sig_processes,
+                                analysis = [analysis],
+                                era = [ERA_ADDED_STR],
+                                channel = [channel],
+                                procs = ["sig"],
+                                bin = l_categories_era_added,
+                                signal = True,
+                            )
+                            
+                            cb_era_added.AddProcesses(
+                                mass = ["*"],
+                                analysis = [analysis],
+                                era = [ERA_ADDED_STR],
+                                channel = [channel],
+                                procs = l_bkg_processes,
+                                bin = l_categories_era_added,
+                                signal = False,
+                            )
+                            
+                            cb_era_added.AddObservations(
+                                mass = ["*"],
+                                analysis = [analysis],
+                                era = [ERA_ADDED_STR],
+                                channel = [channel],
+                                bin = l_categories_era_added,
+                            )
+                            
+                            for bkg_proc in l_bkg_processes :
+                                
+                                cb_tmp = cb.cp().channel([channel]).process([bkg_proc])
+                                cb_era_added_tmp = cb_era_added.cp().era([ERA_ADDED_STR]).channel([channel]).process([bkg_proc])
+                                
+                                cb_era_added_tmp.ForEachProc(
+                                    lambda x : x.set_rate(
+                                        d_yields[eras_str][bkg_proc][x.bin_id()]["yield"]
+                                ))
+                                
+                                l_systematics = cb_tmp.cp().syst_name([SYST_REGEX]).syst_name_set()
+                                #print("*"*10, l_systematics)
+                                
+                                for bin_id, bin_name in l_categories_era_added :
+                                    
+                                    set_stat_errs(
+                                        ch_obj = cb_era_added_tmp,
+                                        target = cb_era_added,
+                                        bin_name = bin_name,
+                                        val = d_yields[eras_str][bkg_proc][bin_id]["yield"],
+                                        err = d_yields[eras_str][bkg_proc][bin_id]["unc_stat"],
+                                        alpha = None
+                                    )
+                                    
+                                    for systname in l_systematics :
+                                        
+                                        cb_tmp_syst = cb_tmp.cp().bin_id([bin_id]).syst_name([systname])
+                                        
+                                        set_syst_errs(
+                                            ch_obj = cb_era_added_tmp,
+                                            target = cb_era_added,
+                                            bin_name = bin_name,
+                                            val = d_yields[eras_str][bkg_proc][bin_id]["yield"],
+                                            err_u = cb_tmp_syst.GetUncertainty(),
+                                            err_d = -cb_tmp_syst.GetUncertainty(),
+                                            systname = systname,
+                                            iseracorr = True,
+                                        )
+                            
+                            #print("$"*20, l_sig_processes)
+                            for sig_proc in l_sig_processes :
+                                
+                                cb_tmp = cb.cp().channel([channel]).mass([sig_proc])
+                                cb_era_added_tmp = cb_era_added.cp().era([ERA_ADDED_STR]).channel([channel]).mass([sig_proc])
+                                
+                                cb_era_added_tmp.ForEachProc(
+                                    lambda x : x.set_rate(
+                                        d_yields[eras_str][sig_proc][x.bin_id()]["yield"]
+                                ))
+                                
+                                l_systematics = cb_tmp.cp().syst_name([SYST_REGEX]).syst_name_set()
+                                
+                                for bin_id, bin_name in l_categories_era_added :
+                                    
+                                    set_stat_errs(
+                                        ch_obj = cb_era_added_tmp,
+                                        target = cb_era_added,
+                                        bin_name = bin_name,
+                                        val = d_yields[eras_str][sig_proc][bin_id]["yield"],
+                                        err = d_yields[eras_str][sig_proc][bin_id]["unc_stat"],
+                                        alpha = None
+                                    )
+                                    
+                                    for systname in l_systematics :
+                                        
+                                        cb_tmp_syst = cb_tmp.cp().bin_id([bin_id]).syst_name([systname])
+                                        
+                                        set_syst_errs(
+                                            ch_obj = cb_era_added_tmp,
+                                            target = cb_era_added,
+                                            bin_name = bin_name,
+                                            val = d_yields[eras_str][sig_proc][bin_id]["yield"],
+                                            err_u = cb_tmp_syst.GetUncertainty(),
+                                            err_d = -cb_tmp_syst.GetUncertainty(),
+                                            systname = systname,
+                                            iseracorr = False,
+                                        )
+                            
+                            cb_era_added.cp().era([ERA_ADDED_STR]).channel([channel]).ForEachObs(
+                                lambda x : x.set_rate(
+                                    d_yields[eras_str]["obs"][x.bin_id()]["yield"]
+                            ))
+                            
+                            cb_era_added.SetFlag("filters-use-regex", False)
+                            #cb_era_added.PrintAll()
+                            
+                            writer = ch.CardWriter(
+                                "$TAG/$ANALYSIS/channels_$CHANNEL/eras_added/$MASS/card_ana_$ANALYSIS_mss_$MASS_chn_$CHANNEL_era_$ERA.txt",
+                                "/tmp/dummy_combineharvester_input.root",
+                            )
+                            writer_ret = writer.WriteCards(args.outdir, cb_era_added)
+                            fix_stat_gmN([_key for _key, _val in writer_ret])
     
     
     if not args.nocards :

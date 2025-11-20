@@ -20,7 +20,7 @@ def main() :
         choices = [
             "2016_preVFP",
             "2016_postVFP",
-            "2016_preVFP.2016_postVFP",
+            #"2016_preVFP.2016_postVFP",
             "2017",
             "2018"
         ]
@@ -28,7 +28,7 @@ def main() :
     
     parser.add_argument(
         "--outsuffix",
-        help = "Will append \"_outsuffix\" to the output directory",
+        help = "Will append \"_<outsuffix>\" to the output directory",
         type = str,
         required = False,
     )
@@ -38,57 +38,85 @@ def main() :
     
     d_distributions = {}
     
+    # nbins = -1 will set nbins = len(rebin) - binstart
+    
+    d_distributions["jet2_pt"] = {
+        "rebin": [
+          0,
+          30,
+          50,
+          100,
+          300,
+          500,
+        ],
+        "binstart": 1,
+        "nbins": -1,
+    }
+    
     d_distributions["METpt"] = {
         "rebin": [
           0,
           120,
           150,
+          200,
           250,
+          350,
           500,
         ],
-        "binstart": 2,
-        "nbins": 3,
+        "binstart": 1,
+        "nbins": -1,
+    }
+    
+    d_distributions["mt2_j1_j2_MET"] = {
+        "rebin": [
+          0,
+          54,
+          102,
+          150,
+          204,
+          300,
+        ],
+        "binstart": 1,
+        "nbins": -1,
     }
     
     d_config_files = {}
     
     d_config_files["2016_preVFP"] = [
-        "configs/distributions/2016_preVFP/config_distrubution_var.yaml"
+        "configs/distributions/2016_preVFP/config_distribution_var_BRT2.yaml"
     ]
     
     d_config_files["2016_postVFP"] = [
-        "configs/distributions/2016_postVFP/config_distrubution_var.yaml"
+        "configs/distributions/2016_postVFP/config_distribution_var_BRT2.yaml"
     ]
     
     d_config_files["2017"] = [
-        "configs/distributions/2017/config_distrubution_var.yaml"
+        "configs/distributions/2017/config_distribution_var_BRT2.yaml"
     ]
     
     d_config_files["2018"] = [
-        "configs/distributions/2018/config_datacard_var.yaml"
+        "configs/distributions/2018/config_distribution_var_BRT2.yaml"
     ]
     
     l_config_files = []
     
     for era in args.eras :
         
-        l_config_files.append(d_config_files[era])
+        l_config_files.extend(d_config_files[era])
     
     username = getpass.getuser()
     tmp_dir = f"/tmp/{username}"
     
-    outdir = f"results/distributions"
+    outdir = "results/distributions"
     
     outdir = f"{outdir}_{args.outsuffix}" if len(args.outsuffix) else outdir
     os.system(f"mkdir -p {outdir}")
     
-    for dist_name, dist_info in d_distributions.items() :
+    for varname, dist_info in d_distributions.items() :
         
-        nametag = f"{key_wp}_{key_dxy}"
+        cmut.logger.info(f"Starting to process [{varname}]")
         
-        cmut.logger.info(f"Preparing cards for [wp {key_wp}], [dxy {key_dxy}], [rebin {rebin}], [binstart {binstart}], [nbins {nbins}]")
-        
-        config_files_wp = []
+        l_config_files_tmp = []
         
         for cfg_file in l_config_files:
             
@@ -99,48 +127,52 @@ def main() :
                 file_content = fin.read()
             
             formatinfo = {
-                "dist_name": dist_name,
-                "rebin": rebin,
-                "binstart": binstart,
-                "nbins": nbins,
+                "varname": varname,
+                "rebin": dist_info["rebin"],
+                "binstart": dist_info["binstart"],
+                "nbins": dist_info["nbins"] if dist_info["nbins"] > 0 else len(dist_info["rebin"]) - dist_info["binstart"],
             }
             
             file_content = file_content.format(**formatinfo)
             
             fname, fext = os.path.splitext(os.path.basename(cfg_file))
             os.system(f"mkdir -p {tmp_dir}")
-            fout_name = f"{tmp_dir}/{fname}_{key_wp}_{key_dxy}_{time.time_ns()}{fext}"
+            #fout_name = f"{tmp_dir}/{fname}_{varname}_{time.time_ns()}{fext}"
+            fout_name = f"{tmp_dir}/{fname}_{varname}{fext}"
+            fout_name = f"{tmp_dir}/{os.path.splitext(cfg_file)[0].replace('/', '_')}_{varname}{fext}"
             cmut.logger.info(f"Writing {cfg_file} --> {fout_name}")
             
             with open(fout_name, "w") as fout :
                 
                 fout.write(file_content)
-                config_files_wp.append(fout_name)
+                l_config_files_tmp.append(fout_name)
         
         #if (args.era != "2016_preVFP.2016_postVFP") :
         #    print(args.era)
         #    exit(1)
         
-        cmd = (
-            "set -x; python3 prepare_cards.py"
-            f" --configs {' '.join(config_files_wp)}"
-            f" --outdir {outdir}"
-            f" --combpars channel"
-            #" --yields_uncs"
-            #f" --chcombos mutau_pass,mutau_fail"
-        )
+        cmd = " ".join([
+            "set -x; python3 prepare_cards.py",
+            f"--configs {' '.join(l_config_files_tmp)}",
+            #f"--outdir {outdir}",
+            "--yields_uncs",
+            "--yields_uncs_sigs configs/distributions/sig_list_for-distributions.txt",
+            "--nocards",
+            "--combpars era",
+            f"--outdir {outdir}",
+        ])
         
-        cmd += f" --eracombos {args.era.replace('.', ',')}" * int(args.era == "2016_preVFP.2016_postVFP")
+        #cmd += f" --eracombos {args.era.replace('.', ',')}" * int(args.era == "2016_preVFP.2016_postVFP")
         
         cmd_retval = os.system(cmd)
         
         if (not cmd_retval) :
             
-            cmut.logger.info(f"Prepared cards for [wp {key_wp}], [dxy {key_dxy}] in {outdir}")
+            cmut.logger.info(f"Processed [{varname}]")
         
         else :
             
-            cmut.logger.info(f"Failure preparing cards for [wp {key_wp}], [dxy {key_dxy}]. Exiting...")
+            cmut.logger.info(f"Failure processing [{varname}]. Exiting...")
             exit(cmd_retval)
         
         #print("="*100)

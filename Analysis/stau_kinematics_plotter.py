@@ -156,11 +156,11 @@ def main() :
             hist.SetTitle(d_stautype_label[stautype])
             hist.SetMarkerColor(istautype+1)
             hist.SetLineColor(istautype+1)
-            hist.SetLineWidth(3)
-            hist.SetMarkerSize(0)
+            hist.SetLineWidth(2)
+            #hist.SetMarkerSize(0)
             hist.SetFillStyle(0)
             hist.SetDrawOption("hist E1")
-            #hist.SetOption("hist")
+            hist.SetOption("hist E1")
             
             l_hist.append(hist)
         
@@ -174,7 +174,7 @@ def main() :
             xtitle = d_xtitle[histname],
             ytitle = "a.u.",
             xtitle_ratio = d_xtitle[histname],
-            ytitle_ratio = f"Ratio w.r.t. {l_hist[-1].GetTitle()}",
+            ytitle_ratio = f"Ratio wrt {l_hist[-1].GetTitle()}",
             centertitlex = True, centertitley = True,
             centerlabelx = False, centerlabely = False,
             gridx = True, gridy = True,

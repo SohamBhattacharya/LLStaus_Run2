@@ -2,4 +2,4 @@
 
 naf --machine 23 "-o ControlMaster=no -o ControlPath=~/.ssh/control:%r@%h:%p"
 
-rsync -asP -e "ssh -o ControlMaster=no -o ControlPath=~/.ssh/control:%C" configs *.py *.sh sobhatta@naf-cms23.desy.de:/data/dust/user/sobhatta/work/LongLivedStaus/LLStaus_Run2/Limits/
+rsync -asP -e "ssh -o ControlMaster=no -o ControlPath=~/.ssh/control:%r@%h:%p" configs *.py *.sh sobhatta@naf-cms23.desy.de:/data/dust/user/sobhatta/work/LongLivedStaus/LLStaus_Run2/Limits/

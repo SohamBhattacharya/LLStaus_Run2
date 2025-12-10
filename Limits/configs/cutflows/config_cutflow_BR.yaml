@@ -1,0 +1,76 @@
+analysis: llstau_maximally-mixed
+channel: BR
+
+procs: "configs/cutflows/sig_procs_for-cutflows.yaml"
+#xsecfile: "/data/dust/user/sobhatta/work/LongLivedStaus/LLStaus_Run2/Analysis/configs/crosssections_stau_maximally-mixed_hepi-fast.csv"
+xsecfile: "/media/soham/D/Programs/DESY/LongLivedStaus/LLStaus_Run2/Analysis/configs/crosssections_stau_maximally-mixed_hepi-fast.csv"
+
+eras:
+  - label: "2016_postVFP"
+    lumi: 16.8
+    scaleby: "1"
+    cutflowsfile: "/media/soham/D/Programs/DESY/LongLivedStaus/Documentation/HEPData/EXO-24-020_HEPData/data/cutflows_2016_preVFP.json"
+  
+  - label: "2016_preVFP"
+    lumi: 19.5
+    scaleby: "1"
+    cutflowsfile: "/media/soham/D/Programs/DESY/LongLivedStaus/Documentation/HEPData/EXO-24-020_HEPData/data/cutflows_2016_postVFP.json"
+  
+  - label: "2017"
+    lumi: 41.48
+    scaleby: "1"
+    cutflowsfile: "/media/soham/D/Programs/DESY/LongLivedStaus/Documentation/HEPData/EXO-24-020_HEPData/data/cutflows_2017.json"
+  
+  - label: "2018"
+    lumi: 59.83
+    scaleby: "1"
+    cutflowsfile: "/media/soham/D/Programs/DESY/LongLivedStaus/Documentation/HEPData/EXO-24-020_HEPData/data/cutflows_2018.json"
+
+# Count to use (from cutflowsfile) in the denominator when normalizing
+# Nested keys separated by "."
+# For e.g. if "a.b.c", will read the dictionary entry dict[a][b][c]
+# Will use the first key it finds
+#neventkey:
+#  - "all.sig_lifetime_reweighting"
+#  - "all.BeforeCuts"
+
+neventkey: "all.BeforeCuts"
+
+scaleby_allprocs: "1"
+
+cuts:
+  - key: "all.BeforeCuts"
+    label: "Total"
+    scaleby: "1"
+  
+  - key: "all.Trigger"
+    label: "Satisfies $p^\\text{miss}_\\text{T}$ triggers"
+    scaleby: "1"
+  
+  - key: "all.MET filters"
+    label: "Passes filters"
+    scaleby: "1"
+  
+  - key: "all.elec_veto"
+    label: "No veto-electrons or veto-muons"
+    scaleby: "1"
+  
+  - key: "all.no_b_tagged_jets"
+    label: "No b-tagged jets"
+    scaleby: "1"
+  
+  - key: "all.MET_trigger_sfs"
+    label: "Offline $p^\\text{miss}_\\text{T} > 120$ GeV"
+    scaleby: "1"
+  
+  - key: "all.two_loose_jets"
+    label: "Exactly 2 $\\tau^\\text{dis}_\\text{h}$ candidate jets"
+    scaleby: "1"
+  
+  - key: "all.dphi_min_cut"
+    label: "$\\Delta\\phi(\\text{j1}, \\text{j2}) > 0.5$"
+    scaleby: "1"
+  
+  - key: "all.ht_soft_forward_cut"
+    label: "$\\HT^{\\text{soft, fwd}} < 50$ GeV"
+    scaleby: "1"

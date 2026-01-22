@@ -227,9 +227,11 @@ def main () :
                     logy = True
                     ymin = 1e-2
                     hist_data = d_hist[ch_info["data"]]
+                    gr_data = ROOT.TGraphAsymmErrors(hist_data.GetNbinsX())
                     
                     for bin in range(hist_data.GetNbinsX()) :
                         
+                        bin_center = hist_data.GetBinCenter(bin+1)
                         bin_val = hist_data.GetBinContent(bin+1)
                         
                         if not bin_val :
@@ -241,16 +243,15 @@ def main () :
                                 hist_data.SetBinContent(bin+1, 2.51*ymin/10)
                             
                             hist_data.SetBinError(bin+1, -numpy.log((1-0.68)/2))
-                    
-                    hist_data.SetTitle("Data")
-                    hist_data.SetLineColor(1)
-                    hist_data.SetMarkerColor(1)
-                    hist_data.SetMarkerSize(2)
-                    hist_data.SetMarkerStyle(20)
-                    hist_data.SetLineWidth(2)
-                    hist_data.SetOption("PE1")
-                    hist_data.SetFillStyle(0)
-                    hist_data.SetFillColor(0)
+                        
+                        unc_d, unc_u = cmut.get_garwood_errors(n = bin_val)
+                        
+                        gr_data.SetPoint(bin, bin_center, bin_val)
+                        gr_data.SetPointError(
+                            bin,
+                            0.0, 0.0,
+                            unc_d, unc_u
+                        )
                     
                     l_hist_bkg = [d_hist[_proc] for _proc in ch_info["processes_bkg"]]
                     l_hist_sig = [d_hist[_proc] for _proc in ch_info["processes_sig"]]
@@ -343,6 +344,46 @@ def main () :
                         (hist_data_ratio_tot, d_hist[ch_info["procs_total"]])
                     ]
                     
+                    gr_ratio_num_unc = ROOT.TGraphAsymmErrors(hist_data.GetNbinsX())
+                    
+                    for ibin in range(hist_data.GetNbinsX()) :
+                        
+                        bin_center = gr_data.GetPointX(ibin)
+                        num = gr_data.GetPointY(ibin)
+                        num_unc_u = gr_data.GetErrorYhigh(ibin)
+                        num_unc_d = gr_data.GetErrorYlow(ibin)
+                        
+                        den = d_hist[ch_info["bkg_total"]].GetBinContent(ibin+1)
+                        den_unc_u = d_hist[ch_info["bkg_total"]].GetBinError(ibin+1)
+                        den_unc_d = d_hist[ch_info["bkg_total"]].GetBinError(ibin+1)
+                        
+                        ratio = num/den if den else 0
+                        gr_ratio_unc_u = 0
+                        gr_ratio_unc_d = 0
+                        
+                        if num :
+                            gr_ratio_unc_u = ratio*num_unc_u/num
+                            gr_ratio_unc_d = ratio*num_unc_d/num
+                        
+                        elif not num and den :
+                            gr_ratio_unc_u =  num_unc_u / den
+                            gr_ratio_unc_d =  0
+                        
+                        gr_ratio_num_unc.SetPointX(ibin, bin_center)
+                        gr_ratio_num_unc.SetPointY(ibin, ratio)
+                        gr_ratio_num_unc.SetPointEYhigh(ibin, gr_ratio_unc_u)
+                        gr_ratio_num_unc.SetPointEYlow(ibin, gr_ratio_unc_d)
+                    
+                    gr_ratio_num_unc.SetLineColor(1)
+                    gr_ratio_num_unc.SetLineWidth(2)
+                    gr_ratio_num_unc.SetMarkerColor(1)
+                    gr_ratio_num_unc.SetMarkerSize(2)
+                    gr_ratio_num_unc.SetMarkerStyle(20)
+                    gr_ratio_num_unc.SetFillStyle(0)
+                    gr_ratio_num_unc.GetHistogram().SetOption("PE1")
+                    
+                    gr_ratio_num_unc.Print("all")
+                    
                     ytitle_ratio = "Data / Pred."
                     legendncol = 2
                     legendwidthscale = 1.9
@@ -370,11 +411,30 @@ def main () :
                         hist_tmp.SetOption("hist E1")
                         hist_tmp.Write()
                     
+                    hist_data.Reset()
+                    hist_data.SetTitle("Data")
+                    hist_data.SetLineColor(1)
+                    hist_data.SetMarkerColor(1)
+                    hist_data.SetMarkerSize(2)
+                    hist_data.SetMarkerStyle(20)
+                    hist_data.SetLineWidth(2)
+                    hist_data.SetOption("PE1")
+                    hist_data.SetFillStyle(0)
+                    hist_data.SetFillColor(0)
+                    
+                    gr_data.SetLineColor(1)
+                    gr_data.SetLineWidth(2)
+                    gr_data.SetMarkerColor(1)
+                    gr_data.SetMarkerSize(2)
+                    gr_data.SetMarkerStyle(20)
+                    gr_data.SetFillStyle(0)
+                    gr_data.GetHistogram().SetOption("PE1")
+                    
                     utils.root_plot1D_legacy(
                         l_hist = l_hist,
                         l_hist_overlay = [*l_hist_sig, hist_data],
-                        l_graph_overlay = [gr_bkg_error],
-                        l_ratio_graph_overlay = [gr_unity],
+                        l_graph_overlay = [gr_bkg_error, gr_data],
+                        l_ratio_graph_overlay = [gr_unity, gr_ratio_num_unc],
                         l_legend_order = [hist_data, *l_hist, gr_bkg_error, *l_hist_sig],
                         outfile = plotfile,
                         xrange = (xmin, xmax),

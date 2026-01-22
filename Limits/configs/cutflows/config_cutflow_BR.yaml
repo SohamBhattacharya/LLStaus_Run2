@@ -72,5 +72,5 @@ cuts:
     scaleby: "1"
   
   - key: "all.ht_soft_forward_cut"
-    label: "$\\HT^{\\text{soft, fwd}} < 50$ GeV"
+    label: "$\\H_\\text{T}^{\\text{soft, fwd}} < 50$ GeV"
     scaleby: "1"

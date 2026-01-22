@@ -134,9 +134,6 @@ def main() :
             d_table = {}
             d_table[bin_header] = []
             
-            d_hist_yields = {}
-            d_gr_uncs = {}
-            
             l_bins_edges = numpy.array(d_input["bin_edges"], dtype = float)
             binstart = d_input["binstart"]
             nbins = len(l_bins_edges)-1
@@ -185,7 +182,8 @@ def main() :
                     
                     #d_hist_yields[proc_type][proc_name] = ROOT.TH1F(f"h1_{proc_name}", d_proc_cfg.get("rootlabel", proc_label), nbins, 1, 1+nbins)
                     d_hist_yields[proc_type][proc_name] = ROOT.TH1F(f"h1_{proc_name}", d_proc_cfg.get("rootlabel", proc_label), *bin_args)
-                    color = ROOT.TColor.GetColor(d_proc_cfg.get("color", "#00000"))
+                    color = d_proc_cfg.get("color", "#00000")
+                    color = ROOT.TColor.GetColor(color) if isinstance(color, str) else color
                     
                     d_hist_yields[proc_type][proc_name].SetLineColor(color)
                     d_hist_yields[proc_type][proc_name].SetLineStyle(d_proc_cfg.get("linestyle", 1))
@@ -193,7 +191,11 @@ def main() :
                     
                     d_gr_uncs[proc_type][proc_name] = ROOT.TGraphAsymmErrors(nbins)
                     d_gr_uncs[proc_type][proc_name].SetName(f"gr_{proc_name}_unc")
-                    d_gr_uncs[proc_type][proc_name].SetTitle(d_config.get("unc_label_bkg", "Background uncertainty"))
+                    
+                    if proc_type == "obs" :
+                        d_gr_uncs[proc_type][proc_name].SetTitle(proc_label)
+                    elif proc_type == "bkg":
+                        d_gr_uncs[proc_type][proc_name].SetTitle(d_config.get("unc_label_bkg", "Background uncertainty"))
                     
                     d_proc_info = d_input[proc_name]
                     
@@ -227,6 +229,7 @@ def main() :
                             
                             d_table[proc_label].append(f"{int(val)}")
                             unc = val**0.5
+                            unc_d, unc_u = cmut.get_garwood_errors(n = val)
                             
                             # Prediction can be a treated as fake observation 
                             if "unc_stat" in d_yield_info and "unc_syst" in d_yield_info :
@@ -234,6 +237,8 @@ def main() :
                                 unc_stat = d_yield_info["unc_stat"]
                                 unc_syst = d_yield_info["unc_syst"]
                                 unc = (unc_stat**2 + unc_syst**2)**0.5
+                                unc_d = unc
+                                unc_u = unc
                         
                         else :
                             
@@ -250,9 +255,13 @@ def main() :
                                 #val_str = f"{val:0.2g}"# if val < 99.5 else f"{val:0.0f}"
                                 #unc_stat_str = f"{unc_stat:0.2g}"# if unc_stat < 99.5 else f"{unc_stat:0.0f}"
                                 #unc_syst_str = f"{unc_syst:0.2g}"# if unc_syst < 99.5 else f"{unc_syst:0.0f}"
-
-                                val_str, unc_stat_str, unc_syst_str = cmut.cms_rounding(val, unc_stat, unc_syst)
-
+                                
+                                val_str = f"{val:0.4}"# if val < 99.5 else f"{val:0.0f}"
+                                unc_stat_str = f"{unc_stat:0.4g}"# if unc_stat < 99.5 else f"{unc_stat:0.0f}"
+                                unc_syst_str = f"{unc_syst:0.4g}"# if unc_syst < 99.5 else f"{unc_syst:0.0f}"
+                                
+                                #val_str, unc_stat_str, unc_syst_str = cmut.cms_rounding(val, unc_stat, unc_syst)
+                                
                                 d_table[proc_label].append(f"${val_str}{{\\pm}}{unc_stat_str}{{\\pm}}{unc_syst_str}$")
                             
                             else :
@@ -269,10 +278,20 @@ def main() :
                             d_hist_yields[proc_type][proc_name].SetBinContent(bin_num+1, val)
                             d_hist_yields[proc_type][proc_name].SetBinError(bin_num+1, unc)
                             
-                            if (proc_type != "obs") :
+                            bin_center = d_hist_yields[proc_type][proc_name].GetXaxis().GetBinCenter(bin_num+1)
+                            bin_halfwidth = 0.5*d_hist_yields[proc_type][proc_name].GetXaxis().GetBinWidth(bin_num+1)
+                            
+                            if (proc_type == "obs" and not d_proc_cfg.get("fakeobs", False)) :
                                 
-                                bin_center = d_hist_yields[proc_type][proc_name].GetXaxis().GetBinCenter(bin_num+1)
-                                bin_halfwidth = 0.5*d_hist_yields[proc_type][proc_name].GetXaxis().GetBinWidth(bin_num+1)
+                                d_gr_uncs[proc_type][proc_name].SetPoint(bin_num, bin_center, val)
+                                
+                                d_gr_uncs[proc_type][proc_name].SetPointError(
+                                    bin_num,
+                                    0.0, 0.0,
+                                    unc_d, unc_u
+                                )
+                            
+                            else :
                                 
                                 d_gr_uncs[proc_type][proc_name].SetPoint(bin_num, bin_center, val)
                                 
@@ -463,15 +482,18 @@ def main() :
             has_obs = "obs" in d_hist_yields
             obs_key = d_config.get("obs_key", "obs")
             hist_obs = d_hist_yields["obs"][obs_key] if has_obs else None
+            gr_obs_unc = d_gr_uncs["obs"][obs_key] if has_obs else None
             total_bkg_key = d_config.get("total_bkg_key", "total_bkg")
             
             if has_obs :
                 
                 hist_ratio = d_hist_yields["obs"][obs_key].Clone("ratio")
+                gr_ratio_num_unc = d_gr_uncs["obs"][obs_key].Clone("ratio_num_unc")
             
             else :
                 
                 hist_ratio = d_hist_yields["bkg"][total_bkg_key].Clone("ratio")
+                gr_ratio_num_unc = d_gr_uncs["bkg"][total_bkg_key].Clone("ratio_num_unc")
             
             gr_bkg_unc = d_gr_uncs["bkg"][total_bkg_key]
             gr_ratio_unc = d_gr_uncs["bkg"][total_bkg_key].Clone("ratio_unc")
@@ -479,30 +501,42 @@ def main() :
             for bin in range(hist_ratio.GetNbinsX()) :
                 
                 num = hist_ratio.GetBinContent(bin+1)
-                num_unc = hist_ratio.GetBinError(bin+1)
+                #num_unc = hist_ratio.GetBinError(bin+1)
+                num_unc_u = gr_ratio_num_unc.GetErrorYhigh(bin)
+                num_unc_d = gr_ratio_num_unc.GetErrorYlow(bin)
                 
                 den = d_hist_yields["bkg"][total_bkg_key].GetBinContent(bin+1)
                 den_unc_u = d_gr_uncs["bkg"][total_bkg_key].GetErrorYhigh(bin)
                 den_unc_d = d_gr_uncs["bkg"][total_bkg_key].GetErrorYlow(bin)
                 
                 ratio = num/den if den else 0
+                gr_ratio_unc_u = 0
+                gr_ratio_unc_d = 0
                 ratio_unc = 0
                 
                 if num :
                     
-                    ratio_unc = ratio*num_unc/num
+                    #ratio_unc = ratio*num_unc/num
+                    gr_ratio_unc_u = ratio*num_unc_u/num
+                    gr_ratio_unc_d = ratio*num_unc_d/num
                 
                 elif not num and den :
                     
                     # One sided Poisson error
-                    ratio_unc = -numpy.log((1-0.68)/2) / den
+                    #ratio_unc = -numpy.log((1-0.68)/2) / den
+                    gr_ratio_unc_u =  num_unc_u / den
+                    gr_ratio_unc_d =  0
                 
                 hist_ratio.SetBinContent(bin+1, ratio)
-                hist_ratio.SetBinError(
-                    bin+1,
-                    #ratio*num_unc/num if num else 0
-                    ratio_unc
-                )
+                #hist_ratio.SetBinError(
+                #    bin+1,
+                #    #ratio*num_unc/num if num else 0
+                #    ratio_unc
+                #)
+                
+                gr_ratio_num_unc.SetPointY(bin, ratio)
+                gr_ratio_num_unc.SetPointEYhigh(bin, gr_ratio_unc_u)
+                gr_ratio_num_unc.SetPointEYlow(bin, gr_ratio_unc_d)
                 
                 gr_ratio_unc.SetPointY(bin, 1)
                 gr_ratio_unc.SetPointEYhigh(bin, den_unc_u/den if den else 0)
@@ -517,16 +551,35 @@ def main() :
             for hist in [hist_obs, hist_ratio] :
                 
                 if hist is None :
-                    
                     continue
+                
+                # Only use this to draw the legend marker
+                # Otherwise, the error bar style of the TGraphAsymmErrors do not match up between the plot and the legend
+                hist.Reset()
                 
                 hist.SetLineColor(1)
                 hist.SetLineWidth(2)
+                #hist.SetLineWidth(0)
                 hist.SetMarkerColor(1)
                 hist.SetMarkerSize(2)
                 hist.SetMarkerStyle(20)
                 hist.SetFillStyle(0)
                 hist.SetOption("PE1")
+                #hist.SetOption("P")
+            
+            for gr in [gr_obs_unc, gr_ratio_num_unc] :
+                
+                if gr is None :
+                    continue
+                
+                gr.SetLineColor(1)
+                gr.SetLineWidth(2)
+                gr.SetMarkerColor(1)
+                gr.SetMarkerSize(2)
+                gr.SetMarkerStyle(20)
+                gr.SetFillStyle(0)
+                gr.GetHistogram().SetOption("PE1")
+                #gr.SetOption("PE1")
             
             for _, hist in d_hist_yields["bkg"].items() :
                 
@@ -586,6 +639,7 @@ def main() :
             hist_dummy =  ROOT.TH1F(f"h1_dummy", "h1_dummy", *bin_args)
             
             l_hist_obs = [hist_obs] if has_obs else []
+            #l_hist_obs = []
             l_hist_bkg = [d_hist_yields["bkg"][_proc] for _proc in d_config["plot_bkgs"]]
             l_hist_sig = list(d_hist_yields["sig"].values())
             
@@ -593,6 +647,7 @@ def main() :
             legend_order_bkgs = [d_hist_yields["bkg"][_proc] for _proc in legend_order_bkgs]
             
             l_obs_bkg_legend = (l_hist_obs + legend_order_bkgs + [gr_bkg_unc]).copy()
+            #l_obs_bkg_legend = ([gr_obs_unc] + legend_order_bkgs + [gr_bkg_unc]).copy()
             l_hist_sig_legend = l_hist_sig.copy()
             
             if len(l_obs_bkg_legend) and len(l_hist_sig_legend) :
@@ -613,23 +668,30 @@ def main() :
             
             #hist_ratio.Print("all")
             
+            yrange = d_config.get("yrange", (None, None))
+            yrange = (
+                yrange[0] if yrange[0] is not None else ymin,
+                yrange[1] if yrange[1] is not None else ymax,
+            )
+            
             utils.root_plot1D_legacy(
                 l_hist = l_hist_bkg,
-                l_hist_overlay = l_hist_sig + l_hist_obs,
+                #l_hist_overlay = l_hist_sig + l_hist_obs,
+                l_hist_overlay = l_hist_sig,
                 ratio_num_den_pairs = [],
-                l_graph_overlay = [gr_bkg_unc],
+                l_graph_overlay = [gr_bkg_unc] + [gr_obs_unc],
                 l_ratio_hist_overlay = [hist_ratio] if has_obs else [hist_dummy],
-                l_ratio_graph_overlay = [gr_unity, gr_ratio_unc],
+                l_ratio_graph_overlay = [gr_unity, gr_ratio_unc, gr_ratio_num_unc],
                 #l_legend_order = l_hist_obs + [0]*int(has_obs) + l_hist_bkg + [gr_bkg_unc] + l_hist_sig,
                 l_legend_order = list(itertools.chain(*zip(l_obs_bkg_legend, l_hist_sig_legend))) if d_config.get("group_sigs", False) else l_obs_bkg_legend + l_hist_sig_legend,
                 outfile = outfilename,
                 #xrange = (xmin, xmax),
                 xrange = d_config.get("xrange", (xmin, xmax)),
-                yrange = (ymin, ymax),
+                yrange = yrange,
                 logx = False,
                 logy = logy,
                 #xtitle = "Bin number",
-                ytitle = "Events",
+                ytitle = d_config.get("ytitle", "Events"),
                 #xtitle_ratio = "Bin number",
                 xtitle_ratio = d_config.get("bin_header_root", d_config["bin_header"].strip("$")),
                 ytitle_ratio = d_config.get("ytitle_ratio", "Data / Bkg."),
@@ -638,7 +700,7 @@ def main() :
                 centerlabelx = d_config.get("centerlabelx", False),
                 centerlabely = False,
                 gridx = False, gridy = False,
-                ndivisionsx = d_config.get("nvivisionsx", (nbins, 1, 0)),
+                ndivisionsx = d_config.get("ndivisionsx", (nbins, 1, 0)),
                 stackdrawopt = "",
                 #ratiodrawopt = "E1",
                 ndivisionsy_ratio = d_config.get("ndivisionsy_ratio", (3, 5, 0)),

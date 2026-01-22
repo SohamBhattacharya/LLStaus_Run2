@@ -12,15 +12,15 @@ INDIR="$1"
 #fi
 
 FITTYPES=(
-    "s"
+    #"s"
     "b"
 )
 
 MASSES=(
     "MStau-100_ctau-50mm"
-    "MStau-100_ctau-100mm"
-    "MStau-200_ctau-50mm"
-    "MStau-200_ctau-100mm"
+    #"MStau-100_ctau-100mm"
+    #"MStau-200_ctau-50mm"
+    #"MStau-200_ctau-100mm"
 )
 
 ERAS=(

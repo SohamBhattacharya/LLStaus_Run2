@@ -16,26 +16,26 @@ bkg:
 sig:
   SMS-TStauStau_MStau-100_ctau-50mm_mLSP-1:
     label: "${[m_{\\PSGt}(100),\\ c\\tau_{0}(50)]}$"
-    rootlabel: "m_{#tilde{#tau}}=100 GeV, c#tau_{0}=50 mm"
-    color: "#bd1f01"
+    rootlabel: "m_{#tilde{#tau}} = 100 GeV, c#tau_{0} = 50 mm"
+    color: "#c91f16"
     linestyle: 7
   
   SMS-TStauStau_MStau-100_ctau-100mm_mLSP-1:
     label: "${[m_{\\PSGt}(100),\\ c\\tau_{0}(100)]}$"
-    rootlabel: "m_{#tilde{#tau}}=100 GeV, c#tau_{0}=100 mm"
-    color: "#bd1f01"
+    rootlabel: "m_{#tilde{#tau}} = 100 GeV, c#tau_{0} = 100 mm"
+    color: "#c91f16"
     linestyle: 3
   
   SMS-TStauStau_MStau-200_ctau-50mm_mLSP-1:
     label: "${[m_{\\PSGt}(200),\\ c\\tau_{0}(50)]}$"
-    rootlabel: "m_{#tilde{#tau}}=200 GeV, c#tau_{0}=50 mm"
-    color: "#832db6"
+    rootlabel: "m_{#tilde{#tau}} = 200 GeV, c#tau_{0} = 50 mm"
+    color: 4
     linestyle: 7
   
   SMS-TStauStau_MStau-200_ctau-100mm_mLSP-1:
     label: "${[m_{\\PSGt}(200), c\\tau_{0}(100)]}$"
-    rootlabel: "m_{#tilde{#tau}}=200 GeV, c#tau_{0}=100 mm"
-    color: "#832db6"
+    rootlabel: "m_{#tilde{#tau}} = 200 GeV, c#tau_{0} = 100 mm"
+    color: 4
     linestyle: 3
 
 plot_bkgs: ["misid"]
@@ -47,6 +47,6 @@ logy: true
 yrange_ratio: [0, 3]
 ndivisionsy_ratio: [3, 5, 0]
 xrange: [30, 500]
-nvivisionsx: null
+ndivisionsx: null
 norm_binwidth: true
 group_sigs: true

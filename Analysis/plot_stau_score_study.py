@@ -72,14 +72,14 @@ def main() :
     d_proc_label["QCD:light"] = "Multijet (u/d/s/g jets)"
     d_proc_label["QCD:bc"] = "Multijet (b/c jets)"
     
-    d_proc_label["MStau-200_ctau-5mm"] = "m_{#tilde{#tau}}=200 GeV, c#tau_{0}=5 mm"
-    d_proc_label["MStau-200_ctau-50mm"] = "m_{#tilde{#tau}}=200 GeV, c#tau_{0}=50 mm"
-    d_proc_label["MStau-200_ctau-100mm"] = "m_{#tilde{#tau}}=200 GeV, c#tau_{0}=100 mm"
-    d_proc_label["MStau-200_ctau-1000mm"] = "m_{#tilde{#tau}}=200 GeV, c#tau_{0}=1000 mm"
+    d_proc_label["MStau-200_ctau-5mm"] = "m_{#tilde{#tau}} = 200 GeV, c#tau_{0} = 5 mm"
+    d_proc_label["MStau-200_ctau-50mm"] = "m_{#tilde{#tau}} = 200 GeV, c#tau_{0} = 50 mm"
+    d_proc_label["MStau-200_ctau-100mm"] = "m_{#tilde{#tau}} = 200 GeV, c#tau_{0} = 100 mm"
+    d_proc_label["MStau-200_ctau-1000mm"] = "m_{#tilde{#tau}} = 200 GeV, c#tau_{0} = 1000 mm"
     
-    d_proc_label["MStau-400_ctau-5mm"] = "m_{#tilde{#tau}}=400 GeV, c#tau_{0}=5 mm"
-    d_proc_label["MStau-400_ctau-100mm"] = "m_{#tilde{#tau}}=400 GeV, c#tau_{0}=100 mm"
-    d_proc_label["MStau-400_ctau-1000mm"] = "m_{#tilde{#tau}}=400 GeV, c#tau_{0}=1000 mm"
+    d_proc_label["MStau-400_ctau-5mm"] = "m_{#tilde{#tau}} = 400 GeV, c#tau_{0} = 5 mm"
+    d_proc_label["MStau-400_ctau-100mm"] = "m_{#tilde{#tau}} = 400 GeV, c#tau_{0} = 100 mm"
+    d_proc_label["MStau-400_ctau-1000mm"] = "m_{#tilde{#tau}} = 400 GeV, c#tau_{0} = 1000 mm"
     
     
     d_proc_color = {}
@@ -268,7 +268,7 @@ def main() :
             logx = False,
             logy = True,
             xtitle = d_xtitle[histkey],
-            ytitle = "a.u.",
+            ytitle = "#lower[-0.25]{Fraction / bin}",
             xtitle_ratio = d_xtitle[histkey],
             ytitle_ratio = f"Ratio wrt {l_hist[-1].GetTitle()}",
             centertitlex = True, centertitley = True,
@@ -284,7 +284,7 @@ def main() :
             legendtextsize = 0.045,
             legendwidthscale = 1.9,
             #legendheightscale = 0.5,
-            legendheightscale = 1.2,
+            legendheightscale = 1,
             legendpadleft_extra = 0.05,
             CMSextraText = "#kern[-0.15]{Simulation}",
             #lumiText = "2018 (13 TeV)"

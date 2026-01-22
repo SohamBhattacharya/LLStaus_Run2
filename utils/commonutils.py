@@ -171,7 +171,8 @@ def get_stau_xsec_dict(l_samplestr, xsecfile, regexp) :
             exit(1)
         
         # 2nd colum is the xsec
-        xsec = arr_data[rowidx, 1]
+        # Convert to scalar
+        xsec = arr_data[rowidx, 1].item()
         
         d_xsec[samplestr] = xsec
     
@@ -516,11 +517,27 @@ def root_TGraph_to_TH1(graph, binning = None, evalBins = False, setError = True)
             pointErrY = graph.GetErrorY(iPoint)
             
             binNum = hist.FindBin(pointValX)
-
+            
             hist.SetBinContent(binNum, pointValY)
-
+            
             if (setError) :
-
+                
                 hist.SetBinError(binNum, pointErrY)
     
     return hist
+
+
+def get_garwood_errors(n, quantile = 0.6827, interval = False) :
+    
+    alpha = 1.0 - quantile
+    
+    d = 0 if n == 0 else ROOT.Math.gamma_quantile(alpha/2, n, 1)
+    u = ROOT.Math.gamma_quantile_c(alpha/2, n+1, 1)
+    
+    if interval :
+        
+        return d, u
+    
+    else :
+        
+        return n - d, u - n

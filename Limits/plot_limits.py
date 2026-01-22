@@ -16,6 +16,7 @@ import utils.commonutils as cmut
 NPX = 300
 NPY = 300
 NZCONTS = 100
+ROOTSPACE_0P4 = "#scale[0.4]{ }"
 
 
 def get_contours_from_hist(hist, contour_value, nsmooth = 0) :
@@ -513,6 +514,7 @@ def main() :
     CMS.SetCMSPalette()
     CMS.ResetAdditionalInfo()
     CMS.getCMSStyle().SetNumberContours(NZCONTS)
+    #CMS.getCMSStyle().SetPadTickX(0)
     
     ymin = 1
     ymax = max([
@@ -561,8 +563,10 @@ def main() :
     #zmax = 10**(round(numpy.log10(zmax))+1)
     
     hframe.GetXaxis().CenterTitle(True)
+    #hframe.GetXaxis().SetTicks("-")
     hframe.GetYaxis().CenterTitle(True)
     
+    #h2_colz.GetXaxis().SetTicks("-")
     h2_colz.GetZaxis().SetRangeUser(zmin, zmax)
     h2_colz.GetZaxis().CenterTitle(True)
     h2_colz.GetZaxis().SetTitle("95% CL upper limit on cross section [fb]")
@@ -592,7 +596,7 @@ def main() :
         CMS.cmsDraw(results["obs_p1"]["contour"], "sameL", lstyle = ROOT.kDashed, lcolor = ROOT.kBlack, lwidth = 3)
         CMS.cmsDraw(results["obs_m1"]["contour"], "sameL", lstyle = ROOT.kDashed, lcolor = ROOT.kBlack, lwidth = 3)
         
-        legend.AddEntry(results["obs_p1"]["contour"], "Observed #pm 1#sigma_{theory}", "L")
+        legend.AddEntry(results["obs_p1"]["contour"], f"Observed{ROOTSPACE_0P4}#pm 1#sigma_{{theory}}", "L")
     
     CMS.cmsDraw(results["exp"]["contour"], "sameL", lstyle = ROOT.kSolid, lcolor = ROOT.kRed+1, lwidth = 3)
     legend.AddEntry(results["exp"]["contour"], "Expected", "L")
@@ -602,7 +606,7 @@ def main() :
         CMS.cmsDraw(results["exp_p1"]["contour"], "sameL", lstyle = ROOT.kDashed, lcolor = ROOT.kRed+1, lwidth = 3)
         CMS.cmsDraw(results["exp_m1"]["contour"], "sameL", lstyle = ROOT.kDashed, lcolor = ROOT.kRed+1, lwidth = 3)
         
-        legend.AddEntry(results["exp_p1"]["contour"], "Expected #pm 1#sigma_{experiment}", "L")
+        legend.AddEntry(results["exp_p1"]["contour"], f"Expected{ROOTSPACE_0P4}#pm 1#sigma_{{experiment}}", "L")
     
     sign_exp_pm2 = ""
     cont_legend = None
@@ -614,7 +618,7 @@ def main() :
         CMS.cmsDraw(results["exp_p2"]["contour"], "sameL", lstyle = ROOT.kDotted, lcolor = ROOT.kRed+1, lwidth = 3)
         
         #legend.AddEntry(0, "", "")
-        #legend.AddEntry(results["exp_p2"]["contour"], "Expected #pm 2#sigma_{experiment}", "L")
+        #legend.AddEntry(results["exp_p2"]["contour"], f"Expected{ROOTSPACE_0P4}#pm 2#sigma_{{experiment}}", "L")
     
     if (results["exp_m2"]["contour"]) :
         
@@ -623,14 +627,14 @@ def main() :
         CMS.cmsDraw(results["exp_m2"]["contour"], "sameL", lstyle = ROOT.kDotted, lcolor = ROOT.kRed+1, lwidth = 3)
         
         #legend.AddEntry(0, "", "")
-        #legend.AddEntry(results["exp_p2"]["contour"], "Expected #pm 2#sigma_{experiment}", "L")
+        #legend.AddEntry(results["exp_p2"]["contour"], f"Expected{ROOTSPACE_0P4}#pm 2#sigma_{{experiment}}", "L")
     
     if sign_exp_pm2 :
         
         sign_exp_pm2 = "#pm" if (sign_exp_pm2 == "#plus#minus") else sign_exp_pm2
         
         legend.AddEntry(0, "", "")
-        legend.AddEntry(cont_legend, f"Expected {sign_exp_pm2} 2#sigma_{{experiment}}", "L")
+        legend.AddEntry(cont_legend, f"Expected{ROOTSPACE_0P4}{sign_exp_pm2} 2#sigma_{{experiment}}", "L")
     
     
     hframe.GetXaxis().SetNdivisions(6, 5, 0)
@@ -659,7 +663,8 @@ def main() :
         isToRemove = True
     )
     
-    #canvas.RedrawAxis()
+    #CMS.getCMSStyle().SetPadTickX(0)
+    canvas.RedrawAxis()
     #legend.Draw()
     #canvas.Update()
     
@@ -717,6 +722,7 @@ def main() :
         CMS.SetLumi(137.62, round_lumi = True)
         CMS.SetEnergy("13")
         CMS.ResetAdditionalInfo()
+        #CMS.getCMSStyle().SetPadTickX(0)
         
         canvas = CMS.cmsCanvas(
             canvName = canvas_name,
@@ -754,8 +760,8 @@ def main() :
             legend.AddEntry(g1_xsecul_obs, "Observed", "L")
         
         legend.AddEntry(g1_xsecul_exp, "Expected", "L")
-        legend.AddEntry(g1_xsecul_exp_pm1, "Expected #pm 1#sigma_{experiment}", "F")
-        legend.AddEntry(g1_xsecul_exp_pm2, "Expected #pm 2#sigma_{experiment}", "F")
+        legend.AddEntry(g1_xsecul_exp_pm1, f"Expected{ROOTSPACE_0P4}#pm 1#sigma_{{experiment}}", "F")
+        legend.AddEntry(g1_xsecul_exp_pm2, f"Expected{ROOTSPACE_0P4}#pm 2#sigma_{{experiment}}", "F")
         
         canvas.SetLogy()
         

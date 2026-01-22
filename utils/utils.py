@@ -39,7 +39,7 @@ def get_canvas(ratio = False) :
     ROOT.gROOT.SetStyle("tdrStyle")
     ROOT.gROOT.ForceStyle(True)
     
-    ROOT.gStyle.SetPadTickX(0)
+    ROOT.gStyle.SetPadTickX(1)
     ROOT.gStyle.SetHatchesSpacing(7*ROOT.gStyle.GetHatchesSpacing())
     ROOT.gStyle.SetHatchesLineWidth(1)
     
@@ -427,7 +427,8 @@ def root_plot1D_legacy(
     legendHeight = legendheightscale * 0.05 * (len(l_hist) + len(l_hist_overlay) + len(l_graph_overlay) + 1.5*(len(legendtitle)>0))
     legendWidth = legendwidthscale * 0.4
     
-    padTop = 1 - canvas.GetTopMargin() - 0.6*ROOT.gStyle.GetTickLength("x")
+    #padTop = 1 - canvas.GetTopMargin() - 0.6*ROOT.gStyle.GetTickLength("x")
+    padTop = 1 - canvas.GetTopMargin() - 1.5*ROOT.gStyle.GetTickLength("x")
     padRight = 1 - canvas.GetRightMargin() - 0.6*ROOT.gStyle.GetTickLength("y")
     padBottom = canvas.GetBottomMargin() + 0.6*ROOT.gStyle.GetTickLength("x")
     padLeft = canvas.GetLeftMargin() + 0.6*ROOT.gStyle.GetTickLength("y") + legendpadleft_extra

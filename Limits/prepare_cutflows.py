@@ -97,13 +97,14 @@ def main() :
         }
         scaleby_proc = eval(d_procinfo.get("scaleby", "1"))
         
-        for d_cutinfo in d_config["cuts"] :
+        for icut, d_cutinfo in enumerate(d_config["cuts"]) :
             
             cut = d_cutinfo["key"]
             print(f"  [cut {cut}]")
             
             scaleby_cut = eval(d_cutinfo.get("scaleby", "1"))
             nevents_proc_cut = 0
+            nevents_err_proc_cut = 0
             
             for sample in d_procinfo["samples"] :
                 
@@ -116,20 +117,33 @@ def main() :
                     
                     lumi = d_erainfo["lumi"]
                     scaleby_era = eval(d_erainfo.get("scaleby", "1"))
-                    nevents_tot = functools.reduce(operator.getitem, [sample]+d_config["neventkey"].split("."), d_cutflow_input[era])
+                    nevents_tot_era = functools.reduce(operator.getitem, [sample]+d_config["neventkey"].split("."), d_cutflow_input[era])
                     #print(d_erainfo)
                     
                     nevents_raw = functools.reduce(operator.getitem, [sample]+cut.split("."), d_cutflow_input[era])
-                    nevents_proc_cut += (nevents_raw * scaleby_proc * scaleby_era * scaleby_cut) / nevents_tot * d_xsec[sample] * lumi
-                    nevents_proc_cut = nevents_proc_cut.item()
+                    efficiency = (nevents_raw * scaleby_proc * scaleby_era * scaleby_cut) / nevents_tot_era
+                    nevents_proc_cut += efficiency * d_xsec[sample] * lumi
+                    #nevents_proc_cut = nevents_proc_cut.item()
+                    
+                    # Binomial error
+                    # Add in quadrature
+                    nevents_err_proc_cut += (efficiency * (1 - efficiency) / nevents_tot_era) * (d_xsec[sample] * lumi)**2
+                    #nevents_err_proc_cut += efficiency**2 * (1.0/nevents_raw + 1.0/nevents_tot_era)
                     
                     print(f"        [nevents_raw {nevents_raw}]")
             
-            print(f"  [proc {prockey}] [cut {cut}] [nevents {nevents_proc_cut}]")
+            nevents_err_proc_cut = nevents_err_proc_cut**0.5
+            
+            print(f"  [proc {prockey}] [cut {cut}] [nevents {nevents_proc_cut:0.4g} +/- {nevents_err_proc_cut:0.4g}]")
+            
+            nevents_tot = nevents_proc_cut if icut == 0 else nevents_tot
             
             d_cutflow_output[prockey]["cuts"].append({
                 "cut_label" : d_cutinfo["label"],
-                "yield" : nevents_proc_cut,
+                "yield" : float(f"{nevents_proc_cut: 0.4g}"),
+                "yield_unc_stat" : float(f"{nevents_err_proc_cut: 0.4g}"),
+                "efficiency" : float(f"{nevents_proc_cut / nevents_tot: 0.4g}"),
+                "efficiency_unc_stat" : float(f"{nevents_err_proc_cut/nevents_tot: 0.4g}"),
             })
     
     cmut.logger.info(f"Writing cutflows to: {outfname}")

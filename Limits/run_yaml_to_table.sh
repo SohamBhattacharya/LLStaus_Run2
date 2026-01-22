@@ -49,12 +49,12 @@ for region in ${REGIONS[@]}; do
         --outdir $OUTDIR \
         ${ARGS}
         
-        ./yaml_to_table.py \
-        --type systematics \
-        --config configs/tables/limits/config_systematics_table_${region}.yaml \
-        --input ${INDIR}/systematics_channels_${region}_eras_${era}.yaml:${era} \
-        --outdir $OUTDIR \
-        ${ARGS}
+        #./yaml_to_table.py \
+        #--type systematics \
+        #--config configs/tables/limits/config_systematics_table_${region}.yaml \
+        #--input ${INDIR}/systematics_channels_${region}_eras_${era}.yaml:${era} \
+        #--outdir $OUTDIR \
+        #${ARGS}
         
         #printf "\n\n"
     done

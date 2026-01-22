@@ -45,9 +45,11 @@ bin_header_root: "Displaced#scale[0.4]{ }#tau_{h} tagger score"
 
 centerlabelx: false
 logy: true
+ytitle: "Events / 0.04 GeV"
 ytitle_ratio: "Data / Pred."
 yrange_ratio: [0, 2]
 ndivisionsy_ratio: [2, 5, 0]
 xrange: [0, 1]
-nvivisionsx: null
+yrange: [1, null]
+ndivisionsx: null
 legendheightscale: 0.8
